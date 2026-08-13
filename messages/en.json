@@ -1,0 +1,180 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "clients": "Clients",
+    "contact": "Contact",
+    "contactCta": "Contact Us",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguage": "Switch language"
+  },
+  "meta": {
+    "home": {
+      "title": "Smart Alliance — Beyond Software. We Build Solutions.",
+      "description": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions."
+    },
+    "about": {
+      "title": "About — Smart Alliance",
+      "description": "For over 20 years, Smart Alliance has delivered custom software development and system integration for government agencies and enterprise organizations."
+    },
+    "services": {
+      "title": "Services — Smart Alliance",
+      "description": "Custom software development, API and system integration, digital workflow, AI solutions, cybersecurity, data analytics, and managed services."
+    },
+    "contact": {
+      "title": "Contact — Smart Alliance",
+      "description": "Get in touch with the Smart Alliance team in Bangkok. We are here to help your organization innovate, integrate, and grow."
+    }
+  },
+  "home": {
+    "hero": {
+      "titleLine1": "Beyond Software.",
+      "titleLine2": "We Build Solutions.",
+      "paragraph": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions.",
+      "primaryCta": "Our Services",
+      "secondaryCta": "Contact Us"
+    }
+  },
+  "about": {
+    "hero": {
+      "titleLine1": "Beyond Software.",
+      "titleLine2": "We Build Solutions.",
+      "paragraph": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions.",
+      "primaryCta": "Our Services",
+      "secondaryCta": "Contact Us"
+    },
+    "label": "About Us",
+    "headingLine1": "Building Digital Solutions",
+    "headingLine2": "Since",
+    "year": "2004",
+    "body": "For over 20 years, Smart Alliance has delivered custom software development and system integration solutions for government agencies and enterprise organizations. We help clients design, develop, integrate, and maintain digital systems that improve efficiency, streamline operations, and support long-term growth.",
+    "whyHeading": "Why Smart Alliance",
+    "points": {
+      "experience": "20+ Years of Experience",
+      "integration": "System Integration Expertise",
+      "delivery": "End-to-End Project Delivery",
+      "custom": "Custom Software Development",
+      "projects": "Government & Enterprise Projects"
+    },
+    "partnership": {
+      "heading": "Technology Partnerships",
+      "body": "Smart Alliance partners with leading global technology providers to deliver enterprise-grade digital solutions. As an Authorized Axway Partner, we provide expertise in API Management, Managed File Transfer (MFT), B2B Integration, and enterprise integration platforms.",
+      "badge": "Authorized Partner"
+    },
+    "stats": {
+      "experience": "20+ Years of Experience",
+      "projects": "Government & Enterprise Projects",
+      "delivery": "End-to-End Project Delivery",
+      "partner": "Authorized Axway Partner"
+    }
+  },
+  "services": {
+    "hero": {
+      "label": "Services",
+      "title": "Comprehensive Technology Services for Modern Organizations",
+      "paragraph": "Smart Alliance delivers end-to-end technology services that help government agencies and enterprises innovate, integrate, and transform with confidence."
+    },
+    "label": "Our Services",
+    "heading": "Solutions That Drive Efficiency, Integration, and Growth",
+    "subheading": "From custom software development to enterprise integration and support, we provide everything you need to succeed in the digital era.",
+    "items": {
+      "custom": {
+        "title": "Custom Software Development",
+        "body": "Tailor-made software for web, mobile, and enterprise applications designed to meet your unique business requirements."
+      },
+      "api": {
+        "title": "API & System Integration",
+        "body": "Seamlessly connect applications, data, APIs, and enterprise systems to ensure smooth data flow and operational efficiency."
+      },
+      "workflow": {
+        "title": "Digital Workflow & e-Services",
+        "body": "Paperless solutions, workflow automation, e-Document, and digital platforms to optimize business processes and improve service delivery."
+      },
+      "ai": {
+        "title": "AI & Intelligent Solutions",
+        "body": "Leverage AI-powered applications, automation analytics, and intelligent solutions to drive innovation and smarter decisions."
+      },
+      "security": {
+        "title": "IT Infrastructure & Cybersecurity",
+        "body": "Secure, scalable, and reliable infrastructure with robust cybersecurity solutions to protect your systems and data."
+      },
+      "data": {
+        "title": "Data & Analytics",
+        "body": "Transform raw data into actionable insights with dashboards, reporting, and advanced analytics to support better business outcomes."
+      },
+      "support": {
+        "title": "Support & Managed Services",
+        "body": "Ongoing support, maintenance, monitoring, and system optimization to ensure your business runs smoothly 24/7."
+      }
+    }
+  },
+  "contact": {
+    "hero": {
+      "label": "Contact Us",
+      "titleLine1": "Let's Build Solutions",
+      "titleLine2": "Together",
+      "paragraph": "We are here to help your organization innovate, integrate, and grow. Get in touch with our team today."
+    },
+    "formLabel": "Send Us a Message",
+    "formHeading": "Fill out the form below and our team will get back to you as soon as possible.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "company": "Company / Organization",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "required": "*",
+      "submit": "Send Message",
+      "submitting": "Sending…",
+      "privacy": "Your information is secure and will only be used to respond to your inquiry.",
+      "success": "Thank you — your message has been sent. Our team will get back to you shortly.",
+      "error": "Something went wrong. Please try again, or email us directly.",
+      "errors": {
+        "nameRequired": "Please enter your full name.",
+        "emailRequired": "Please enter your email address.",
+        "emailInvalid": "Please enter a valid email address.",
+        "messageRequired": "Please enter your message."
+      }
+    },
+    "touchLabel": "Get in Touch",
+    "touchHeading": "We are ready to answer your questions and provide the right solution for your business.",
+    "info": {
+      "phone": "Phone",
+      "phoneNote": "Mon – Fri 9:00 AM – 6:00 PM (ICT)",
+      "email": "Email",
+      "emailNote": "We reply within 24 hours",
+      "address": "Address",
+      "website": "Website"
+    },
+    "map": {
+      "label": "Our Location",
+      "heading": "Find Us Here",
+      "directions": "View Directions on Google Maps",
+      "imageAlt": "Map showing the Smart Alliance office in Chatuchak, Bangkok"
+    }
+  },
+  "cta": {
+    "home": {
+      "heading": "Let's Build Solutions That Drive Success",
+      "body": "Partner with Smart Alliance for innovative, secure, and scalable solutions."
+    },
+    "services": {
+      "heading": "Let's Build the Right Solution for Your Organization",
+      "body": "Partner with Smart Alliance and experience technology solutions that drive efficiency, integration, and growth."
+    },
+    "contact": {
+      "heading": "We Look Forward to Hearing From You",
+      "body": "Partner with Smart Alliance for innovative, secure, and scalable digital solutions."
+    },
+    "button": "Contact Smart Alliance"
+  },
+  "footer": {
+    "copyright": "© {year} Smart Alliance Co., Ltd. All Rights Reserved.",
+    "facebook": "Facebook",
+    "email": "Email",
+    "phone": "Phone"
+  }
+}
