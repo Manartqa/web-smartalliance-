@@ -4,9 +4,10 @@ import type { ContactRequest } from "@/types/api/main/contact";
 
 import { getTransporter, readMailConfig } from "./client";
 import { buildContactMail } from "./contact-template";
+import { sendViaGraph } from "./graph";
 
 export type SendContactResult =
-  | { status: "sent" }
+  | { status: "sent"; via: "graph" | "smtp" }
   | { status: "not_configured"; missing: string[] }
   | { status: "send_failed"; reason: string };
 
@@ -14,7 +15,7 @@ export type SendContactResult =
  * Delivers one contact submission to the company mailbox.
  *
  * `replyTo` carries the visitor's address so hitting Reply in the inbox goes
- * straight back to them, while `From` stays the authenticated SMTP mailbox —
+ * straight back to them, while the sender stays the configured mailbox —
  * spoofing the visitor there would fail SPF/DMARC on most receivers.
  */
 export async function sendContactMail(
@@ -38,16 +39,26 @@ export async function sendContactMail(
   const mail = buildContactMail(payload);
 
   try {
-    const transporter = await getTransporter(config);
+    if (config.transport.kind === "graph") {
+      await sendViaGraph({
+        oauth: config.transport.oauth,
+        mailbox: config.transport.mailbox,
+        to: config.to,
+        mail,
+      });
+      return { status: "sent", via: "graph" };
+    }
+
+    const transporter = await getTransporter(config.transport);
     await transporter.sendMail({
       from: config.from,
-      to: config.to,
+      to: config.to.join(", "),
       replyTo: mail.replyTo,
       subject: mail.subject,
       text: mail.text,
       html: mail.html,
     });
-    return { status: "sent" };
+    return { status: "sent", via: "smtp" };
   } catch (error) {
     return {
       status: "send_failed",

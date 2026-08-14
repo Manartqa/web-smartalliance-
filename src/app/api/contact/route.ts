@@ -38,6 +38,14 @@ export async function POST(request: Request) {
   // Bots fill every input they find. Accept the request so they get no signal
   // to retry differently, but drop it on the floor.
   if (body.website?.trim()) {
+    // Logged because the visitor is told the message was sent: without this
+    // line a honeypot tripped by browser autofill looks identical to mail that
+    // never arrived, with nothing anywhere to explain the difference.
+    console.warn(
+      `[contact] honeypot filled — submission dropped (from ${
+        body.email?.trim() || "no email"
+      }).`,
+    );
     return NextResponse.json<ContactResponse>({ ok: true });
   }
 

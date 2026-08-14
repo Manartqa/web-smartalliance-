@@ -58,7 +58,7 @@ src/services/                contact.service.ts — trims + shapes the request
 src/lib/api/                 client.ts (axios), interceptor.ts (ApiError), api-main.ts
 src/lib/utils.ts             cn() — clsx + tailwind-merge
 src/lib/validation.ts        EMAIL_PATTERN, shared by the form and the route handler
-src/lib/fonts.ts             Noto Sans Thai — the only typeface (next/font/google, self-hosted)
+src/lib/fonts.ts             Montserrat (Latin) + Noto Sans Thai (Thai), both self-hosted
 src/lib/metadata.ts          per-page metadata + hreflang alternates
 src/types/api/main/          backend contract (ApiResponse, ContactRequest…)
 src/types/app/contact/       frontend domain types
@@ -112,36 +112,41 @@ neutralises `uppercase` and loosens `line-height` under `:lang(th)`.
 
 ## Contact form
 
-`POST /api/contact` sends the enquiry over **SMTP via nodemailer**. It needs
+`POST /api/contact` sends the enquiry through **Microsoft Graph** (`sendMail`). It needs
 credentials to work — with none set the route answers `503 not_configured` rather than
 accepting a submission it would silently drop.
 
 **To turn it on:** copy `.env.example` to `.env.local`, fill it in, restart the dev
 server. Nothing in the code needs changing.
 
-### Authentication — this domain needs OAuth2
+### Why Graph and not SMTP
 
-`smartalliance.co.th` runs on **Exchange Online** (MX → `*.mail.protection.outlook.com`)
-with **Security Defaults** enabled, which blocks Basic Authentication. A username +
-password login is refused:
+`smartalliance.co.th` runs on **Exchange Online** with **Security Defaults** enabled,
+which blocks Basic Authentication — a username + password login is refused with
+`535 5.7.139 … locked by your organization's security defaults policy`. So the app
+authenticates as itself against Entra ID (client-credentials flow).
+
+That leaves two OAuth2 routes, and they need **different, non-interchangeable**
+application permissions:
+
+| Route | Permission | Extra setup |
+|---|---|---|
+| **Graph `sendMail`** (used here) | `Mail.Send` on Microsoft Graph | none |
+| SMTP XOAUTH2 | `SMTP.SendAsApp` on Office 365 Exchange Online | also needs an Exchange service principal (`New-ServicePrincipal`) and a mailbox grant (`Add-MailboxPermission`) |
+
+A token minted for one resource carries no roles on the other — inspect `roles` in the
+JWT to tell them apart. The existing App Registration already holds `Mail.Send`, so Graph
+works with no admin action; SMTP would have needed a new grant plus PowerShell.
 
 ```
-535 5.7.139 Authentication unsuccessful, user is locked by
-your organization's security defaults policy.
+MS_TENANT_ID · MS_CLIENT_ID · MS_CLIENT_SECRET
+SMTP_USER=<mailbox to send as> · CONTACT_MAIL_TO=<recipients, comma-separated>
 ```
 
-So the transport authenticates with **XOAUTH2** using an Entra ID App Registration
-(client-credentials flow). The app needs the *application* permission
-**`SMTP.SendAsApp`** (Office 365 Exchange Online) with admin consent granted.
-
-```
-SMTP_HOST=smtp.office365.com · SMTP_PORT=587 · SMTP_USER=<mailbox>
-MS_TENANT_ID · MS_CLIENT_ID · MS_CLIENT_SECRET · CONTACT_MAIL_TO
-```
-
-Password auth is still supported for any server that allows it — leave the `MS_*`
-block empty and set `SMTP_PASSWORD` instead. `readMailConfig` picks the mode and
-reports exactly which variables are missing.
+`readMailConfig` picks the transport and reports exactly which variables are missing.
+Set `MAIL_TRANSPORT=smtp` to force nodemailer instead (needs `SMTP_HOST`), and leave the
+`MS_*` block empty to fall back to `SMTP_PASSWORD` on servers that still allow Basic
+Auth. Graph is the default whenever Entra credentials are present.
 
 > **Quote passwords and secrets containing `#`.** dotenv parses an unquoted value that
 > starts with `#` as an empty string, which fails as a silent auth error rather than a
@@ -199,7 +204,8 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 
 | Layer | File |
 |---|---|
-| Transport + config | `src/lib/mail/client.ts` |
+| Transport selection + config | `src/lib/mail/client.ts` |
+| Graph sendMail | `src/lib/mail/graph.ts` |
 | Entra token (XOAUTH2) | `src/lib/mail/oauth.ts` |
 | Message body (text + HTML) | `src/lib/mail/contact-template.ts` |
 | Orchestration | `src/lib/mail/send-contact.ts` |
@@ -226,7 +232,6 @@ Open items, all marked `TODO` in code:
 
 - **Thai copy needs review** — `messages/th.json` is a first draft, not approved
   marketing copy. Taglines and service names especially.
-- `src/config/site.ts` — real Facebook URL.
 - **Privacy / PDPA page** — referenced by the form's privacy note, does not exist.
 - **Images** — `hero-*.png` and `map.png` are 1.4–1.8 MB PNGs, and
   `ic-mail-circle.png` is ~325 KB that should be SVG. `next/image` converts to AVIF/WebP

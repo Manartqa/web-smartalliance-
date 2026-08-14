@@ -88,15 +88,24 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-4">
       {/* Honeypot: off-screen rather than display:none, since some bots skip
-          hidden inputs. Never focusable, never announced. */}
+          hidden inputs. Never focusable, never announced.
+
+          The id/name deliberately match no autofill category. Named `website`
+          it was filled with the visitor's own email by Chrome and by password
+          managers — and a tripped honeypot silently discards the message, so
+          real enquiries vanished. The `data-*` opt-outs below cover
+          1Password / LastPass / Dashlane, which ignore `autoComplete="off"`. */}
       <div aria-hidden className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
-        <label htmlFor="website">Leave this field empty</label>
+        <label htmlFor="contact-ref">Leave this field empty</label>
         <input
-          id="website"
-          name="website"
+          id="contact-ref"
+          name="contact-ref"
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          data-1p-ignore
+          data-lpignore="true"
+          data-form-type="other"
           value={values.website}
           onChange={(e) =>
             setValues((v) => ({ ...v, website: e.target.value }))

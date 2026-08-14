@@ -28,8 +28,7 @@ export const siteConfig = {
   // Kept for structured data and as the fallback map centre.
   coords: { lat: 13.8284251, lng: 100.5469484 },
   social: {
-    // TODO: replace with the real Facebook page URL.
-    facebook: "https://www.facebook.com/",
+    facebook: "https://www.facebook.com/smartalliance.co.th",
   },
   foundedYear: 2004,
 } as const;

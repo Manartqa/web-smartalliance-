@@ -7,8 +7,10 @@ import "server-only";
  * cannot be reached with a password. OAuth2 is the supported route: the app
  * authenticates as itself and sends as the configured mailbox.
  *
- * Requires an App Registration with the **SMTP.SendAsApp** *application*
- * permission (Office 365 Exchange Online) and admin consent granted.
+ * Which application permission is needed depends on the transport:
+ * `Mail.Send` on Microsoft Graph, or `SMTP.SendAsApp` on Office 365 Exchange
+ * Online. Both need admin consent, and they are **not** interchangeable — a
+ * token minted for one resource carries no roles on the other.
  */
 export interface OAuthConfig {
   tenantId: string;
@@ -16,19 +18,27 @@ export interface OAuthConfig {
   clientSecret: string;
 }
 
-/** Exchange Online's SMTP scope — not the Graph one. */
-const SCOPE = "https://outlook.office365.com/.default";
+/** The two resources this app can be granted against. */
+export const SCOPE = {
+  graph: "https://graph.microsoft.com/.default",
+  smtp: "https://outlook.office365.com/.default",
+} as const;
 
 interface CachedToken {
   value: string;
   expiresAt: number;
 }
 
-let cache: CachedToken | undefined;
+/** One entry per scope — the two resources issue different tokens. */
+const cache = new Map<string, CachedToken>();
 
-export async function getAccessToken(config: OAuthConfig): Promise<string> {
+export async function getAccessToken(
+  config: OAuthConfig,
+  scope: string = SCOPE.graph,
+): Promise<string> {
   // Reuse until a minute before expiry so a send never races the rollover.
-  if (cache && cache.expiresAt > Date.now() + 60_000) return cache.value;
+  const hit = cache.get(scope);
+  if (hit && hit.expiresAt > Date.now() + 60_000) return hit.value;
 
   const endpoint = `https://login.microsoftonline.com/${encodeURIComponent(
     config.tenantId,
@@ -40,7 +50,7 @@ export async function getAccessToken(config: OAuthConfig): Promise<string> {
     body: new URLSearchParams({
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      scope: SCOPE,
+      scope,
       grant_type: "client_credentials",
     }),
     cache: "no-store",
@@ -63,15 +73,15 @@ export async function getAccessToken(config: OAuthConfig): Promise<string> {
     );
   }
 
-  cache = {
+  cache.set(scope, {
     value: payload.access_token,
     expiresAt: Date.now() + (payload.expires_in ?? 3600) * 1000,
-  };
+  });
 
-  return cache.value;
+  return payload.access_token;
 }
 
-/** Drops the cached token so the next send re-authenticates. */
+/** Drops cached tokens so the next send re-authenticates. */
 export function resetTokenCache() {
-  cache = undefined;
+  cache.clear();
 }

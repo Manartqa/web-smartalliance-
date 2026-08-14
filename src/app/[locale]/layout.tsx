@@ -28,7 +28,16 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={fontVariables} data-scroll-behavior="smooth">
+    // `suppressHydrationWarning`: browser extensions (screen recorders, password
+    // managers) stamp their own attributes on <html> before React hydrates, so
+    // the server HTML can never match. Scoped to this element only — children
+    // still report real mismatches.
+    <html
+      lang={locale}
+      className={fontVariables}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       {/* No `overflow-x-hidden` on <body>: it turns body into a scroll
           container, which silently kills `position: sticky` on the hero. */}
       <body className="flex min-h-screen flex-col">
