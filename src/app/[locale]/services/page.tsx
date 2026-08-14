@@ -1,10 +1,8 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
+
+import { ServicesContent } from "@/components/partials/Services";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
-import { Hero } from "@/components/sections/Hero";
-import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { CtaBand } from "@/components/layout/CtaBand";
-import { PageBody } from "@/components/layout/PageBody";
 
 export async function generateMetadata({
   params,
@@ -22,22 +20,6 @@ export default async function ServicesPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("services.hero");
 
-  return (
-    <>
-      <Hero
-        image="/assets/hero-service.png"
-        label={t("label")}
-        title={t("title")}
-        paragraph={t("paragraph")}
-        rule
-        ribbon="services"
-      />
-      <PageBody>
-        <ServicesGrid />
-        <CtaBand variant="services" />
-      </PageBody>
-    </>
-  );
+  return <ServicesContent />;
 }

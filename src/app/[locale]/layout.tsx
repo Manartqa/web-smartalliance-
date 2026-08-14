@@ -2,10 +2,12 @@ import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { UIProvider } from "@/components/providers";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -30,10 +32,13 @@ export default async function LocaleLayout({
       {/* No `overflow-x-hidden` on <body>: it turns body into a scroll
           container, which silently kills `position: sticky` on the hero. */}
       <body className="flex min-h-screen flex-col">
+        {/* Provider order: NextIntl → UIProvider (React Query) → app. */}
         <NextIntlClientProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <UIProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </UIProvider>
         </NextIntlClientProvider>
       </body>
     </html>

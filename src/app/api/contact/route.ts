@@ -1,30 +1,26 @@
 import { NextResponse } from "next/server";
 
-interface ContactPayload {
-  name?: string;
-  email?: string;
-  company?: string;
-  phone?: string;
-  subject?: string;
-  message?: string;
-}
+import { EMAIL_PATTERN } from "@/lib/validation";
+import type { ApiErrorResponse } from "@/types/api/main/common";
+import type { ContactRequest, ContactResponse } from "@/types/api/main/contact";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const fail = (error: ApiErrorResponse["error"], status: number) =>
+  NextResponse.json<ApiErrorResponse>({ error }, { status });
 
 export async function POST(request: Request) {
-  let body: ContactPayload;
+  let body: Partial<ContactRequest>;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    return fail("invalid_json", 400);
   }
 
   const name = body.name?.trim() ?? "";
   const email = body.email?.trim() ?? "";
   const message = body.message?.trim() ?? "";
 
-  if (!name || !email || !message || !EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "validation_failed" }, { status: 400 });
+  if (!name || !email || !message || !EMAIL_PATTERN.test(email)) {
+    return fail("validation_failed", 400);
   }
 
   // ---------------------------------------------------------------------
@@ -36,12 +32,13 @@ export async function POST(request: Request) {
   // and rate limiting at the same time.
   // ---------------------------------------------------------------------
   if (!process.env.CONTACT_MAIL_TO) {
-    console.warn(
-      "[contact] CONTACT_MAIL_TO is not set — submission rejected.",
-      { name, email, hasMessage: message.length > 0 },
-    );
-    return NextResponse.json({ error: "not_configured" }, { status: 503 });
+    console.warn("[contact] CONTACT_MAIL_TO is not set — submission rejected.", {
+      name,
+      email,
+      hasMessage: message.length > 0,
+    });
+    return fail("not_configured", 503);
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json<ContactResponse>({ ok: true });
 }
