@@ -19,9 +19,9 @@
   --color-placeholder: #9ca3af;
   --color-surface-muted: #f8f9fb;
 
-  --font-sans: var(--font-poppins), var(--font-noto-thai), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-jakarta: var(--font-jakarta), var(--font-noto-thai), ui-sans-serif,
+  /* Montserrat for Latin; Thai glyphs it does not have fall through to Noto
+     Sans Thai behind it, per character. */
+  --font-sans: var(--font-montserrat), var(--font-noto-thai), ui-sans-serif,
     system-ui, sans-serif;
 
   --shadow-card: 0 14px 34px rgba(13, 38, 76, 0.08);

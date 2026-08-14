@@ -8,6 +8,7 @@ import { BaseButton } from "@/components/ui/Button";
 import { ChevronRight } from "@/components/ui/Icon";
 import { BaseInput, BaseTextarea } from "@/components/ui/Input";
 import { useContactSubmit } from "@/hooks/contact";
+import { ApiError } from "@/lib/api/interceptor";
 import type {
   ContactFieldErrors,
   ContactFieldName,
@@ -28,7 +29,15 @@ export default function ContactForm() {
   const t = useTranslations("contact.form");
   const [values, setValues] = useState<ContactFormValues>(CONTACT_FORM_DEFAULTS);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
-  const { submit, isPending, isSuccess, isError, reset } = useContactSubmit();
+  const { submit, isPending, isSuccess, isError, error, reset } =
+    useContactSubmit();
+
+  // Too-many-submissions is worth naming; everything else is one generic
+  // failure, since the visitor can't act on the difference.
+  const errorMessage =
+    error instanceof ApiError && error.code === "rate_limited"
+      ? t("errors.tooMany")
+      : t("error");
 
   const set = (field: ContactFieldName, value: string) => {
     setValues((v) => ({ ...v, [field]: value }));
@@ -78,6 +87,23 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-4">
+      {/* Honeypot: off-screen rather than display:none, since some bots skip
+          hidden inputs. Never focusable, never announced. */}
+      <div aria-hidden className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Leave this field empty</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={values.website}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, website: e.target.value }))
+          }
+        />
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         {CONTACT_GRID_FIELDS.map((field) => (
           <div key={field}>
@@ -123,7 +149,9 @@ export default function ContactForm() {
           </span>
         )}
         {isError && (
-          <span className="text-sm font-medium text-red-600">{t("error")}</span>
+          <span className="text-sm font-medium text-red-600">
+            {errorMessage}
+          </span>
         )}
       </p>
 

@@ -88,7 +88,7 @@
         "body": "Seamlessly connect applications, data, APIs, and enterprise systems to ensure smooth data flow and operational efficiency."
       },
       "workflow": {
-        "title": "Digital Workflow & e-Services",
+        "title": "Digital Workflow & e-\u2060Services",
         "body": "Paperless solutions, workflow automation, e-Document, and digital platforms to optimize business processes and improve service delivery."
       },
       "ai": {
@@ -135,7 +135,8 @@
         "nameRequired": "Please enter your full name.",
         "emailRequired": "Please enter your email address.",
         "emailInvalid": "Please enter a valid email address.",
-        "messageRequired": "Please enter your message."
+        "messageRequired": "Please enter your message.",
+        "tooMany": "Too many submissions. Please wait a few minutes and try again."
       }
     },
     "touchLabel": "Get in Touch",

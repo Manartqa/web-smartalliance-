@@ -1,10 +1,16 @@
-/** Keys resolve against the `about.*` namespace in `messages/*.json`. */
+/**
+ * Keys resolve against the `about.*` namespace in `messages/*.json`.
+ *
+ * Listed in reading order — down the first column, then the second — which is
+ * how the mockup arranges them (left column at y 401/441/481, right column at
+ * y 401/441). `AboutDetail` splits the array in half to build the two columns.
+ */
 export const ABOUT_POINTS = [
   "experience",
-  "custom",
   "integration",
-  "projects",
   "delivery",
+  "custom",
+  "projects",
 ] as const;
 
 export const ABOUT_STATS = [

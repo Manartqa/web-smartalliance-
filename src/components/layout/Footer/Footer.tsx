@@ -37,17 +37,19 @@ export default function Footer() {
         </nav>
 
         <div className="flex items-center gap-2 lg:justify-self-end">
-          {FOOTER_SOCIAL_ITEMS.map((s) => (
+          {FOOTER_SOCIAL_ITEMS.map(({ key, href, icon: Icon, external }) => (
             <a
-              key={s.key}
-              href={s.href}
-              aria-label={t(s.key)}
-              {...(s.external
+              key={key}
+              href={href}
+              aria-label={t(key)}
+              {...(external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="transition-opacity hover:opacity-80"
+              // white/60 over the footer's navy is exactly the #99a3b1 the
+              // original bitmaps used.
+              className="text-white/60 transition-colors hover:text-white"
             >
-              <Image src={s.icon} alt="" width={38} height={38} />
+              <Icon />
             </a>
           ))}
         </div>

@@ -76,7 +76,7 @@ export default function Hero({
             />
           )}
 
-          <p className="mt-6 max-w-xl font-jakarta text-base font-light leading-relaxed text-hero-para lg:text-lg">
+          <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-hero-para lg:text-lg">
             {paragraph}
           </p>
 

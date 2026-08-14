@@ -7,6 +7,12 @@ import { BaseSectionLabel } from "@/components/ui/SectionLabel";
 
 import { ABOUT_POINTS, ABOUT_STATS } from "./About.config";
 
+/** Split down the middle: the first half fills column one, the rest column two. */
+const POINT_COLUMNS = [
+  ABOUT_POINTS.slice(0, Math.ceil(ABOUT_POINTS.length / 2)),
+  ABOUT_POINTS.slice(Math.ceil(ABOUT_POINTS.length / 2)),
+];
+
 /** Company overview. Shared by the home page and the about page. */
 export default function AboutDetail() {
   const t = useTranslations("about");
@@ -37,21 +43,30 @@ export default function AboutDetail() {
             {t("whyHeading")}
           </h3>
 
-          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
-            {ABOUT_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow text-white">
-                  <Check />
-                </span>
-                {/* leading-6 makes the first line box exactly as tall as the
-                    24px icon, so the two centre on each other with no nudge —
-                    and a label that wraps still starts level with the icon. */}
-                <span className="text-[15px] font-medium leading-6 text-navy">
-                  {t(`points.${point}`)}
-                </span>
-              </li>
+          {/* Two independent lists rather than one two-column grid: grid rows
+              share a height, so a label that wraps to two lines pushes the
+              *other* column's next item down with it and the 40px rhythm the
+              mockup uses breaks. Separate lists keep each column's gap even. */}
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {POINT_COLUMNS.map((column, index) => (
+              <ul key={index} className="grid content-start gap-4">
+                {column.map((point) => (
+                  <li key={point} className="flex items-start gap-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow text-white">
+                      <Check />
+                    </span>
+                    {/* leading-6 makes the first line box exactly as tall as
+                        the 24px icon, so the two centre on each other with no
+                        nudge — and a label that wraps still starts level with
+                        the icon. */}
+                    <span className="text-[15px] font-medium leading-6 text-navy">
+                      {t(`points.${point}`)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             ))}
-          </ul>
+          </div>
         </div>
 
         {/* Right column — partnership card + stat grid */}

@@ -21,7 +21,10 @@ export async function buildMetadata(
   );
 
   return {
-    title: t("title"),
+    // Every tab reads as the company name. The descriptive per-page titles in
+    // `meta.*.title` are kept for Open Graph below, where the page context
+    // still matters when a link is shared.
+    title: siteConfig.name,
     description: t("description"),
     metadataBase: new URL(siteConfig.url),
     alternates: {

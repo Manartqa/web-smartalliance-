@@ -19,7 +19,9 @@ export interface PageObject<T> {
 export type ApiErrorCode =
   | "invalid_json"
   | "validation_failed"
-  | "not_configured";
+  | "rate_limited"
+  | "not_configured"
+  | "send_failed";
 
 export interface ApiErrorResponse {
   error: ApiErrorCode;

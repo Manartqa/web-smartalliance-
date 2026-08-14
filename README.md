@@ -58,7 +58,7 @@ src/services/                contact.service.ts — trims + shapes the request
 src/lib/api/                 client.ts (axios), interceptor.ts (ApiError), api-main.ts
 src/lib/utils.ts             cn() — clsx + tailwind-merge
 src/lib/validation.ts        EMAIL_PATTERN, shared by the form and the route handler
-src/lib/fonts.ts             Poppins + Plus Jakarta (local woff2) + Noto Sans Thai (Google)
+src/lib/fonts.ts             Noto Sans Thai — the only typeface (next/font/google, self-hosted)
 src/lib/metadata.ts          per-page metadata + hreflang alternates
 src/types/api/main/          backend contract (ApiResponse, ContactRequest…)
 src/types/app/contact/       frontend domain types
@@ -88,38 +88,171 @@ from `next/link` or `next/navigation` — the locale prefix comes from there.
 
 The `:root` variables from the original `styles.css` live in `src/app/globals.css`
 under `@theme`, so they are available as Tailwind utilities: `bg-yellow`, `text-navy`,
-`border-line`, `shadow-card`, `font-jakarta`, etc.
+`border-line`, `shadow-card`, `font-sans`, etc.
 
-### Thai typography
+### Typography
 
-Poppins and Plus Jakarta have no Thai glyphs. Noto Sans Thai sits behind them in the
-font stack, so Thai text falls through automatically — no per-locale class switching.
-`globals.css` also neutralises `uppercase` and loosens `line-height` under `:lang(th)`.
+**Montserrat for Latin, Noto Sans Thai for Thai** — both via `next/font/google`
+(self-hosted at build time, no runtime request to Google).
+
+The pairing is a font stack, not a per-locale switch: Montserrat sits first and has no
+Thai glyphs, so Thai characters fall through to Noto Sans Thai **per character**. An
+English product name inside a Thai sentence therefore still renders in Montserrat,
+which is the intent. Nothing in the components needs to know the locale.
+
+Only the weights the UI uses are loaded: 300 (`font-light`), 400 (body default), 500
+(`font-medium`), 600 (`font-semibold`) and 700 for `<strong>`. Noto Sans Thai is pulled
+with the `thai` subset only, since Montserrat already covers Latin, digits and
+punctuation. Both families are variable and have no italic. `globals.css` still
+neutralises `uppercase` and loosens `line-height` under `:lang(th)`.
+
+> Replaced the original Poppins + Plus Jakarta (local woff2) stack. The
+> `--font-jakarta` token and its `font-jakarta` utility went with it; the three call
+> sites now inherit `font-sans`. Type scale and weights are unchanged throughout.
+
+## Contact form
+
+`POST /api/contact` sends the enquiry over **SMTP via nodemailer**. It needs
+credentials to work — with none set the route answers `503 not_configured` rather than
+accepting a submission it would silently drop.
+
+**To turn it on:** copy `.env.example` to `.env.local`, fill it in, restart the dev
+server. Nothing in the code needs changing.
+
+### Authentication — this domain needs OAuth2
+
+`smartalliance.co.th` runs on **Exchange Online** (MX → `*.mail.protection.outlook.com`)
+with **Security Defaults** enabled, which blocks Basic Authentication. A username +
+password login is refused:
+
+```
+535 5.7.139 Authentication unsuccessful, user is locked by
+your organization's security defaults policy.
+```
+
+So the transport authenticates with **XOAUTH2** using an Entra ID App Registration
+(client-credentials flow). The app needs the *application* permission
+**`SMTP.SendAsApp`** (Office 365 Exchange Online) with admin consent granted.
+
+```
+SMTP_HOST=smtp.office365.com · SMTP_PORT=587 · SMTP_USER=<mailbox>
+MS_TENANT_ID · MS_CLIENT_ID · MS_CLIENT_SECRET · CONTACT_MAIL_TO
+```
+
+Password auth is still supported for any server that allows it — leave the `MS_*`
+block empty and set `SMTP_PASSWORD` instead. `readMailConfig` picks the mode and
+reports exactly which variables are missing.
+
+> **Quote passwords and secrets containing `#`.** dotenv parses an unquoted value that
+> starts with `#` as an empty string, which fails as a silent auth error rather than a
+> config error.
+
+### Handling the secret
+
+Any `*_ENC` variable is decrypted at runtime with `CONFIG_MASTER_KEY` — the same shape
+as Jasypt's `ENC(...)`. Implementation in `src/lib/secrets.ts` (AES-256-GCM, scrypt KDF,
+random salt + IV per value, authenticated so tampering is rejected).
+
+```bash
+npm run secret:genkey                          # generate CONFIG_MASTER_KEY
+npm run secret:encrypt                         # prompts; nothing is echoed
+echo -n "the-secret" | npm run secret:encrypt  # or pipe it
+```
+
+```
+MS_CLIENT_SECRET_ENC=enc:v1:<base64>
+```
+
+`readSecret()` prefers the plain `NAME` and falls back to `NAME_ENC`, so either style
+works without touching code. A wrong master key surfaces as `503 not_configured` with
+the reason logged, never a 500.
+
+**What this buys you, and what it doesn't.** It protects the value *at rest* — in a
+committed config file, a shared `.env`, a backup, a screen share. It does **not** protect
+a running process: the master key has to get in somehow, and anyone who can read the
+process environment or memory can read the decrypted secret.
+
+> It is only worth something when the key and the ciphertext live in **different
+> places**. `CONFIG_MASTER_KEY` sitting in `.env.local` next to `MS_CLIENT_SECRET_ENC`
+> buys nothing at all — keep the key in the host's secret store, the systemd unit, or
+> the shell profile, and the ciphertext in the config file.
+
+Stronger options, in rough order of preference:
+
+1. **Managed identity** (if hosted on Azure) — no secret exists at all; the platform
+   issues tokens. Best possible answer for an Entra/M365 integration.
+2. **Certificate credentials** instead of a client secret — Entra supports this, and the
+   private key can live in a keystore or Key Vault. Microsoft recommends it over secrets.
+3. **The platform's own secret store** — Vercel/Azure environment variables, Docker
+   secrets, or a `systemd` `EnvironmentFile` with mode `0600`. Encrypted at rest and
+   injected at runtime, with no key material in the repo.
+4. **`*_ENC` + master key** (this repo) — the pragmatic option when config files are
+   committed or passed around, and the one that matches existing practice here.
+
+Whatever the choice: **rotate the secret if it has ever been pasted into a file, a chat,
+or a ticket.**
+
+`SMTP_SECURE` defaults to true only on port 465; 587 negotiates STARTTLS.
+`CONTACT_MAIL_FROM` defaults to `SMTP_USER`, because Exchange rejects a `From` that
+isn't the sending mailbox. The visitor's address goes in **`Reply-To`**, so replying
+from the inbox reaches them while the envelope still passes SPF/DMARC.
+
+| Layer | File |
+|---|---|
+| Transport + config | `src/lib/mail/client.ts` |
+| Entra token (XOAUTH2) | `src/lib/mail/oauth.ts` |
+| Message body (text + HTML) | `src/lib/mail/contact-template.ts` |
+| Orchestration | `src/lib/mail/send-contact.ts` |
+| Rate limiting | `src/lib/rate-limit.ts` |
+| Route | `src/app/api/contact/route.ts` |
+
+### Abuse protection
+
+- **Honeypot** — a `website` field, positioned off-screen and untabbable. Filled means a
+  bot, and the route answers `200` without sending so it gets no signal to retry.
+- **Rate limit** — 5 submissions per IP per 10 minutes, applied *after* validation so
+  malformed spam can't burn a real visitor's budget. Returns `429` + `Retry-After`, and
+  the form shows a dedicated message.
+- **Length caps** and header-injection stripping (`\r\n` removed from Subject and
+  Reply-To) in the template.
+
+> The rate limiter is in-process, so on a multi-instance or serverless deployment the
+> effective limit is `5 × instances`. Swap in Redis/Upstash if the site is scaled out.
+> A CAPTCHA (Turnstile / reCAPTCHA) is still worth adding if spam gets through.
 
 ## Not wired yet
 
-**Contact form — `POST /api/contact` returns 503 by design.**
-The UI, validation, and error/success states are complete, but no mail transport is
-configured. The route deliberately refuses rather than accepting a submission it would
-silently drop. To go live:
-
-1. Pick a transport (Resend, SES, company SMTP) and send the mail in the route.
-2. Set `CONTACT_MAIL_TO` and remove the `not_configured` guard.
-3. Add spam protection (Turnstile / reCAPTCHA) and rate limiting at the same time.
-
-Other open items, all marked `TODO` in code:
+Open items, all marked `TODO` in code:
 
 - **Thai copy needs review** — `messages/th.json` is a first draft, not approved
   marketing copy. Taglines and service names especially.
 - `src/config/site.ts` — real Facebook URL.
 - **Privacy / PDPA page** — referenced by the form's privacy note, does not exist.
-- **Google Maps** — `MapSection` renders the static `map.png` export.
-- **Images** — `hero-*.png` and `map.png` are 1.4–1.8 MB PNGs; `ic-badge.png` and
-  `ic-mail-circle.png` are 270–325 KB PNGs that should be SVG. `next/image` converts to
-  AVIF/WebP on the fly, but shipping smaller sources would cut build and cache cost.
-- **SEO** — no `sitemap.ts`, `robots.ts`, favicon, or OG image yet.
+- **Images** — `hero-*.png` and `map.png` are 1.4–1.8 MB PNGs, and
+  `ic-mail-circle.png` is ~325 KB that should be SVG. `next/image` converts to AVIF/WebP
+  on the fly, but shipping smaller sources would cut build and cache cost.
+  (`ic-badge.png` was the other offender at 264 KB — redrawn and now 5.3 KB.)
+- **SEO** — no `sitemap.ts`, `robots.ts`, or OG image yet.
 - **Language switcher placement** — not in the original design; currently `EN | TH`
   beside the header CTA (and in the mobile drawer row).
+
+## Icons
+
+**App icons** — `src/app/{favicon.ico,icon.png,apple-icon.png}` are generated from the
+brand mark, not hand-drawn: the yellow node cluster in `public/assets/logo-white.png`
+(crop `x 1953–2123, y 170–342`) keyed off its white separator strokes via the blue
+channel, then centred at 58% on a navy `#002a62` rounded square. The navy plate is what
+keeps the all-yellow mark legible on a light tab strip. Regenerate from the same crop if
+the logo ever changes.
+
+**Footer social icons** live in `src/components/ui/Icon/social.tsx` as inline SVG —
+one shared ring, one glyph each, all painted in `currentColor`. The footer sets that to
+`white/60`, which composites to the `#99a3b1` the original bitmaps used.
+
+**Stat icons** (`public/assets/{ic-badge,stat-users,stat-box,stat-shield}.png`) share a
+house style worth preserving when adding one: ink `#002b63`, a ~117px canvas, and the
+glyph filling only ~60% of it so the transparent padding keeps every icon at the same
+optical size behind `object-contain`.
 
 ## Adding a third locale
 

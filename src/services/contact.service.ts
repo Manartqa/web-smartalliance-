@@ -15,6 +15,8 @@ const toRequest = (values: ContactFormValues): ContactRequest => {
     ...(company ? { company } : {}),
     ...(phone ? { phone } : {}),
     ...(subject ? { subject } : {}),
+    // Forwarded as-is: the route decides what a non-empty honeypot means.
+    ...(values.website ? { website: values.website } : {}),
   };
 };
 

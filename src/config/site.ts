@@ -3,11 +3,11 @@
  * Everything here is locale-independent — translated labels live in messages/*.json.
  */
 export const siteConfig = {
-  name: "Smart Alliance Co., Ltd.",
+  name: "Smart Alliance Co.,Ltd.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.smartalliance.co.th",
   phone: "+66 5 509 2905",
   phoneHref: "tel:+6655092905",
-  email: "info@smartalliance.co.th",
+  email: "admin@smartalliance.co.th",
   website: "www.smartalliance.co.th",
   address: {
     building: "Smart Alliance Building,",
@@ -16,9 +16,16 @@ export const siteConfig = {
   },
   // Shared Google Maps pin for the office (supplied by the client).
   mapsUrl: "https://maps.app.goo.gl/wYu54GZAJY9FU5MY7",
-  // Resolved from the share link above. Kept as raw coordinates because the
-  // short link cannot be framed — Google serves /maps/place/* with
-  // X-Frame-Options, so the embed has to target the coordinates instead.
+  // Google's own id for the business listing, resolved from the share link
+  // above (`!1s0x30e29e5d72156099:0x26f56fb15325db8d` → the second half as
+  // decimal). The embed needs this rather than raw coordinates: given only a
+  // lat/lng Google has no idea which place is meant and drops an unlabelled
+  // pin, whereas `cid` renders the listing with its name.
+  //
+  // The /maps/place/* share link itself still cannot be framed (Google serves
+  // it with X-Frame-Options), which is why the id is stored separately.
+  mapsCid: "2807272750130256781",
+  // Kept for structured data and as the fallback map centre.
   coords: { lat: 13.8284251, lng: 100.5469484 },
   social: {
     // TODO: replace with the real Facebook page URL.

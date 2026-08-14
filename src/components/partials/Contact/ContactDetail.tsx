@@ -27,7 +27,7 @@ export default function ContactDetail() {
 
         <div>
           <BaseSectionLabel>{t("touchLabel")}</BaseSectionLabel>
-          <h2 className="mt-4 font-jakarta text-2xl font-semibold leading-snug text-navy lg:text-[2rem]">
+          <h2 className="mt-4 text-2xl font-semibold leading-snug text-navy lg:text-[2rem]">
             {t("touchHeading")}
           </h2>
           <div className="mt-8">

@@ -1,43 +1,34 @@
-import localFont from "next/font/local";
-import { Noto_Sans_Thai } from "next/font/google";
+import { Montserrat, Noto_Sans_Thai } from "next/font/google";
 
 /**
- * Latin display/body faces lifted from the original design (subset woff2).
- * Neither covers Thai glyphs, so `notoThai` sits behind them in the CSS stack
- * and the browser falls through to it automatically for Thai text.
+ * Two faces, paired by script rather than by locale.
+ *
+ * Montserrat sits first in the stack and carries all Latin text; it has no Thai
+ * glyphs, so Thai characters fall through to Noto Sans Thai automatically. That
+ * happens per character, not per page — an English product name inside a Thai
+ * sentence still renders in Montserrat, which is the intent.
+ *
+ * Weights are limited to the ones the UI uses: 300 (`font-light`), 400 (body
+ * default), 500 (`font-medium`), 600 (`font-semibold`) and 700 for `<strong>`.
+ * Both families are variable and have no italic; nothing in the design asks for
+ * one.
+ *
+ * `next/font/google` self-hosts the files at build time — no request ever goes
+ * to Google at runtime.
  */
-export const poppins = localFont({
-  variable: "--font-poppins",
-  display: "swap",
-  src: [
-    { path: "../fonts/poppins-300.woff2", weight: "300", style: "normal" },
-    { path: "../fonts/poppins-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/poppins-500.woff2", weight: "500", style: "normal" },
-    { path: "../fonts/poppins-600.woff2", weight: "600", style: "normal" },
-    { path: "../fonts/poppins-700.woff2", weight: "700", style: "normal" },
-  ],
-});
-
-export const jakarta = localFont({
-  variable: "--font-jakarta",
-  display: "swap",
-  src: [
-    { path: "../fonts/jakarta-300.woff2", weight: "300", style: "normal" },
-    { path: "../fonts/jakarta-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/jakarta-500.woff2", weight: "500", style: "normal" },
-    { path: "../fonts/jakarta-600.woff2", weight: "600", style: "normal" },
-  ],
-});
-
-export const notoThai = Noto_Sans_Thai({
-  variable: "--font-noto-thai",
-  subsets: ["thai", "latin"],
+export const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-export const fontVariables = [
-  poppins.variable,
-  jakarta.variable,
-  notoThai.variable,
-].join(" ");
+/** Thai-only subset: Montserrat already covers Latin, digits and punctuation. */
+export const notoSansThai = Noto_Sans_Thai({
+  variable: "--font-noto-thai",
+  subsets: ["thai"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+export const fontVariables = [montserrat.variable, notoSansThai.variable].join(" ");

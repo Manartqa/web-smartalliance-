@@ -3,11 +3,21 @@ import { useTranslations } from "next-intl";
 
 import { BaseCard } from "@/components/ui/Card";
 import { BaseSectionLabel } from "@/components/ui/SectionLabel";
+import { cn } from "@/lib/utils";
 
-import { SERVICE_ITEMS } from "./Services.config";
+import {
+  SERVICE_ITEMS,
+  SERVICES_GRID_COLUMNS,
+  SERVICES_LAST_ROW_START_CLASS,
+} from "./Services.config";
 
 export default function ServicesDetail() {
   const t = useTranslations("services");
+
+  // 7 cards over 4 columns leaves 3 in the last row; offsetting that row's
+  // first card centres it instead of letting it hang to the left.
+  const remainder = SERVICE_ITEMS.length % SERVICES_GRID_COLUMNS;
+  const lastRowFirstIndex = SERVICE_ITEMS.length - remainder;
 
   return (
     // Same as AboutDetail — the services hero ribbon is even deeper, so this
@@ -18,14 +28,23 @@ export default function ServicesDetail() {
         <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight text-navy lg:text-[2.2rem]">
           {t("heading")}
         </h2>
-        <p className="mt-4 max-w-3xl font-jakarta text-base font-light leading-relaxed text-body lg:text-lg">
+        <p className="mt-4 max-w-3xl text-base font-light leading-relaxed text-body lg:text-lg">
           {t("subheading")}
         </p>
       </div>
 
-      <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {SERVICE_ITEMS.map((service) => (
-          <li key={service.key} className="flex">
+      {/* 8 columns, each card spanning 2 — see SERVICES_LAST_ROW_START_CLASS. */}
+      <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-8">
+        {SERVICE_ITEMS.map((service, index) => (
+          <li
+            key={service.key}
+            className={cn(
+              "flex lg:col-span-2",
+              remainder > 0 &&
+                index === lastRowFirstIndex &&
+                SERVICES_LAST_ROW_START_CLASS[remainder],
+            )}
+          >
             <BaseCard className="relative flex w-full flex-col overflow-hidden p-8">
               <Image
                 src="/assets/card-dots.png"
@@ -35,7 +54,9 @@ export default function ServicesDetail() {
                 aria-hidden
                 className="absolute right-4 top-4 h-10 w-auto"
               />
-              <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-[#e6efff]">
+              {/* Mockup centres the circle in the card (icirc left 111 in a
+                  294-wide card) while title, rule and body stay flush left. */}
+              <span className="flex h-[72px] w-[72px] items-center justify-center self-center rounded-full bg-[#e6efff]">
                 <Image
                   src={service.icon}
                   alt=""

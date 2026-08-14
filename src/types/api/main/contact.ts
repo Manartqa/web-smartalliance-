@@ -8,6 +8,11 @@ export interface ContactRequest {
   phone?: string;
   subject?: string;
   message: string;
+  /**
+   * Honeypot. Hidden from people, so anything here means a bot filled the form
+   * blindly. Named to look like a field worth filling.
+   */
+  website?: string;
 }
 
 export interface ContactResponse {

@@ -8,7 +8,14 @@ export type ContactFieldName =
   | "subject"
   | "message";
 
-export type ContactFormValues = Record<ContactFieldName, string>;
+export type ContactFormValues = Record<ContactFieldName, string> & {
+  /**
+   * Honeypot. Hidden from people and always submitted empty; the route drops
+   * anything that arrives with it filled. Kept out of `ContactFieldName` so it
+   * never appears in the rendered field loops.
+   */
+  website: string;
+};
 
 export type ContactFieldErrors = Partial<Record<ContactFieldName, string>>;
 

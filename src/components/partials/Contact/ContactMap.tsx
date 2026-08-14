@@ -9,10 +9,12 @@ export default function ContactMap() {
   const t = useTranslations("contact.map");
   const locale = useLocale();
 
-  const { lat, lng } = siteConfig.coords;
-  // `output=embed` is the keyless Maps embed. `hl` makes the map's own labels
-  // follow the site language, so the Thai page gets Thai street names.
-  const embedSrc = `https://www.google.com/maps?q=${lat},${lng}&z=17&hl=${locale}&output=embed`;
+  // `output=embed` is the keyless Maps embed. `cid` points at the company's
+  // Google listing so the pin carries its name — a bare `q=lat,lng` renders an
+  // anonymous pin, because Google has no way to tell which place is meant.
+  // `hl` makes the map's own labels follow the site language, so the Thai page
+  // gets Thai street names.
+  const embedSrc = `https://www.google.com/maps?cid=${siteConfig.mapsCid}&z=17&hl=${locale}&output=embed`;
 
   return (
     <section className="bg-surface-muted py-10 lg:py-6">
