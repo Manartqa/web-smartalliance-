@@ -5,8 +5,8 @@
 export const siteConfig = {
   name: "Smart Alliance Co.,Ltd.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.smartalliance.co.th",
-  phone: "+66 5 509 2905",
-  phoneHref: "tel:+6655092905",
+  phone: "+66 65 509 2905",
+  phoneHref: "tel:+66655092905",
   email: "admin@smartalliance.co.th",
   website: "www.smartalliance.co.th",
   address: {

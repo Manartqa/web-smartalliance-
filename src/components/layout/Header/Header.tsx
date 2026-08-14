@@ -78,7 +78,10 @@ export default function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? t("closeMenu") : t("openMenu")}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-navy"
+            // `touch-manipulation` opts this control out of double-tap-to-zoom.
+            // Without it some mobile browsers hold the tap back waiting to see
+            // whether a second one follows, and a quick tap can be swallowed.
+            className="flex h-11 w-11 touch-manipulation items-center justify-center rounded-lg border border-line text-navy"
           >
             <span aria-hidden className="relative block h-4 w-5">
               <span

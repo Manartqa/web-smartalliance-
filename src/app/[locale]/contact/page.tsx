@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 
+import { BreadcrumbJsonLd } from "@/components/common";
 import { ContactContent } from "@/components/partials/Contact";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
@@ -21,5 +22,10 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <ContactContent />;
+  return (
+    <>
+      <ContactContent />
+      <BreadcrumbJsonLd locale={locale} page="contact" />
+    </>
+  );
 }
