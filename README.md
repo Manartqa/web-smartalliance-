@@ -72,7 +72,6 @@ Other open items, all marked `TODO` in code:
 - **Thai copy needs review** — `messages/th.json` is a first draft, not approved
   marketing copy. Taglines and service names especially.
 - `src/config/site.ts` — real Facebook URL.
-- **Clients page** — footer link currently points at `/`.
 - **Privacy / PDPA page** — referenced by the form's privacy note, does not exist.
 - **Google Maps** — `MapSection` renders the static `map.png` export.
 - **Images** — `hero-*.png` and `map.png` are 1.4–1.8 MB PNGs; `ic-badge.png` and

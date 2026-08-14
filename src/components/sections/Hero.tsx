@@ -1,7 +1,11 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { HeroConstellation, HeroRibbon } from "./HeroDecor";
+import {
+  HeroConstellation,
+  HeroRibbon,
+  HeroRibbonServices,
+} from "./HeroDecor";
 
 interface HeroProps {
   image: string;
@@ -11,8 +15,15 @@ interface HeroProps {
   /** Services hero has a short yellow rule between title and paragraph. */
   rule?: boolean;
   actions?: ReactNode;
-  ribbonFlip?: boolean;
+  /** Which of the mockup's two band treatments to draw at the hero's foot. */
+  ribbon?: "home" | "services";
 }
+
+/** Bottom padding must clear the ribbon, which differs in height per variant. */
+const RIBBON_CLEARANCE = {
+  home: "pb-24 lg:pb-36",
+  services: "pb-28 lg:pb-56",
+} as const;
 
 export function Hero({
   image,
@@ -21,10 +32,12 @@ export function Hero({
   paragraph,
   rule = false,
   actions,
-  ribbonFlip = false,
+  ribbon = "home",
 }: HeroProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-hero-bg">
+    // `sticky top-0 z-0` pins the hero while <PageBody> scrolls over it.
+    // It still occupies its full height in flow, so nothing below shifts.
+    <section className="sticky top-0 z-0 overflow-hidden bg-hero-bg">
       <Image
         src={image}
         alt=""
@@ -40,7 +53,9 @@ export function Hero({
       />
       <HeroConstellation />
 
-      <div className="container-site relative pt-16 pb-24 sm:pt-20 lg:pt-28 lg:pb-40">
+      <div
+        className={`container-site relative pt-16 sm:pt-20 lg:pt-28 ${RIBBON_CLEARANCE[ribbon]}`}
+      >
         <div className="max-w-2xl">
           {label && <SectionLabel tone="yellow">{label}</SectionLabel>}
 
@@ -71,7 +86,7 @@ export function Hero({
         </div>
       </div>
 
-      <HeroRibbon flip={ribbonFlip} />
+      {ribbon === "services" ? <HeroRibbonServices /> : <HeroRibbon />}
     </section>
   );
 }

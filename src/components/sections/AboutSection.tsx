@@ -23,7 +23,10 @@ export function AboutSection() {
   const t = useTranslations("about");
 
   return (
-    <section className="container-site py-16 lg:py-24">
+    // Top padding is deliberately tiny: the hero ribbon above already supplies
+    // the whitespace (design puts this section's label 7px below the hero).
+    // Mobile gets a little more because the ribbon scales down with the width.
+    <section className="container-site pt-6 pb-16 lg:pt-2 lg:pb-28">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Left column — narrative + checklist */}
         <div>
@@ -48,10 +51,13 @@ export function AboutSection() {
           <ul className="mt-5 grid gap-4 sm:grid-cols-2">
             {POINTS.map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow text-white">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow text-white">
                   <Check />
                 </span>
-                <span className="text-[15px] font-medium leading-snug text-navy">
+                {/* leading-6 makes the first line box exactly as tall as the
+                    24px icon, so the two centre on each other with no nudge —
+                    and a label that wraps still starts level with the icon. */}
+                <span className="text-[15px] font-medium leading-6 text-navy">
                   {t(`points.${point}`)}
                 </span>
               </li>

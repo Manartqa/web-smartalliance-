@@ -17,7 +17,9 @@ export function ServicesGrid() {
   const t = useTranslations("services");
 
   return (
-    <section className="container-site py-16 lg:py-24">
+    // Same as AboutSection — the services hero ribbon is even deeper, so this
+    // section starts almost flush against it (design: label 8px below the hero).
+    <section className="container-site pt-6 pb-14 lg:pt-2 lg:pb-16">
       <div className="flex flex-col items-center text-center">
         <SectionLabel>{t("label")}</SectionLabel>
         <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight text-navy lg:text-[2.2rem]">

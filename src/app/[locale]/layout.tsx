@@ -27,7 +27,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={fontVariables} data-scroll-behavior="smooth">
-      <body className="flex min-h-screen flex-col overflow-x-hidden">
+      {/* No `overflow-x-hidden` on <body>: it turns body into a scroll
+          container, which silently kills `position: sticky` on the hero. */}
+      <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider>
           <Header />
           <main className="flex-1">{children}</main>

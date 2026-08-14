@@ -41,23 +41,53 @@ export function HeroConstellation() {
 }
 
 /**
- * The angled white/yellow ribbon that separates the hero from the page body.
- * `preserveAspectRatio="none"` lets it stretch to any viewport width while
- * keeping a fixed visual height.
+ * The angled ribbon that separates the hero from the page body.
+ *
+ * Polygon coordinates are copied verbatim from the mockup's second `.bands`
+ * SVG, so the geometry is the design's, not an approximation: two white
+ * ribbons that cross around 62% of the width, with a yellow ribbon paired to
+ * one of them. The yellow therefore reads as a *wedge* — ~19px thick at the
+ * left edge, tapering to nothing around x=830 — not a constant-width stripe.
+ *
+ * The viewBox crops the source SVG to the part that overlapped the hero
+ * (source y 635–739; the mockup offset that SVG by -80px against the page).
+ * `preserveAspectRatio="none"` keeps every proportion inside the box intact
+ * while the box itself stretches to any viewport width.
  */
-export function HeroRibbon({ flip = false }: { flip?: boolean }) {
+export function HeroRibbon() {
   return (
     <svg
       aria-hidden
-      viewBox="0 0 1440 120"
+      viewBox="0 635 1440 104"
       preserveAspectRatio="none"
-      className={`pointer-events-none absolute inset-x-0 bottom-0 h-14 w-full lg:h-20 ${
-        flip ? "scale-x-[-1]" : ""
-      }`}
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-12 w-full sm:h-16 lg:h-[104px]"
     >
-      <polygon points="0,58 1440,10 1440,52 0,100" fill="#ffffff" />
-      <polygon points="0,64 1440,16 1440,58 0,106" fill="#ffc300" />
-      <polygon points="0,78 1440,30 1440,120 0,120" fill="#ffffff" />
+      <polygon points="-62,814 2084,569 2102,729 -44,974" fill="#ffffff" />
+      <polygon points="-171,655 1987,756 1979,918 -178,817" fill="#ffffff" />
+      <polygon points="-163,661 1994,762 1987,923 -171,822" fill="#ffc300" />
+      <polygon points="-165,684 1994,735 1990,897 -169,846" fill="#ffffff" />
+    </svg>
+  );
+}
+
+/**
+ * The services hero uses a different pair of bands: a single yellow ribbon
+ * under a single white one, both rising to the right. Here the yellow wedge is
+ * thickest at the *right* edge (~21px) and tapers out toward the left, and the
+ * white ribbon eats a much deeper diagonal slice out of the hero image.
+ *
+ * Source: the `.bands` SVG in services.html, cropped to y 555–740.
+ */
+export function HeroRibbonServices() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 555 1440 185"
+      preserveAspectRatio="none"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-16 w-full sm:h-24 lg:h-[185px]"
+    >
+      <polygon points="1659,534 -488,772 -470,933 1677,695" fill="#ffc300" />
+      <polygon points="1661,558 -489,761 -474,922 1677,719" fill="#ffffff" />
     </svg>
   );
 }

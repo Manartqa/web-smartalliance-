@@ -3,7 +3,6 @@
     "home": "หน้าแรก",
     "about": "เกี่ยวกับเรา",
     "services": "บริการ",
-    "clients": "ลูกค้าของเรา",
     "contact": "ติดต่อเรา",
     "contactCta": "ติดต่อเรา",
     "openMenu": "เปิดเมนู",
@@ -153,7 +152,7 @@
       "label": "ที่ตั้งของเรา",
       "heading": "แผนที่สำนักงาน",
       "directions": "ดูเส้นทางบน Google Maps",
-      "imageAlt": "แผนที่แสดงที่ตั้งสำนักงาน Smart Alliance เขตจตุจักร กรุงเทพฯ"
+      "frameTitle": "Google Maps — สำนักงาน Smart Alliance เขตจตุจักร กรุงเทพฯ"
     }
   },
   "cta": {

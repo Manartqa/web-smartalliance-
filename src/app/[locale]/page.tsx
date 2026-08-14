@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { Hero } from "@/components/sections/Hero";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { CtaBand } from "@/components/layout/CtaBand";
+import { PageBody } from "@/components/layout/PageBody";
 import { LinkButton } from "@/components/ui/Button";
 import { ArrowRight } from "@/components/ui/icons";
 
@@ -49,8 +50,10 @@ export default async function HomePage({
           </>
         }
       />
-      <AboutSection />
-      <CtaBand variant="home" />
+      <PageBody>
+        <AboutSection />
+        <CtaBand variant="home" />
+      </PageBody>
     </>
   );
 }

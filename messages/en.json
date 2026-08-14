@@ -3,7 +3,6 @@
     "home": "Home",
     "about": "About",
     "services": "Services",
-    "clients": "Clients",
     "contact": "Contact",
     "contactCta": "Contact Us",
     "openMenu": "Open menu",
@@ -153,7 +152,7 @@
       "label": "Our Location",
       "heading": "Find Us Here",
       "directions": "View Directions on Google Maps",
-      "imageAlt": "Map showing the Smart Alliance office in Chatuchak, Bangkok"
+      "frameTitle": "Google Maps — Smart Alliance office, Chatuchak, Bangkok"
     }
   },
   "cta": {

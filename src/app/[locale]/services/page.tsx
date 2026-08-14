@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { CtaBand } from "@/components/layout/CtaBand";
+import { PageBody } from "@/components/layout/PageBody";
 
 export async function generateMetadata({
   params,
@@ -31,10 +32,12 @@ export default async function ServicesPage({
         title={t("title")}
         paragraph={t("paragraph")}
         rule
-        ribbonFlip
+        ribbon="services"
       />
-      <ServicesGrid />
-      <CtaBand variant="services" />
+      <PageBody>
+        <ServicesGrid />
+        <CtaBand variant="services" />
+      </PageBody>
     </>
   );
 }

@@ -1,14 +1,20 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/config/site";
 
 export function MapSection() {
   const t = useTranslations("contact.map");
+  const locale = useLocale();
+
+  const { lat, lng } = siteConfig.coords;
+  // `output=embed` is the keyless Maps embed. `hl` makes the map's own labels
+  // follow the site language, so the Thai page gets Thai street names.
+  const embedSrc = `https://www.google.com/maps?q=${lat},${lng}&z=17&hl=${locale}&output=embed`;
 
   return (
-    <section className="bg-surface-muted py-16 lg:py-20">
+    <section className="bg-surface-muted py-10 lg:py-6">
       <div className="container-site">
         <SectionLabel>{t("label")}</SectionLabel>
         <h2 className="mt-4 text-2xl font-semibold text-navy lg:text-[1.75rem]">
@@ -16,16 +22,14 @@ export function MapSection() {
         </h2>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
-          {/* TODO: swap this static export for a Google Maps embed once the
-              place ID / API key is available. */}
-          <div className="overflow-hidden rounded-2xl shadow-card-lg">
-            <Image
-              src="/assets/map.png"
-              alt={t("imageAlt")}
-              width={784}
-              height={360}
-              sizes="(min-width: 1024px) 784px, 100vw"
-              className="h-full w-full object-cover"
+          <div className="aspect-[4/3] overflow-hidden rounded-2xl shadow-card-lg sm:aspect-[16/9] lg:aspect-auto lg:min-h-[360px]">
+            <iframe
+              src={embedSrc}
+              title={t("frameTitle")}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
             />
           </div>
 

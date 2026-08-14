@@ -11,11 +11,15 @@ export const siteConfig = {
   website: "www.smartalliance.co.th",
   address: {
     building: "Smart Alliance Building,",
-    line1: "599/59 Ratchadapisek Road, Chatuchak Subdistrict, Chatuchak District,",
+    line1: "599/36 Ratchadapisek Road, Chatuchak Subdistrict, Chatuchak District,",
     line2: "Bangkok 10900, Thailand",
   },
-  mapsUrl:
-    "https://maps.google.com/?q=599/59+Ratchadapisek+Road,+Chatuchak,+Bangkok+10900",
+  // Shared Google Maps pin for the office (supplied by the client).
+  mapsUrl: "https://maps.app.goo.gl/wYu54GZAJY9FU5MY7",
+  // Resolved from the share link above. Kept as raw coordinates because the
+  // short link cannot be framed — Google serves /maps/place/* with
+  // X-Frame-Options, so the embed has to target the coordinates instead.
+  coords: { lat: 13.8284251, lng: 100.5469484 },
   social: {
     // TODO: replace with the real Facebook page URL.
     facebook: "https://www.facebook.com/",
@@ -34,6 +38,5 @@ export const footerNavItems = [
   { key: "home", href: "/" },
   { key: "about", href: "/about" },
   { key: "services", href: "/services" },
-  { key: "clients", href: "/" }, // TODO: point at /clients once the page exists.
   { key: "contact", href: "/contact" },
 ] as const;
