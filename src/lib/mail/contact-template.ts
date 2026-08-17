@@ -1,12 +1,20 @@
 import type { ContactRequest } from "@/types/api/main/contact";
 
-/** Escape anything that lands inside the HTML body of the notification. */
+/**
+ * Escape anything that lands inside the HTML body of the notification.
+ *
+ * `'` is escaped even though every attribute in this template is
+ * double-quoted: the day someone writes `style='…${value}'` the omission turns
+ * into script execution inside the recipient's mail client, and that is not a
+ * mistake worth leaving available.
+ */
 const escapeHtml = (value: string) =>
   value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 /**
  * Header injection guard: a newline in a value that ends up in Subject or

@@ -226,6 +226,19 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 > effective limit is `5 × instances`. Swap in Redis/Upstash if the site is scaled out.
 > A CAPTCHA (Turnstile / reCAPTCHA) is still worth adding if spam gets through.
 
+## Security
+
+Rules for changing this codebase live in [SECURITY.md](SECURITY.md) — written
+against OWASP Top 10:2025 after the 2026-08-17 audit, and scoped to what this site
+actually has rather than the generic list. The short version: user values reach the
+notification email only through `escapeHtml`/`singleLine`, outbound hosts are never
+taken from a request, secrets go through `lib/secrets.ts`, the contact endpoint
+carries a per-caller *and* a site-wide limit, and no personal data goes to the log.
+
+Security response headers ship from `next.config.ts` (CSP is report-only until a
+script nonce replaces `'unsafe-inline'`). `TRUST_PROXY` must be set only when a
+proxy in front of the app rewrites `X-Forwarded-For` — see `.env.example`.
+
 ## Not wired yet
 
 Open items, all marked `TODO` in code:

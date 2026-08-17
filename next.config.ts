@@ -3,7 +3,77 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const isProduction = process.env.NODE_ENV === "production";
+
+/**
+ * Content Security Policy — **report-only for now, on purpose.**
+ *
+ * Enforcing it blind would break the site: the contact page frames Google Maps,
+ * Next inlines its bootstrap script, and `next/image` writes inline `style`
+ * attributes. Report-only leaves rendering untouched while violations show up
+ * in the browser console, which is the evidence needed before switching the
+ * header name to `Content-Security-Policy`.
+ *
+ * `'unsafe-inline'` in `script-src` is what the enforced version should shed
+ * first, via a nonce — it is the difference between a policy that stops XSS and
+ * one that only documents it.
+ */
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  // The Maps embed on /contact. `frame-src` governs what this page may frame;
+  // `frame-ancestors` below governs who may frame this page.
+  "frame-src https://www.google.com",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+/**
+ * Baseline security headers.
+ *
+ * None of these change a pixel — they constrain what a browser will do with the
+ * response, not how it renders.
+ */
+const securityHeaders = [
+  // Clickjacking: nothing on this site is meant to be framed. Duplicated as CSP
+  // `frame-ancestors` above for browsers that prefer it.
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  // Send the origin cross-site, the full URL same-site. Without this the Maps
+  // iframe receives the complete referring URL.
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=()",
+  },
+  { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
+  // HSTS only in production: browsers ignore it over plain HTTP anyway, and
+  // pinning a development host to HTTPS is a needless foot-gun.
+  ...(isProduction
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains",
+        },
+      ]
+    : []),
+];
+
 const nextConfig: NextConfig = {
+  // Nothing gains from announcing the framework and version to a scanner.
+  poweredByHeader: false,
+
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
+
   images: {
     // Design assets are PNG; serve modern formats where the browser supports them.
     formats: ["image/avif", "image/webp"],

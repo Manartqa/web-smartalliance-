@@ -14,6 +14,18 @@ export const siteConfig = {
     line1: "599/36 Ratchadapisek Road, Chatuchak Subdistrict, Chatuchak District,",
     line2: "Bangkok 10900, Thailand",
   },
+  // Axway's own partner directory — where the partnership can be checked
+  // against the vendor rather than taken on the site's word. Linked from the
+  // partnership logo on the about page.
+  //
+  // The query string pre-filters the directory to Thailand, which is what puts
+  // SMART Alliance on the first screen instead of somewhere in 74 countries.
+  // It is a Drupal Views exposed filter (`method="get"`), and `2048` is Axway's
+  // internal taxonomy id for Thailand — verified against the live page, but
+  // their id, so it could change if they rebuild the site. Harmless if it does:
+  // an unknown value just renders the unfiltered directory.
+  axwayPartnerUrl:
+    "https://www.axway.com/en/partners/find-partner?field_country_target_id_selective=2048",
   // Shared Google Maps pin for the office (supplied by the client).
   mapsUrl: "https://maps.app.goo.gl/wYu54GZAJY9FU5MY7",
   // Google's own id for the business listing, resolved from the share link

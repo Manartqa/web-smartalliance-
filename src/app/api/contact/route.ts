@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { sendContactMail } from "@/lib/mail";
-import { clientKey, rateLimit } from "@/lib/rate-limit";
+import { clientKey, rateLimit, GLOBAL_KEY } from "@/lib/rate-limit";
 import { EMAIL_PATTERN } from "@/lib/validation";
 import type { ApiErrorResponse } from "@/types/api/main/common";
 import type { ContactRequest, ContactResponse } from "@/types/api/main/contact";
@@ -9,8 +9,19 @@ import type { ContactRequest, ContactResponse } from "@/types/api/main/contact";
 /** Nodemailer needs Node APIs, so this route cannot run on the Edge runtime. */
 export const runtime = "nodejs";
 
-/** Per-IP submission budget. */
+/** Per-caller submission budget. */
 const RATE_LIMIT = { max: 5, windowMs: 10 * 60 * 1000 };
+
+/**
+ * Whole-site ceiling, counted on top of the per-caller budget.
+ *
+ * The per-caller key is only as good as the deployment's proxy configuration
+ * (see `clientKey`), so this is the number that actually bounds the damage if
+ * that key is ever forgeable: no more than this many enquiries reach the
+ * mailbox in an hour, from anyone, by any route. Set well above real traffic —
+ * this site takes a handful of enquiries a week.
+ */
+const GLOBAL_LIMIT = { max: 60, windowMs: 60 * 60 * 1000 };
 
 const MAX_LENGTH = {
   name: 120,
@@ -73,6 +84,19 @@ export async function POST(request: Request) {
   const limit = rateLimit(clientKey(request), RATE_LIMIT);
   if (!limit.allowed) {
     return fail("rate_limited", 429, { "Retry-After": String(limit.retryAfter) });
+  }
+
+  // Checked second so a caller inside its own budget still cannot push the site
+  // past the hourly ceiling.
+  const global = rateLimit(GLOBAL_KEY, GLOBAL_LIMIT);
+  if (!global.allowed) {
+    console.error(
+      "[contact] hourly site-wide submission ceiling reached — further enquiries " +
+        "are being rejected. Investigate before raising GLOBAL_LIMIT.",
+    );
+    return fail("rate_limited", 429, {
+      "Retry-After": String(global.retryAfter),
+    });
   }
 
   const result = await sendContactMail({

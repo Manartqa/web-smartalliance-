@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 import { BaseCard } from "@/components/ui/Card";
+import { siteConfig } from "@/config/site";
 import { Check } from "@/components/ui/Icon";
 import { BaseSectionLabel } from "@/components/ui/SectionLabel";
 
@@ -81,16 +82,27 @@ export default function AboutDetail() {
               {t("partnership.body")}
             </p>
             <div className="mt-7 flex items-center gap-6">
-              <Image
-                src="/assets/axway.png"
-                // Not just "Axway": the logo is the only place the partnership
-                // is stated as a relationship rather than implied, and alt text
-                // is indexed like body copy.
-                alt={t("partnership.logoAlt")}
-                width={141}
-                height={65}
-                className="h-14 w-auto object-contain"
-              />
+              {/* Links to Axway's own partner directory: the claim on this card
+                  is checkable at the vendor rather than only asserted here.
+                  `rel="noopener noreferrer"` per SECURITY.md — every outbound
+                  `target="_blank"` on this site carries it. */}
+              <a
+                href={siteConfig.axwayPartnerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-14 shrink-0 items-center transition-opacity hover:opacity-75"
+              >
+                <Image
+                  src="/assets/axway.png"
+                  // Not just "Axway": the logo is the only place the
+                  // partnership is stated as a relationship rather than
+                  // implied, and this doubles as the link's accessible name.
+                  alt={t("partnership.logoAlt")}
+                  width={141}
+                  height={65}
+                  className="h-14 w-auto object-contain"
+                />
+              </a>
               <span aria-hidden className="h-14 w-px bg-[#d8dee8]" />
               <span className="text-[15px] font-semibold uppercase leading-snug text-navy">
                 {t("partnership.badge")}
