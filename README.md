@@ -284,6 +284,20 @@ services `meta` copy, in `Organization.knowsAbout`, as a `Service` with
 "Axway partner Thailand" and the Thai equivalents; the bare brand name belongs to
 axway.com.
 
+**AI crawlers** — `robots.ts` lists them in two named groups: the assistants and
+AI-search indexers that can cite the site back to a user, and the crawlers that
+collect pages for model training. Both currently allow everything except `/api/`.
+They are separate so the training group can be flipped to `disallow` on its own
+without losing AI-search visibility. Note that a named group *replaces* the `*`
+group for that agent rather than adding to it, which is why each group repeats
+the `/api/` rule.
+
+**`/llms.txt`** (`src/lib/llms-txt.ts`) is the plain-text site summary those tools
+look for at the root — what the company does, which page covers what, the service
+list, the Axway partnership and the contact facts. A sitemap only lists URLs; this
+answers the question without eight fetches. It is generated from the same messages
+and config the pages render from, so it cannot drift.
+
 **Search Console / Bing** verification is read from
 `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION`
 (see `.env.example`). Unset means no tag is rendered at all.

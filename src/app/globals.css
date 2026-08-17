@@ -36,6 +36,15 @@
     scroll-behavior: smooth;
   }
 
+  /* Smooth scrolling is motion the visitor did not ask for, and a jump to
+     `/about#axway` is exactly the kind that triggers vestibular symptoms. The
+     OS preference turns it off; nothing else about the page changes. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     background: #fff;
     color: var(--color-ink);
