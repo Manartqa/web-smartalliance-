@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 
-import { PartnershipJsonLd } from "@/components/common";
+import { PartnershipJsonLd } from "@/components/partials/About";
 import { HomeContent } from "@/components/partials/Home";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";

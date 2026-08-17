@@ -52,13 +52,23 @@ export function siteGraph(locale: Locale, description: string) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
+        // Two types, not one: `LocalBusiness` is what makes the address, geo
+        // and phone below eligible for local results and the map pack — an
+        // `Organization` alone carries the same fields but is read as a company
+        // record, not a place of business.
+        //
+        // `LocalBusiness` directly, not the `ProfessionalService` subtype that
+        // looks like a better fit: schema.org deprecated that one for being
+        // confusable with `Service`, and none of the surviving subtypes
+        // (Dentist, Attorney, Electrician…) describe a software company.
+        "@type": ["Organization", "LocalBusiness"],
         "@id": ORGANIZATION_ID,
         name: siteConfig.name,
         alternateName: "Smart Alliance",
         url: siteConfig.url,
         description,
         foundingDate: String(siteConfig.foundedYear),
+        areaServed: { "@type": "Country", name: "Thailand" },
         knowsAbout: [...AXWAY_EXPERTISE],
         email: siteConfig.email,
         telephone: siteConfig.phone,
@@ -71,6 +81,17 @@ export function siteGraph(locale: Locale, description: string) {
         logo: {
           "@type": "ImageObject",
           url: `${siteConfig.url}/assets/logo.png`,
+        },
+        // `LocalBusiness` results want an image, and a bare logo does not
+        // qualify — Google asks for a photo of the business at a usable size.
+        // The generated 1200×630 social card stands in until someone supplies a
+        // photograph of the office; swap this for that photo when it exists.
+        // (One card serves both locales: its copy is English by design.)
+        image: {
+          "@type": "ImageObject",
+          url: `${siteConfig.url}/en/opengraph-image`,
+          width: 1200,
+          height: 630,
         },
         // `sameAs` is how Google links this record to the profiles it already
         // knows about, which is what earns a Knowledge Panel.
@@ -96,6 +117,40 @@ export function siteGraph(locale: Locale, description: string) {
         publisher: { "@id": ORGANIZATION_ID },
       },
     ],
+  };
+}
+
+/**
+ * The service catalogue as an ordered `ItemList` of `Service` nodes.
+ *
+ * An `ItemList` rather than seven loose nodes: it states that these are the
+ * company's services *as a set* and in the order the page lists them, which is
+ * what lets a crawler treat the page as the catalogue instead of guessing from
+ * seven unrelated cards.
+ *
+ * Every entry's `provider` points back at the Organization already on the page,
+ * so each service is attributed rather than floating.
+ */
+export function servicesGraph(
+  locale: Locale,
+  items: ReadonlyArray<{ name: string; description: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${siteConfig.url}/${locale}/services#catalogue`,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name: item.name,
+        description: item.description,
+        inLanguage: bcp47(locale),
+        provider: { "@id": ORGANIZATION_ID },
+        areaServed: { "@type": "Country", name: "Thailand" },
+      },
+    })),
   };
 }
 

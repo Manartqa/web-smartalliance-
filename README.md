@@ -232,16 +232,78 @@ Open items, all marked `TODO` in code:
 
 - **Thai copy needs review** — `messages/th.json` is a first draft, not approved
   marketing copy. Taglines and service names especially.
-- **Privacy / PDPA page** — referenced by the form's privacy note, does not exist.
-- **Images** — `hero-*.png` and `map.png` are 1.4–1.8 MB PNGs, and
-  `ic-mail-circle.png` is ~325 KB that should be SVG. `next/image` converts to AVIF/WebP
-  on the fly, but shipping smaller sources would cut build and cache cost.
-  (`ic-badge.png` was the other offender at 264 KB — redrawn and now 5.3 KB.)
-- **SEO — Search Console** — no verification meta tag and no analytics wired.
-  (`sitemap.ts`, `robots.ts`, the generated OG/Twitter card, hreflang and the
-  JSON-LD graph are all in place — see "SEO" below.)
+- **Privacy / PDPA page** — the contact form's privacy note is plain text, not a
+  link, so nothing is currently broken. A real page needs approved legal copy.
+- **`public/assets/map.png`** — 1.75 MB and referenced nowhere: the contact page
+  switched to the live Google embed. Delete it once someone confirms it is not
+  wanted for a fallback.
+- **SEO — Search Console** — the verification slot is wired (see below) but no
+  token is set, and no analytics is installed. Analytics needs a PDPA consent
+  decision first.
+- **Office photograph** — `LocalBusiness.image` currently points at the generated
+  social card because no photo of the premises exists. Google's local results
+  want a real one; swap it in `structured-data.ts` when it arrives.
+- **Per-service pages** — `/services` carries seven topics on one URL, so it
+  competes with itself for all of them. Splitting them needs approved copy per
+  service, and would add a link to each card on the existing page.
+- **Business hours and social profiles** — `openingHoursSpecification` is absent
+  and `sameAs` lists only Facebook and the Maps pin. Both are facts to collect,
+  not decisions to make.
 - **Language switcher placement** — not in the original design; currently `EN | TH`
   beside the header CTA (and in the mobile drawer row).
+
+## SEO
+
+Per-page `title` and `description` live in `messages/*.json` under `meta.*`, not in
+code — `src/lib/metadata.ts` builds every page's `Metadata` from them, so a copy
+change is a translation change. That one builder also emits the canonical URL, the
+`hreflang` set (`en`, `th`, `x-default`) and the robots directives.
+
+**Structured data** (`src/lib/structured-data.ts`) is emitted as JSON-LD:
+
+| Node | Where | Emitted by |
+|---|---|---|
+| `Organization` + `LocalBusiness` (`@graph` with `WebSite`) | every page | `[locale]/layout.tsx` |
+| `BreadcrumbList` | about, services, contact | `BreadcrumbJsonLd` |
+| `Service` — the Axway partnership | home, about | `partials/About/PartnershipJsonLd` |
+| `ItemList` of the seven services | services | `partials/Services/ServicesJsonLd` |
+
+The last two live with their feature rather than in `common/`, because they read
+that feature's config and messages; `JsonLd` and `BreadcrumbJsonLd` stay generic
+and shared.
+
+The company node is double-typed `["Organization", "LocalBusiness"]`, which is
+what makes the address and geo eligible for local results. Not the
+`ProfessionalService` subtype that looks like a closer fit — schema.org
+deprecated it for being confusable with `Service`. Every other node references
+the company by `@id` rather than repeating it.
+
+**Axway** is a deliberate keyword target — the partnership appears in the about and
+services `meta` copy, in `Organization.knowsAbout`, as a `Service` with
+`brand: Axway`, and in the partnership logo's alt text. Realistic queries are
+"Axway partner Thailand" and the Thai equivalents; the bare brand name belongs to
+axway.com.
+
+**Search Console / Bing** verification is read from
+`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION`
+(see `.env.example`). Unset means no tag is rendered at all.
+
+**`sitemap.ts`** carries a hand-maintained `lastModified` per page — bump the date
+in `CONTENT_DATES` when copy changes. It is deliberately not the build time: a
+sitemap that claims every URL changed on every deploy teaches crawlers to ignore
+the field.
+
+**404** — `[locale]/not-found.tsx` renders inside the locale layout, so a wrong URL
+still gets the header, footer and both languages. It is reached through
+`[locale]/[...rest]/page.tsx`, which exists only to call `notFound()`: without that
+catch-all, an unmatched path never enters the locale segment and Next serves its
+own bare 404 instead. Static routes always beat a catch-all, so the four real
+pages are untouched by it.
+
+**Image weight** — heroes are WebP (`Hero.config.ts`), and icon sources are stored
+at roughly 2–3× their rendered size rather than 512²; the asset directory went from
+~5.5 MB to ~340 KB. `next/image` re-encodes to AVIF/WebP regardless, so oversized
+sources cost build time and cache, not bandwidth. Keep new assets to that rule.
 
 ## Icons
 

@@ -27,6 +27,14 @@
       "description": "Get in touch with the Smart Alliance team in Bangkok. We are here to help your organization innovate, integrate, and grow."
     }
   },
+  "notFound": {
+    "code": "404",
+    "title": "This page does not exist",
+    "body": "The link may be out of date, or the address mistyped. The pages below are where most visitors are heading.",
+    "home": "Back to home",
+    "services": "Our services",
+    "contact": "Contact us"
+  },
   "home": {
     "hero": {
       "titleLine1": "Beyond Software.",

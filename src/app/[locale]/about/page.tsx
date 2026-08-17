@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 
-import { BreadcrumbJsonLd, PartnershipJsonLd } from "@/components/common";
-import { AboutContent } from "@/components/partials/About";
+import { BreadcrumbJsonLd } from "@/components/common";
+import { AboutContent, PartnershipJsonLd } from "@/components/partials/About";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
 

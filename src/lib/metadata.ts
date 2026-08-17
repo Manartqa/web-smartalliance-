@@ -6,6 +6,21 @@ import { locales, type Locale } from "@/i18n/routing";
 type PageKey = "home" | "about" | "services" | "contact";
 
 /**
+ * Ownership tags for Search Console and Bing Webmaster Tools.
+ *
+ * Both are optional: `undefined` keys are dropped by Next rather than rendered
+ * empty, so an unconfigured deployment simply ships no tag. Reading them from
+ * the environment means the token can be pasted at deploy time — verification
+ * is per-property, so staging and production hold different values.
+ */
+const verification = {
+  google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+    ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+    : undefined,
+};
+
+/**
  * Builds per-page metadata plus the hreflang alternates that let search
  * engines pair the two language versions of the same page.
  */
@@ -39,6 +54,7 @@ export async function buildMetadata(
     description: t("description"),
     metadataBase: new URL(siteConfig.url),
     applicationName: siteConfig.name,
+    verification,
     alternates: {
       canonical: href(locale),
       languages: { ...languages, "x-default": href("en") },

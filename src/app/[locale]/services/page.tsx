@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 
 import { BreadcrumbJsonLd } from "@/components/common";
-import { ServicesContent } from "@/components/partials/Services";
+import { ServicesContent, ServicesJsonLd } from "@/components/partials/Services";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
 
@@ -26,6 +26,7 @@ export default async function ServicesPage({
     <>
       <ServicesContent />
       <BreadcrumbJsonLd locale={locale} page="services" />
+      <ServicesJsonLd locale={locale} />
     </>
   );
 }
