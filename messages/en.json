@@ -12,15 +12,15 @@
   "meta": {
     "home": {
       "title": "Smart Alliance — Beyond Software. We Build Solutions.",
-      "description": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions."
+      "description": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions. Authorized Axway Partner in Thailand."
     },
     "about": {
-      "title": "About — Smart Alliance",
-      "description": "For over 20 years, Smart Alliance has delivered custom software development and system integration for government agencies and enterprise organizations."
+      "title": "About Smart Alliance — Authorized Axway Partner in Thailand",
+      "description": "Authorized Axway Partner in Thailand. Smart Alliance has delivered custom software, system integration, API Management and Managed File Transfer (MFT) since 2004."
     },
     "services": {
-      "title": "Services — Smart Alliance",
-      "description": "Custom software development, API and system integration, digital workflow, AI solutions, cybersecurity, data analytics, and managed services."
+      "title": "Services — Axway API Management, MFT & System Integration",
+      "description": "Custom software development, Axway API Management and Managed File Transfer (MFT), system integration, digital workflow, AI, cybersecurity, data analytics and managed services."
     },
     "contact": {
       "title": "Contact — Smart Alliance",
@@ -60,7 +60,9 @@
     "partnership": {
       "heading": "Technology Partnerships",
       "body": "Smart Alliance partners with leading global technology providers to deliver enterprise-grade digital solutions. As an Authorized Axway Partner, we provide expertise in API Management, Managed File Transfer (MFT), B2B Integration, and enterprise integration platforms.",
-      "badge": "Authorized Partner"
+      "badge": "Authorized Partner",
+      "logoAlt": "Axway — Smart Alliance is an Authorized Axway Partner in Thailand",
+      "serviceName": "Axway API Management, Managed File Transfer (MFT) and B2B Integration"
     },
     "stats": {
       "experience": "20+ Years of Experience",

@@ -237,7 +237,9 @@ Open items, all marked `TODO` in code:
   `ic-mail-circle.png` is ~325 KB that should be SVG. `next/image` converts to AVIF/WebP
   on the fly, but shipping smaller sources would cut build and cache cost.
   (`ic-badge.png` was the other offender at 264 KB — redrawn and now 5.3 KB.)
-- **SEO** — no `sitemap.ts`, `robots.ts`, or OG image yet.
+- **SEO — Search Console** — no verification meta tag and no analytics wired.
+  (`sitemap.ts`, `robots.ts`, the generated OG/Twitter card, hreflang and the
+  JSON-LD graph are all in place — see "SEO" below.)
 - **Language switcher placement** — not in the original design; currently `EN | TH`
   beside the header CTA (and in the mobile drawer row).
 

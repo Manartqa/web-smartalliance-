@@ -71,7 +71,9 @@ export default function AboutDetail() {
 
         {/* Right column — partnership card + stat grid */}
         <div className="flex flex-col gap-10">
-          <BaseCard className="p-7">
+          {/* `id` makes the partnership a linkable target (`/about#axway`),
+              which is what a citation of the Axway relationship can point at. */}
+          <BaseCard id="axway" className="scroll-mt-24 p-7">
             <h3 className="text-xl font-semibold text-navy">
               {t("partnership.heading")}
             </h3>
@@ -81,7 +83,10 @@ export default function AboutDetail() {
             <div className="mt-7 flex items-center gap-6">
               <Image
                 src="/assets/axway.png"
-                alt="Axway"
+                // Not just "Axway": the logo is the only place the partnership
+                // is stated as a relationship rather than implied, and alt text
+                // is indexed like body copy.
+                alt={t("partnership.logoAlt")}
                 width={141}
                 height={65}
                 className="h-14 w-auto object-contain"
