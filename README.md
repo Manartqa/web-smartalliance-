@@ -67,6 +67,8 @@ src/context/query/           QueryProvider (staleTime 0, gcTime 0)
 tests/unit/                  Vitest suites, mirroring src/ (see Tests below)
 tests/stubs/                 server-only stub, so server modules are importable in tests
 vitest.config.mts            two projects: node (server logic) + jsdom (components)
+Dockerfile, compose.yaml     production image + how it runs (see Deployment)
+scripts/                     azure-setup.sh, vm-provision.sh, encrypt-secret.mjs
 ```
 
 ### Conventions
@@ -232,15 +234,23 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 
 ## Deployment
 
-Azure App Service (Linux, Node 22), deployed by GitHub Actions from `main`.
-Setup, branch strategy and troubleshooting: **[DEPLOYMENT.md](DEPLOYMENT.md)**.
+Docker container behind nginx on an Azure VM. Deployed manually — there is no
+CI/CD pipeline. Step-by-step: **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
-The two things that catch people out:
+```bash
+docker compose up -d --build
+```
 
-- `NEXT_PUBLIC_*` are baked in at **build** time, so they belong in GitHub
-  variables, not App Service settings. Everything else is runtime.
+Three things that catch people out:
+
+- `NEXT_PUBLIC_*` are baked in at **build** time, so they go in `.env` (Compose
+  build args). Runtime settings go in `.env.production`. Putting a
+  `NEXT_PUBLIC_*` in the latter does nothing.
 - `next.config.ts` sets `output: "standalone"`, which omits `.next/static` and
-  `public` on purpose. The deploy workflow copies both back in.
+  `public` on purpose. The Dockerfile copies both back in.
+- nginx must **overwrite** `X-Forwarded-For`, not append. The usual
+  `$proxy_add_x_forwarded_for` lets a visitor forge the entry `clientKey` reads,
+  which turns the contact form's rate limiter into one that never limits.
 
 ## Tests
 
