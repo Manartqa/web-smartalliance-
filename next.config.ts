@@ -67,6 +67,21 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  /**
+   * Emit `.next/standalone` — a self-contained server with only the modules the
+   * app actually reaches, traced from the build.
+   *
+   * This is what gets deployed to App Service. Without it the artifact is the
+   * whole `node_modules` tree (hundreds of MB, most of it devDependencies) and
+   * the deploy has to run `npm install` on the host. With it the upload is a
+   * few MB and the host runs `node server.js` against what is already there.
+   *
+   * The trade-off is that `.next/static` and `public` are NOT copied into it —
+   * Next assumes a CDN serves them — so the packaging step in the deploy
+   * workflow copies both, or the site loads with no CSS, JS or images.
+   */
+  output: "standalone",
+
   // Nothing gains from announcing the framework and version to a scanner.
   poweredByHeader: false,
 

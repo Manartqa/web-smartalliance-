@@ -230,6 +230,18 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 > effective limit is `5 × instances`. Swap in Redis/Upstash if the site is scaled out.
 > A CAPTCHA (Turnstile / reCAPTCHA) is still worth adding if spam gets through.
 
+## Deployment
+
+Azure App Service (Linux, Node 22), deployed by GitHub Actions from `main`.
+Setup, branch strategy and troubleshooting: **[DEPLOYMENT.md](DEPLOYMENT.md)**.
+
+The two things that catch people out:
+
+- `NEXT_PUBLIC_*` are baked in at **build** time, so they belong in GitHub
+  variables, not App Service settings. Everything else is runtime.
+- `next.config.ts` sets `output: "standalone"`, which omits `.next/static` and
+  `public` on purpose. The deploy workflow copies both back in.
+
 ## Tests
 
 ```bash

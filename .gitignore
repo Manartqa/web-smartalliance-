@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# deploy staging dir, assembled by the deploy workflow
+/deploy
+
 # next.js
 /.next/
 /out/

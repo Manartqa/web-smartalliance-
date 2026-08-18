@@ -1,0 +1,64 @@
+name: CI
+
+# Two entry points:
+#   pull_request  — the gate on every PR into main.
+#   workflow_call — invoked by deploy-production.yml so the exact commit being
+#                   deployed is re-verified, rather than trusting that a PR
+#                   check on a different tree still applies.
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+
+# A new push to the same PR cancels the previous run; main is never cancelled,
+# because deploy-production.yml waits on this and a cancelled call would read
+# as a failed gate.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, types, tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          # Must match the App Service runtime — see DEPLOYMENT.md.
+          node-version: "22"
+          cache: npm
+
+      # `npm ci` not `npm install`: it installs exactly what package-lock.json
+      # pins and fails if the two have drifted, which is the behaviour a build
+      # server wants.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx eslint .
+
+      # `next build` type-checks too, but only after a full compile. Running tsc
+      # first fails a type error in seconds instead of minutes, and covers the
+      # test files, which the build does not compile.
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ github.sha }}
+          path: coverage/
+          retention-days: 14
+          if-no-files-found: ignore
