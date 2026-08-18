@@ -5,6 +5,7 @@ import { BaseLinkButton } from "@/components/ui/Button";
 import { ChevronRight } from "@/components/ui/Icon";
 
 import {
+  CTA_BAND_HAS_BUTTON,
   CTA_BAND_ICONS,
   CTA_BAND_STRIPES,
   type CtaBandVariant,
@@ -19,6 +20,7 @@ interface CtaBandProps {
 export default function CtaBand({ variant, icon }: CtaBandProps) {
   const t = useTranslations(`cta.${variant}`);
   const tCta = useTranslations("cta");
+  const hasButton = CTA_BAND_HAS_BUTTON[variant];
 
   return (
     <section className="relative overflow-hidden bg-blue-cta">
@@ -54,14 +56,16 @@ export default function CtaBand({ variant, icon }: CtaBandProps) {
           </div>
         </div>
 
-        <BaseLinkButton
-          href="/contact"
-          variant="yellow"
-          className="shrink-0 uppercase text-[#013a85]"
-        >
-          {tCta("button")}
-          <ChevronRight />
-        </BaseLinkButton>
+        {hasButton && (
+          <BaseLinkButton
+            href="/contact"
+            variant="yellow"
+            className="shrink-0 uppercase text-[#013a85]"
+          >
+            {tCta("button")}
+            <ChevronRight />
+          </BaseLinkButton>
+        )}
       </div>
     </section>
   );
