@@ -63,6 +63,10 @@ src/lib/metadata.ts          per-page metadata + hreflang alternates
 src/types/api/main/          backend contract (ApiResponse, ContactRequest…)
 src/types/app/contact/       frontend domain types
 src/context/query/           QueryProvider (staleTime 0, gcTime 0)
+
+tests/unit/                  Vitest suites, mirroring src/ (see Tests below)
+tests/stubs/                 server-only stub, so server modules are importable in tests
+vitest.config.mts            two projects: node (server logic) + jsdom (components)
 ```
 
 ### Conventions
@@ -225,6 +229,48 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 > The rate limiter is in-process, so on a multi-instance or serverless deployment the
 > effective limit is `5 × instances`. Swap in Redis/Upstash if the site is scaled out.
 > A CAPTCHA (Turnstile / reCAPTCHA) is still worth adding if spam gets through.
+
+## Tests
+
+```bash
+npm test              # whole suite, once
+npm run test:watch    # re-run on change
+npm run test:coverage # + coverage report, enforces thresholds
+```
+
+Vitest, split into two projects by what the unit under test needs:
+
+| Project | Environment | Files | Covers |
+|---|---|---|---|
+| `node` | node | `tests/unit/**/*.test.ts` | route handler, mail, secrets, rate limiting, SEO builders, message catalogues |
+| `jsdom` | jsdom + Testing Library | `tests/unit/**/*.test.tsx` | `ContactForm` — the only client component holding logic |
+
+Two things worth knowing before adding tests:
+
+- **`server-only` is aliased to a stub** (`tests/stubs/server-only.ts`). The real
+  package throws by design when pulled into a client bundle, so a test could never
+  import `lib/mail/*`, `lib/secrets.ts` or `lib/rate-limit.ts` directly without it.
+- **`next-intl` is inlined** for the jsdom project. Its ESM build imports
+  `next/navigation` with no file extension, and Next 16 declares no `exports` map, so
+  Node's resolver — the one Vitest uses for externalised deps — cannot resolve it.
+
+Coverage thresholds are set just under what the suite currently reaches, so a change
+that drops coverage fails rather than eroding it quietly. Scope is deliberately the
+logic-bearing modules; pages, layouts and presentational partials are covered by
+`next build`'s type-check and by looking at the site.
+
+What the suite is actually guarding, beyond line count:
+
+- The contact route end to end — honeypot, validation bounds, both rate limits, and
+  the mapping from a mail failure to `503`/`502` with the reason kept out of the
+  response body.
+- Both header-injection barriers (`EMAIL_PATTERN` and the template's `singleLine`)
+  and every escaped field in the notification email.
+- Transport selection in `readMailConfig`, which has more branches than anything else
+  in the codebase, plus the XOAUTH2 transporter cache rebuilding on token refresh.
+- **English/Thai catalogue parity** — key sets, placeholder sets, and no blanks.
+  next-intl resolves a missing key at *render* time, so without this a missing Thai
+  string ships and prints the raw key on the page.
 
 ## Security
 

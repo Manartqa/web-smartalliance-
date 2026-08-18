@@ -57,7 +57,7 @@ export default function Footer() {
 
       <div className="border-t border-[#003a75]">
         <p className="container-site py-4 text-center text-xs font-light text-white/40">
-          {t("copyright", { year: new Date().getFullYear() })}
+          {t("copyright")}
         </p>
       </div>
     </footer>

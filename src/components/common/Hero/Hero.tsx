@@ -36,14 +36,21 @@ export default function Hero({
     // `sticky top-0 z-0` pins the hero while <PageBody> scrolls over it.
     // It still occupies its full height in flow, so nothing below shifts.
     <section className="sticky top-0 z-0 overflow-hidden bg-hero-bg">
-      <Image
-        src={image}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center opacity-90"
-      />
+      {/* The wrapper exists only to satisfy `next/image`. `fill` needs a
+          positioned parent, and `sticky` *is* one — an absolutely positioned
+          child resolves against it exactly like `relative` — but the dev-mode
+          check accepts only absolute/fixed/relative, so it warns on every
+          render. Same box, same stacking order, no warning. */}
+      <div className="absolute inset-0">
+        <Image
+          src={image}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-90"
+        />
+      </div>
       {/* Keeps the copy legible over the photograph at every width. */}
       <div
         aria-hidden

@@ -79,10 +79,22 @@ export function readMailConfig():
 
   if (!useGraph && !value("SMTP_HOST")) missing.push("SMTP_HOST");
 
+  /**
+   * `Number("")` is 0, not NaN, and `??` only catches an *absent* variable —
+   * so a present-but-empty `SMTP_PORT`, which is what a deploy platform writes
+   * for a blank field and what a stray `SMTP_PORT=` line leaves behind, used to
+   * resolve to port 0. Both that and a typo (`NaN`) surfaced only as a
+   * connection failure at send time, with nothing naming the cause.
+   */
+  const portRaw = value("SMTP_PORT");
+  const port = portRaw ? Number(portRaw) : 587;
+  if (!useGraph && !Number.isInteger(port)) {
+    missing.push(`SMTP_PORT (must be a whole number, got "${portRaw}")`);
+  }
+
   if (missing.length > 0) return { ok: false, missing };
 
   const oauth: OAuthConfig = { tenantId, clientId, clientSecret };
-  const port = Number(process.env.SMTP_PORT ?? 587);
 
   return {
     ok: true,
