@@ -13,6 +13,8 @@
 .PARAMETER SiteUrl
     Baked into the JS bundle, sitemap.xml and the canonical tags AT BUILD TIME.
     Change it here - not in .env.production, where it does nothing at all.
+    The https default assumes the VM's nginx already serves a certificate for
+    the domain; otherwise every canonical link points at a page that won't load.
 
 .PARAMETER SkipTests
     Skips `npm test`. There is no CI pipeline any more; use sparingly.
@@ -21,11 +23,11 @@
     .\scripts\deploy.ps1
 
 .EXAMPLE
-    .\scripts\deploy.ps1 -SiteUrl https://www.smartalliance.co.th
+    .\scripts\deploy.ps1 -SiteUrl http://4.194.62.222
 #>
 [CmdletBinding()]
 param(
-    [string] $SiteUrl = 'http://4.194.62.222',
+    [string] $SiteUrl = 'https://www.smartalliance.co.th',
     [switch] $SkipTests
 )
 
