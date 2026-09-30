@@ -3,7 +3,15 @@
  * Everything here is locale-independent — translated labels live in messages/*.json.
  */
 export const siteConfig = {
-  name: "Smart Alliance Co.,Ltd.",
+  // The brand, used as the site name (og:site_name, WebSite JSON-LD) and the
+  // Organization name. Google asks for the concise, commonly-used form —
+  // "Google", not "Google, Inc" — and matches it against these same places.
+  name: "Smart Alliance",
+  // The same brand as Thai searchers spell it.
+  nameTh: "สมาร์ท อัลลายแอนส์",
+  // Registered names. Must match the footer copyright lines in messages/*.json.
+  legalName: "Smart Alliance Co., Ltd.",
+  legalNameTh: "บริษัท สมาร์ท อัลลายแอนส์ จำกัด",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.smartalliance.co.th",
   phone: "+66 65 509 2905",
   phoneHref: "tel:+66655092905",

@@ -62,7 +62,7 @@ export async function buildLlmsTxt(): Promise<string> {
     "",
     "## Company facts",
     "",
-    `- Legal name: ${siteConfig.name}`,
+    `- Legal name: ${siteConfig.legalName} (Thai: ${siteConfig.legalNameTh})`,
     `- Founded: ${siteConfig.foundedYear}`,
     `- Address: ${siteConfig.address.line1} ${siteConfig.address.line2}`,
     `- Telephone: ${siteConfig.phone}`,

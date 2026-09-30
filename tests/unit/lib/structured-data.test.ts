@@ -48,6 +48,23 @@ describe("siteGraph", () => {
     });
   });
 
+  it("gives the Organization and WebSite the same name and alternateName", () => {
+    // Google's Organization guidance asks for the site-name values here too.
+    const [org, site] = siteGraph("en", "desc")["@graph"];
+
+    expect(org.name).toBe(site.name);
+    expect(org.alternateName).toBe(site.alternateName);
+  });
+
+  it.each([
+    ["en", siteConfig.legalName],
+    ["th", siteConfig.legalNameTh],
+  ] as const)("states the %s legal name the footer shows", (locale, legal) => {
+    const [org] = siteGraph(locale, "desc")["@graph"];
+
+    expect(org.legalName).toBe(legal);
+  });
+
   it("states the Axway expertise as a fact on the company record", () => {
     // Otherwise a crawler has to infer from prose whether the company sells
     // Axway or merely mentions it.
@@ -83,15 +100,16 @@ describe("siteGraph", () => {
   });
 
   it.each([
-    ["en", "en-US", `${siteConfig.url}/en`],
-    ["th", "th-TH", `${siteConfig.url}/th`],
+    ["en", "en-US"],
+    ["th", "th-TH"],
   ] as const)(
-    "renders the %s WebSite node with the right language and url",
-    (locale, bcp47, url) => {
+    "renders the %s WebSite node with the right language and the domain root",
+    (locale, bcp47) => {
+      // Google ignores a site name declared on a subdirectory such as /th.
       const [, site] = siteGraph(locale, "desc")["@graph"];
 
       expect(site.inLanguage).toBe(bcp47);
-      expect(site.url).toBe(url);
+      expect(site.url).toBe(`${siteConfig.url}/`);
     },
   );
 

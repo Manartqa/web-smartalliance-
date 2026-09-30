@@ -38,7 +38,7 @@ export default function ContactMap() {
 
           <BaseCard className="flex flex-col p-7">
             <h3 className="text-[15px] font-semibold text-navy">
-              {siteConfig.name}
+              {locale === "th" ? siteConfig.legalNameTh : siteConfig.legalName}
             </h3>
 
             <div className="mt-5 flex items-start gap-2.5">

@@ -106,7 +106,8 @@ describe("buildLlmsTxt — content derived from config", () => {
   it("states the company facts from siteConfig", async () => {
     const text = await (await load())();
 
-    expect(text).toContain(`Legal name: ${siteConfig.name}`);
+    expect(text).toContain(`Legal name: ${siteConfig.legalName}`);
+    expect(text).toContain(siteConfig.legalNameTh);
     expect(text).toContain(`Founded: ${siteConfig.foundedYear}`);
     expect(text).toContain(`Telephone: ${siteConfig.phone}`);
     expect(text).toContain(`Email: ${siteConfig.email}`);

@@ -63,8 +63,13 @@ export function siteGraph(locale: Locale, description: string) {
         // (Dentist, Attorney, Electrician…) describe a software company.
         "@type": ["Organization", "LocalBusiness"],
         "@id": ORGANIZATION_ID,
+        // Google asks for the same `name` and `alternateName` here as on the
+        // WebSite node. `legalName` follows the page language so it matches the
+        // copyright line in that page's footer.
         name: siteConfig.name,
-        alternateName: "Smart Alliance",
+        alternateName: siteConfig.nameTh,
+        legalName:
+          locale === "th" ? siteConfig.legalNameTh : siteConfig.legalName,
         url: siteConfig.url,
         description,
         foundingDate: String(siteConfig.foundedYear),
@@ -110,8 +115,11 @@ export function siteGraph(locale: Locale, description: string) {
       {
         "@type": "WebSite",
         "@id": WEBSITE_ID,
-        url: `${siteConfig.url}/${locale}`,
+        // The domain root, not `/${locale}`: Google reads the site name only
+        // from a domain-level home page and ignores it on a subdirectory.
+        url: `${siteConfig.url}/`,
         name: siteConfig.name,
+        alternateName: siteConfig.nameTh,
         description,
         inLanguage: bcp47(locale),
         publisher: { "@id": ORGANIZATION_ID },

@@ -3,6 +3,7 @@ import th from "../../../messages/th.json";
 
 import { describe, expect, it } from "vitest";
 
+import { siteConfig } from "@/config/site";
 import { locales } from "@/i18n/routing";
 
 /**
@@ -131,5 +132,20 @@ describe("message catalogues — keys the code depends on", () => {
 
     expect(copyright).not.toContain("{year}");
     expect(placeholders(copyright)).toEqual([]);
+  });
+
+  it("names the company in the footer exactly as the structured data does", () => {
+    // `legalName` in the JSON-LD is only credible if the page shows it too.
+    expect((en.footer as Messages).copyright).toContain(siteConfig.legalName);
+    expect((th.footer as Messages).copyright).toContain(siteConfig.legalNameTh);
+  });
+
+  it("spells the brand in Thai wherever a Thai title names it", () => {
+    // Searches for the Thai spelling only match if the title carries it.
+    for (const [key, value] of entries(th.meta as Messages)) {
+      if (key.endsWith("title") && value.includes(siteConfig.name)) {
+        expect(value, key).toContain(siteConfig.nameTh);
+      }
+    }
   });
 });
