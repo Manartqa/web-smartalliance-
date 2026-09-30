@@ -61,13 +61,17 @@ try {
 
     # ~102 MB, over GitHub's 100 MiB per-file limit. `.gitignore` carries a
     # `*.tar` rule so this cannot be committed by accident again.
-    Write-Host "`nBuilt. Copy it up and load it:" -ForegroundColor Green
-    Write-Host "  scp .\smartalliance-web.tar azureuser@4.194.62.222:/tmp/"
+    # The VM has no Compose and azureuser is not in the docker group - hence
+    # plain `docker run` under sudo. DEPLOYMENT.md has the env check and rollback.
+    Write-Host "`nBuilt. Copy it up and swap the container (env check, verify, rollback: DEPLOYMENT.md):" -ForegroundColor Green
+    Write-Host "  scp .\smartalliance-web.tar azureuser@4.194.62.222:~/"
     Write-Host "  ssh azureuser@4.194.62.222"
-    Write-Host "  docker tag $image smartalliance-web:previous 2>/dev/null || true"
-    Write-Host "  docker load -i /tmp/smartalliance-web.tar && rm /tmp/smartalliance-web.tar"
-    Write-Host "  cd /var/www/company-web && docker compose up -d && docker image prune -f"
-    Write-Host "  docker compose ps"
+    Write-Host "  sudo docker tag $image smartalliance-web:previous"
+    Write-Host "  sudo docker load -i ~/smartalliance-web.tar && rm ~/smartalliance-web.tar"
+    Write-Host "  sudo docker rm smartalliance-web-old 2>/dev/null || true"
+    Write-Host "  sudo docker rename smartalliance-web smartalliance-web-old && sudo docker stop smartalliance-web-old"
+    Write-Host "  sudo docker run -d --name smartalliance-web --restart unless-stopped -p 3000:3000 --env-file /home/azureuser/production.env $image"
+    Write-Host "  sudo docker ps -a"
 }
 finally {
     Pop-Location

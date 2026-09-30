@@ -67,8 +67,9 @@ src/context/query/           QueryProvider (staleTime 0, gcTime 0)
 tests/unit/                  Vitest suites, mirroring src/ (see Tests below)
 tests/stubs/                 server-only stub, so server modules are importable in tests
 vitest.config.mts            two projects: node (server logic) + jsdom (components)
-Dockerfile, compose.yaml     production image + how it runs (see Deployment)
-scripts/                     azure-setup.sh, vm-provision.sh, encrypt-secret.mjs
+Dockerfile                   production image (see Deployment)
+compose.yaml                 Compose variant — not used on the production VM
+scripts/                     deploy.ps1, azure-setup.sh, vm-provision.sh, encrypt-secret.mjs
 ```
 
 ### Conventions
@@ -237,15 +238,19 @@ from the inbox reaches them while the envelope still passes SPF/DMARC.
 Docker container behind nginx on an Azure VM. Deployed manually — there is no
 CI/CD pipeline. Step-by-step: **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
-```bash
-docker compose up -d --build
+```powershell
+.\scripts\deploy.ps1
 ```
+
+Tests and builds the image on Windows and exports `smartalliance-web.tar`, which
+is loaded on the VM and started with `docker run`.
 
 Three things that catch people out:
 
-- `NEXT_PUBLIC_*` are baked in at **build** time, so they go in `.env` (Compose
-  build args). Runtime settings go in `.env.production`. Putting a
-  `NEXT_PUBLIC_*` in the latter does nothing.
+- `NEXT_PUBLIC_*` are baked in at **build** time, so they are build args
+  (`deploy.ps1 -SiteUrl`). Runtime settings go in `production.env` on the VM
+  and take effect only in a newly created container. Putting a `NEXT_PUBLIC_*`
+  in the latter does nothing.
 - `next.config.ts` sets `output: "standalone"`, which omits `.next/static` and
   `public` on purpose. The Dockerfile copies both back in.
 - nginx must **overwrite** `X-Forwarded-For`, not append. The usual
