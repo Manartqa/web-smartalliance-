@@ -89,6 +89,28 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
 
+  /**
+   * URLs from the old WordPress site that Google still has indexed. A permanent
+   * redirect hands their ranking to the new page; a 404 throws it away. The old
+   * site was Thai, so they land on `/th`.
+   *
+   * Only pages with a real counterpart are mapped. Theme leftovers
+   * (`/product-tag/*`, `/elements/*`) and `/careers` stay 404 on purpose —
+   * Google treats a redirect to an unrelated page as a soft 404 anyway.
+   *
+   * Trailing slashes need no pattern: Next strips them with its own 308 first.
+   * These run before `proxy.ts`, so the locale middleware never sees them.
+   */
+  async redirects() {
+    return [
+      // The products page sold Axway; the home page carries the Axway logo.
+      { source: "/products-smartalliance", destination: "/th", permanent: true },
+      { source: "/about-us", destination: "/th/about", permanent: true },
+      { source: "/service-support", destination: "/th/services", permanent: true },
+      { source: "/contact-us", destination: "/th/contact", permanent: true },
+    ];
+  },
+
   images: {
     // Design assets are PNG; serve modern formats where the browser supports them.
     formats: ["image/avif", "image/webp"],
