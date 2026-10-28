@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { sendContactMail } from "@/lib/mail";
 import { clientKey, rateLimit, GLOBAL_KEY } from "@/lib/rate-limit";
+import { verifyRecaptcha } from "@/lib/recaptcha/verify";
 import { EMAIL_PATTERN } from "@/lib/validation";
 import type { ApiErrorResponse } from "@/types/api/main/common";
 import type { ContactRequest, ContactResponse } from "@/types/api/main/contact";
@@ -75,7 +76,16 @@ export async function POST(request: Request) {
     subject.length > MAX_LENGTH.subject ||
     message.length > MAX_LENGTH.message;
 
-  if (!name || !email || !message || !EMAIL_PATTERN.test(email) || tooLong) {
+  // `=== true`, not truthy: a client that sends "yes" or 1 has not used the
+  // checkbox, and consent is the one field the PDPA says must be explicit.
+  if (
+    !name ||
+    !email ||
+    !message ||
+    !EMAIL_PATTERN.test(email) ||
+    tooLong ||
+    body.consent !== true
+  ) {
     return fail("validation_failed", 400);
   }
 
@@ -99,10 +109,19 @@ export async function POST(request: Request) {
     });
   }
 
+  // After the rate limits, so a flood is turned away before it costs a round
+  // trip to Google each.
+  const captcha = await verifyRecaptcha(body.recaptchaToken);
+  if (captcha.status === "failed") {
+    console.warn(`[contact] reCAPTCHA check failed — ${captcha.reason}.`);
+    return fail("captcha_failed", 400);
+  }
+
   const result = await sendContactMail({
     name,
     email,
     message,
+    consent: true,
     ...(company ? { company } : {}),
     ...(phone ? { phone } : {}),
     ...(subject ? { subject } : {}),

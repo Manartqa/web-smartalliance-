@@ -1,9 +1,10 @@
-export type CtaBandVariant = "home" | "services" | "contact";
+export type CtaBandVariant = "home" | "services" | "about" | "contact";
 
 /** Which icon each `cta.*` copy block ships with by default. */
 export const CTA_BAND_ICONS: Record<CtaBandVariant, string> = {
   home: "/assets/ic-mail-circle.png",
   services: "/assets/cta-share.png",
+  about: "/assets/cta-handshake.png",
   contact: "/assets/cta-handshake.png",
 };
 
@@ -21,6 +22,7 @@ export const CTA_BAND_ICONS: Record<CtaBandVariant, string> = {
 export const CTA_BAND_HAS_BUTTON: Record<CtaBandVariant, boolean> = {
   home: true,
   services: true,
+  about: true,
   contact: false,
 };
 

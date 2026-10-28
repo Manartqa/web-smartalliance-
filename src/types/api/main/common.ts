@@ -20,6 +20,7 @@ export type ApiErrorCode =
   | "invalid_json"
   | "validation_failed"
   | "rate_limited"
+  | "captcha_failed"
   | "not_configured"
   | "send_failed";
 

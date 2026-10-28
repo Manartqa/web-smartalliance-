@@ -17,6 +17,7 @@ export const CONTACT_FORM_DEFAULTS: ContactFormValues = {
   subject: "",
   message: "",
   website: "",
+  consent: false,
 };
 
 /** The four fields rendered in the two-column grid at the top of the form. */

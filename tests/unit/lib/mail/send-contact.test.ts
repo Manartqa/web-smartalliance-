@@ -6,6 +6,7 @@ const payload: ContactRequest = {
   name: "Somchai",
   email: "somchai@example.co.th",
   message: "Please send a quote.",
+  consent: true,
 };
 
 const readMailConfig = vi.fn();

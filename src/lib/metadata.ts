@@ -3,7 +3,13 @@ import { getTranslations } from "next-intl/server";
 import { siteConfig } from "@/config/site";
 import { locales, type Locale } from "@/i18n/routing";
 
-type PageKey = "home" | "about" | "services" | "contact";
+type PageKey = "home" | "about" | "services" | "contact" | "privacy" | "terms";
+
+/** Title and description for a page whose copy does not live under `meta.*`. */
+interface PageCopy {
+  title: string;
+  description: string;
+}
 
 /**
  * Ownership tags for Search Console and Bing Webmaster Tools.
@@ -23,13 +29,17 @@ const verification = {
 /**
  * Builds per-page metadata plus the hreflang alternates that let search
  * engines pair the two language versions of the same page.
+ *
+ * `page` names a `meta.*` namespace, or carries the copy itself — the service
+ * detail pages build theirs from the service's own messages.
  */
 export async function buildMetadata(
   locale: Locale,
-  page: PageKey,
+  page: PageKey | PageCopy,
   path: string,
 ): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: `meta.${page}` });
+  const { title, description } =
+    typeof page === "string" ? await metaCopy(locale, page) : page;
 
   const href = (l: string) => `/${l}${path === "/" ? "" : path}`;
   const languages = Object.fromEntries(locales.map((l) => [l, href(l)]));
@@ -42,7 +52,7 @@ export async function buildMetadata(
     url: `/${locale}/${route}`,
     width: 1200,
     height: 630,
-    alt: t("title"),
+    alt: title,
   });
 
   return {
@@ -50,8 +60,8 @@ export async function buildMetadata(
     // on-page ranking signal a marketing page has. It was previously the
     // company name on all four pages, which left every result looking
     // identical and let Google rewrite the titles itself.
-    title: t("title"),
-    description: t("description"),
+    title,
+    description,
     metadataBase: new URL(siteConfig.url),
     applicationName: siteConfig.name,
     verification,
@@ -60,8 +70,8 @@ export async function buildMetadata(
       languages: { ...languages, "x-default": href("en") },
     },
     openGraph: {
-      title: t("title"),
-      description: t("description"),
+      title,
+      description,
       url: href(locale),
       siteName: siteConfig.name,
       locale: locale === "th" ? "th_TH" : "en_US",
@@ -74,8 +84,8 @@ export async function buildMetadata(
     },
     twitter: {
       card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
+      title,
+      description,
       images: [card("twitter-image")],
     },
     robots: {
@@ -92,4 +102,9 @@ export async function buildMetadata(
       },
     },
   };
+}
+
+async function metaCopy(locale: Locale, page: PageKey): Promise<PageCopy> {
+  const t = await getTranslations({ locale, namespace: `meta.${page}` });
+  return { title: t("title"), description: t("description") };
 }

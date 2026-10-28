@@ -1,4 +1,4 @@
-export type ButtonVariant = "yellow" | "outline" | "navyOutline";
+export type ButtonVariant = "yellow" | "outline" | "navyOutline" | "navy";
 
 export const BUTTON_BASE_CLASS =
   "inline-flex items-center justify-center gap-2.5 rounded-[10px] px-6 py-3.5 " +
@@ -11,4 +11,5 @@ export const BUTTON_VARIANT_CLASS: Record<ButtonVariant, string> = {
     "border-[1.5px] border-white text-white hover:bg-white hover:text-navy",
   navyOutline:
     "border-[1.5px] border-navy bg-white text-navy hover:bg-navy hover:text-white",
+  navy: "bg-blue-cta text-white hover:bg-navy",
 };

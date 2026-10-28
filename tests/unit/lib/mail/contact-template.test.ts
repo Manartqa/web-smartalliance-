@@ -7,6 +7,7 @@ const base: ContactRequest = {
   name: "Somchai Jaidee",
   email: "somchai@example.co.th",
   message: "We would like a quote for Axway MFT.",
+  consent: true,
 };
 
 const build = (overrides: Partial<ContactRequest> = {}) =>
@@ -212,5 +213,18 @@ describe("buildContactMail — body content", () => {
     const { html } = build();
 
     expect(html).toContain("Somchai Jaidee · somchai@example.co.th");
+  });
+});
+
+describe("buildContactMail — consent record", () => {
+  it("states the visitor's consent in both bodies", () => {
+    const { text, html } = build();
+
+    expect(text).toContain(
+      "Consent: Agreed to the privacy policy and terms and conditions",
+    );
+    expect(html).toContain(
+      "Agreed to the privacy policy and terms and conditions",
+    );
   });
 });

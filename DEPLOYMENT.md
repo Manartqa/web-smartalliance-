@@ -236,16 +236,23 @@ The single most common way to misconfigure this app.
 
 | | Where | Effect of changing it |
 |---|---|---|
-| `NEXT_PUBLIC_*` | `deploy.ps1 -SiteUrl` → `docker build --build-arg` | **Rebuild required.** Inlined into the JS bundle and into the prerendered `sitemap.xml`, `robots.txt`, canonical and hreflang tags during `next build`. |
-| `SMTP_*`, `MS_*`, `CONTACT_MAIL_*`, `TRUST_PROXY` | `~/production.env` → `docker run --env-file` | **New container required** — see [Changing a runtime setting](#changing-a-runtime-setting). |
+| `NEXT_PUBLIC_*` | `deploy.ps1 -SiteUrl` / `-RecaptchaSiteKey` → `docker build --build-arg` | **Rebuild required.** Inlined into the JS bundle and into the prerendered `sitemap.xml`, `robots.txt`, canonical and hreflang tags during `next build`. |
+| `SMTP_*`, `MS_*`, `CONTACT_MAIL_*`, `TRUST_PROXY`, `RECAPTCHA_SECRET_KEY` | `~/production.env` → `docker run --env-file` | **New container required** — see [Changing a runtime setting](#changing-a-runtime-setting). |
 
 Putting `NEXT_PUBLIC_SITE_URL` in `production.env` does nothing at all. The
 Dockerfile fails the build if it is missing, but it cannot tell whether the
 value is *correct* — check `/sitemap.xml` after deploying.
 
-`deploy.ps1` passes only `NEXT_PUBLIC_SITE_URL`. The Google and Bing
-verification meta tags are therefore never emitted; verify Search Console by
-DNS TXT record instead.
+`deploy.ps1` passes `NEXT_PUBLIC_SITE_URL` and, when given,
+`NEXT_PUBLIC_RECAPTCHA_SITE_KEY`. The Google and Bing verification meta tags
+are therefore never emitted; verify Search Console by DNS TXT record instead.
+
+reCAPTCHA is two halves in two places: the site key at build time
+(`-RecaptchaSiteKey`), the secret in `production.env` (`RECAPTCHA_SECRET_KEY`).
+With the secret but no site key, every enquiry is rejected — the log shows
+`reCAPTCHA check failed — missing token`. With the site key but no secret, the
+badge shows and nothing is checked. Every rejection is logged with its reason
+and score; tune `RECAPTCHA_MIN_SCORE` in `src/lib/recaptcha/config.ts`.
 
 ## Why the proxy overwrites XFF
 

@@ -1,21 +1,26 @@
-import { PageBody } from "@/components/common";
 import { CtaBand } from "@/components/layout/CtaBand";
 
-import AboutDetail from "./AboutDetail";
+import AboutClients from "./AboutClients";
 import AboutHero from "./AboutHero";
+import AboutIntro from "./AboutIntro";
+import AboutJourney from "./AboutJourney";
 
 /**
- * Entry point for the about page. Stays a server component — nothing on this
- * page holds state or handles events, so there is no `"use client"` boundary.
+ * Entry point for the about page. Server components throughout; the only
+ * client code is the client-logo carousel's scroll buttons.
+ *
+ * Not built from `AboutDetail` any more — that overview now lives only on the
+ * home page. The hero here is an ordinary section, not the sticky shared
+ * `Hero`, so the page needs no `PageBody` to scroll over it.
  */
 export default function AboutContent() {
   return (
     <>
       <AboutHero />
-      <PageBody>
-        <AboutDetail />
-        <CtaBand variant="home" />
-      </PageBody>
+      <AboutIntro />
+      <AboutJourney />
+      <AboutClients />
+      <CtaBand variant="about" />
     </>
   );
 }

@@ -69,6 +69,14 @@ export function buildContactMail(payload: ContactRequest): ContactMail {
     ["Company", payload.company?.trim() ?? ""],
     ["Phone", payload.phone?.trim() ?? ""],
     ["Subject", payload.subject?.trim() ?? ""],
+    // The PDPA consent record: this mail, with its received-at stamp, is
+    // where the company keeps proof that the visitor agreed.
+    [
+      "Consent",
+      payload.consent
+        ? "Agreed to the privacy policy and terms and conditions"
+        : "",
+    ],
   ].filter((entry): entry is [string, string] => Boolean(entry[1]));
 
   const stamp = receivedAt.format(new Date());

@@ -18,6 +18,7 @@ const values = (overrides: Partial<ContactFormValues> = {}): ContactFormValues =
   subject: "",
   message: "Please send a quote.",
   website: "",
+  consent: true,
   ...overrides,
 });
 
@@ -81,6 +82,32 @@ describe("submitContact — request shaping", () => {
 
     expect(postContactApi).toHaveBeenCalledWith(
       expect.objectContaining({ website: "  spam.example  " }),
+    );
+  });
+});
+
+describe("submitContact — consent and reCAPTCHA", () => {
+  it("forwards the consent flag as given", async () => {
+    await (await load())(values({ consent: true }));
+
+    expect(postContactApi).toHaveBeenCalledWith(
+      expect.objectContaining({ consent: true }),
+    );
+  });
+
+  it("forwards the reCAPTCHA token when there is one", async () => {
+    await (await load())({ ...values(), recaptchaToken: "token-123" });
+
+    expect(postContactApi).toHaveBeenCalledWith(
+      expect.objectContaining({ recaptchaToken: "token-123" }),
+    );
+  });
+
+  it("omits the token field when no token was issued", async () => {
+    await (await load())(values());
+
+    expect(postContactApi.mock.calls[0]![0]).not.toHaveProperty(
+      "recaptchaToken",
     );
   });
 });

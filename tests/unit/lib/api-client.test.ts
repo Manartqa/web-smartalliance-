@@ -67,7 +67,12 @@ describe("postContactApi", () => {
     create.mockReturnValue(client);
 
     const { postContactApi } = await import("@/lib/api/api-main");
-    const payload = { name: "Somchai", email: "a@b.co", message: "hi" };
+    const payload = {
+      name: "Somchai",
+      email: "a@b.co",
+      message: "hi",
+      consent: true,
+    };
     postContactApi(payload);
 
     expect(client.post).toHaveBeenCalledWith("/api/contact", payload);

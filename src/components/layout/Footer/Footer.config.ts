@@ -26,3 +26,9 @@ export const FOOTER_SOCIAL_ITEMS = [
     external: false,
   },
 ] as const;
+
+/** Policy pages, linked beside the copyright line. Labels from `footer.*`. */
+export const FOOTER_LEGAL_ITEMS = [
+  { key: "privacy", href: "/privacy-policy" },
+  { key: "terms", href: "/terms" },
+] as const;

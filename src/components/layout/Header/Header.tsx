@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { navItems } from "@/config/site";
@@ -28,6 +28,40 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  // One yellow bar under the desktop nav that slides to whichever item is
+  // hovered or focused, and back to the current page's item on leave.
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef(new Map<string, HTMLAnchorElement>());
+  const [bar, setBar] = useState<{
+    left: number;
+    width: number;
+    visible: boolean;
+  } | null>(null);
+
+  const activeKey = navItems.find((item) => isActive(item.href))?.key;
+
+  const moveBarTo = useCallback((key: string | undefined) => {
+    const link = key ? linkRefs.current.get(key) : undefined;
+    // With nothing to sit under (a page outside the nav, like /terms), fade
+    // out where it is rather than sliding off to the left edge.
+    setBar((prev) =>
+      link
+        ? { left: link.offsetLeft, width: link.offsetWidth, visible: true }
+        : prev && { ...prev, visible: false },
+    );
+  }, []);
+
+  // Re-measure when the page changes and whenever the nav's box does — which
+  // covers window resizes and the web font swapping in after first paint.
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    moveBarTo(activeKey);
+    const observer = new ResizeObserver(() => moveBarTo(activeKey));
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, [activeKey, moveBarTo]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white">
       <div className="container-site flex h-16 items-center justify-between gap-4 lg:h-20">
@@ -43,22 +77,49 @@ export default function Header() {
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav
+          ref={navRef}
+          onMouseLeave={() => moveBarTo(activeKey)}
+          // Only when focus leaves the nav altogether; tabbing between its
+          // links blurs one and focuses the next.
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget))
+              moveBarTo(activeKey);
+          }}
+          className="relative hidden items-center gap-8 lg:flex"
+        >
           {navItems.map((item) => (
             <Link
               key={item.key}
+              ref={(el) => {
+                if (el) linkRefs.current.set(item.key, el);
+                else linkRefs.current.delete(item.key);
+              }}
               href={item.href}
+              onMouseEnter={() => moveBarTo(item.key)}
+              onFocus={() => moveBarTo(item.key)}
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "relative py-1 text-sm uppercase tracking-[0.02em] transition-colors",
+                "relative py-1 text-sm uppercase tracking-[0.02em] transition-[color,transform] duration-300 hover:-translate-y-px motion-reduce:transform-none",
                 isActive(item.href)
-                  ? "font-semibold text-ink after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:bg-yellow"
-                  : "font-medium text-ink/80 hover:text-ink",
+                  ? "font-semibold text-ink"
+                  : "font-medium text-ink/70 hover:text-ink",
               )}
             >
               {t(item.key)}
             </Link>
           ))}
+          <span
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute -bottom-0.5 left-0 h-0.5 rounded-full bg-yellow transition-[transform,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+              bar?.visible ? "opacity-100" : "opacity-0",
+            )}
+            style={{
+              width: bar?.width ?? 0,
+              transform: `translateX(${bar?.left ?? 0}px)`,
+            }}
+          />
         </nav>
 
         <div className="hidden items-center gap-5 lg:flex">

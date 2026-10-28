@@ -4,6 +4,7 @@ import { CtaBand } from "@/components/layout/CtaBand";
 // imported through its barrel rather than duplicated.
 import { AboutDetail } from "@/components/partials/About";
 
+import HomeCertifications from "./HomeCertifications";
 import HomeHero from "./HomeHero";
 
 /** Entry point for the home page. Server component — no state, no handlers. */
@@ -13,6 +14,7 @@ export default function HomeContent() {
       <HomeHero />
       <PageBody>
         <AboutDetail />
+        <HomeCertifications />
         <CtaBand variant="home" />
       </PageBody>
     </>

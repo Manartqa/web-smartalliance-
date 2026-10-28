@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Script from "next/script";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { BaseButton } from "@/components/ui/Button";
 import { ChevronRight } from "@/components/ui/Icon";
 import { BaseInput, BaseTextarea } from "@/components/ui/Input";
 import { useContactSubmit } from "@/hooks/contact";
+import { Link } from "@/i18n/navigation";
 import { ApiError } from "@/lib/api/interceptor";
+import { getRecaptchaToken, recaptchaScriptSrc } from "@/lib/recaptcha/client";
 import type {
   ContactFieldErrors,
   ContactFieldName,
@@ -27,8 +30,12 @@ import { ContactFieldError, ContactFieldIcon } from "./ContactField";
 
 export default function ContactForm() {
   const t = useTranslations("contact.form");
+  const locale = useLocale();
   const [values, setValues] = useState<ContactFormValues>(CONTACT_FORM_DEFAULTS);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
+  // Set when no reCAPTCHA token could be had (script blocked or failed), which
+  // happens before the mutation runs and so is not in its error state.
+  const [captchaUnavailable, setCaptchaUnavailable] = useState(false);
   const { submit, isPending, isSuccess, isError, error, reset } =
     useContactSubmit();
 
@@ -37,13 +44,23 @@ export default function ContactForm() {
   const errorMessage =
     error instanceof ApiError && error.code === "rate_limited"
       ? t("errors.tooMany")
-      : t("error");
+      : error instanceof ApiError && error.code === "captcha_failed"
+        ? t("errors.captcha")
+        : t("error");
 
   const set = (field: ContactFieldName, value: string) => {
     setValues((v) => ({ ...v, [field]: value }));
     setErrors((e) => ({ ...e, [field]: undefined }));
     // Clear a stale success/error banner as soon as the user edits again.
     if (isSuccess || isError) reset();
+    setCaptchaUnavailable(false);
+  };
+
+  const setConsent = (consent: boolean) => {
+    setValues((v) => ({ ...v, consent }));
+    setErrors((e) => ({ ...e, consent: undefined }));
+    if (isSuccess || isError) reset();
+    setCaptchaUnavailable(false);
   };
 
   const validate = () => {
@@ -53,6 +70,7 @@ export default function ContactForm() {
     else if (!EMAIL_PATTERN.test(values.email))
       next.email = t("errors.emailInvalid");
     if (!values.message.trim()) next.message = t("errors.messageRequired");
+    if (!values.consent) next.consent = t("errors.consentRequired");
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -61,8 +79,16 @@ export default function ContactForm() {
     event.preventDefault();
     if (!validate()) return;
 
+    let recaptchaToken: string | undefined;
     try {
-      await submit(values);
+      recaptchaToken = await getRecaptchaToken();
+    } catch {
+      setCaptchaUnavailable(true);
+      return;
+    }
+
+    try {
+      await submit({ ...values, recaptchaToken });
       setValues(CONTACT_FORM_DEFAULTS);
     } catch {
       // `isError` from the mutation drives the banner below.
@@ -142,6 +168,57 @@ export default function ContactForm() {
         <ContactFieldError field="message" message={errors.message} />
       </div>
 
+      {/* Consent is its own required step, ticked by the visitor — never
+          pre-checked, which the PDPA does not accept as consent. The policy
+          links open in a new tab so following one does not lose the form. */}
+      <fieldset className="mt-2">
+        <legend className="text-sm font-semibold text-ink">
+          {t("consent.label")}{" "}
+          <span aria-hidden className="text-red-600">
+            {t("required")}
+          </span>
+        </legend>
+        <div className="mt-2 flex items-start gap-3">
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            checked={values.consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            required
+            aria-invalid={errors.consent ? true : undefined}
+            aria-describedby={errors.consent ? "consent-error" : undefined}
+            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-blue-cta"
+          />
+          <label
+            htmlFor="consent"
+            className="cursor-pointer text-[15px] leading-relaxed text-ink"
+          >
+            {t.rich("consent.agree", {
+              privacy: (chunks) => (
+                <Link
+                  href="/privacy-policy"
+                  target="_blank"
+                  className="text-blue-cta underline-offset-2 hover:underline"
+                >
+                  {chunks}
+                </Link>
+              ),
+              terms: (chunks) => (
+                <Link
+                  href="/terms"
+                  target="_blank"
+                  className="text-blue-cta underline-offset-2 hover:underline"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </label>
+        </div>
+        <ContactFieldError field="consent" message={errors.consent} />
+      </fieldset>
+
       <BaseButton
         type="submit"
         disabled={isPending}
@@ -157,9 +234,9 @@ export default function ContactForm() {
             {t("success")}
           </span>
         )}
-        {isError && (
+        {(isError || captchaUnavailable) && (
           <span className="text-sm font-medium text-red-600">
-            {errorMessage}
+            {captchaUnavailable ? t("errors.captcha") : errorMessage}
           </span>
         )}
       </p>
@@ -175,6 +252,11 @@ export default function ContactForm() {
         />
         {t("privacy")}
       </p>
+
+      {/* reCAPTCHA v3 shows its own badge; nothing loads without a site key. */}
+      {recaptchaScriptSrc(locale) && (
+        <Script src={recaptchaScriptSrc(locale)} strategy="afterInteractive" />
+      )}
     </form>
   );
 }

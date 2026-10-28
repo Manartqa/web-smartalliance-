@@ -16,15 +16,23 @@
     },
     "about": {
       "title": "About Smart Alliance — Authorized Axway Partner in Thailand",
-      "description": "Authorized Axway Partner in Thailand. Smart Alliance has delivered custom software, system integration, API Management and Managed File Transfer (MFT) since 2004."
+      "description": "Authorized Axway Partner in Thailand. Smart Alliance has delivered custom software, system integration, API Management, and Managed File Transfer (MFT) since 2004."
     },
     "services": {
       "title": "Services — Axway API Management, MFT & System Integration",
-      "description": "Custom software development, Axway API Management and Managed File Transfer (MFT), system integration, digital workflow, AI, cybersecurity, data analytics and managed services."
+      "description": "Custom software development, Axway API Management and Managed File Transfer (MFT), system integration, digital workflow, AI, cybersecurity, data analytics, and managed services."
     },
     "contact": {
       "title": "Contact — Smart Alliance",
       "description": "Get in touch with the Smart Alliance team in Bangkok. We are here to help your organization innovate, integrate, and grow."
+    },
+    "privacy": {
+      "title": "Privacy Policy — Smart Alliance",
+      "description": "How Smart Alliance Co., Ltd. collects, uses, and protects personal data under Thailand's Personal Data Protection Act (PDPA), and how to exercise your rights."
+    },
+    "terms": {
+      "title": "Terms and Conditions — Smart Alliance",
+      "description": "The terms and conditions that apply when you use the Smart Alliance website, www.smartalliance.co.th."
     }
   },
   "notFound": {
@@ -42,15 +50,49 @@
       "paragraph": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions.",
       "primaryCta": "Our Services",
       "secondaryCta": "Contact Us"
+    },
+    "certifications": {
+      "heading": "Certifications",
+      "subheading": "Standards and certifications that reflect the quality of our management and our commitment to professional service.",
+      "scope": "Certification scope",
+      "certificateNo": "Certificate No.",
+      "issuer": "Issued by",
+      "validUntil": "Valid until",
+      "view": "View certificate",
+      "download": "Download certificate",
+      "thumbnailAlt": "{standard} certificate issued to Smart Alliance Co., Ltd. — opens the PDF",
+      "items": {
+        "iso9001": {
+          "title": "Quality Management",
+          "scope": "Sales, installation and maintenance services for system software"
+        },
+        "iso29110": {
+          "title": "Software Engineering",
+          "scope": "Quality maintenance services for network systems, computer equipment and accessories"
+        }
+      }
     }
   },
   "about": {
     "hero": {
-      "titleLine1": "Beyond Software.",
-      "titleLine2": "We Build Solutions.",
-      "paragraph": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions.",
-      "primaryCta": "Our Services",
-      "secondaryCta": "Contact Us"
+      "label": "About Smart Alliance",
+      "titleLine1": "Over <highlight>20 years</highlight> of expertise",
+      "titleLine2": "in IT solutions",
+      "paragraph": "The technology partner organizations have trusted since 2004",
+      "facts": [
+        {
+          "label": "In business since",
+          "value": "2004"
+        },
+        {
+          "label": "Experience",
+          "value": "20+ years"
+        },
+        {
+          "label": "Serving",
+          "value": "Public & private sectors"
+        }
+      ]
     },
     "label": "About Us",
     "headingLine1": "Building Digital Solutions",
@@ -70,13 +112,78 @@
       "body": "Smart Alliance partners with leading global technology providers to deliver enterprise-grade digital solutions. As an Authorized Axway Partner, we provide expertise in API Management, Managed File Transfer (MFT), B2B Integration, and enterprise integration platforms.",
       "badge": "Authorized Partner",
       "logoAlt": "Axway — Smart Alliance is an Authorized Axway Partner in Thailand",
-      "serviceName": "Axway API Management, Managed File Transfer (MFT) and B2B Integration"
+      "serviceName": "Axway API Management, Managed File Transfer (MFT), and B2B Integration"
     },
     "stats": {
       "experience": "20+ Years of Experience",
       "projects": "Government & Enterprise Projects",
       "delivery": "End-to-End Project Delivery",
       "partner": "Authorized Axway Partner"
+    },
+    "intro": {
+      "label": "Get to know Smart Alliance",
+      "body": "Founded in 2004, we set out to become a leading provider of IT projects for the public and private sectors. Our ISO 9001:2015 certification means our work meets internationally recognized quality standards. Our team is carefully selected and trained by the product vendors themselves, so every engagement runs as smoothly as possible, and our track record has earned the trust of many leading organizations.",
+      "cta": "Explore our services"
+    },
+    "expertise": {
+      "heading": "What we do best",
+      "subheading": "End-to-end technology services for public and private sector organizations.",
+      "items": {
+        "custom": {
+          "title": "Custom Software Development",
+          "body": "Systems designed and built around your organization's needs"
+        },
+        "api": {
+          "title": "API & System Integration",
+          "body": "Data exchange between agencies and your enterprise systems"
+        },
+        "workflow": {
+          "title": "Digital Workflow & e-Services",
+          "body": "Online requests, approvals, and electronic documents"
+        },
+        "infra": {
+          "title": "Infrastructure & Managed Services",
+          "body": "Networks, cybersecurity, and ongoing system care"
+        }
+      }
+    },
+    "timeline": {
+      "heading": "Our journey",
+      "items": [
+        {
+          "period": "2004",
+          "body": "Company founded; first IT projects delivered"
+        },
+        {
+          "period": "2007 – 2017",
+          "body": "Expanded our services and delivered large-scale projects connecting data between agencies"
+        },
+        {
+          "period": "2018 – 2022",
+          "body": "Grew our team's capabilities in new technology and digital solutions"
+        },
+        {
+          "period": "2023",
+          "body": "Introduced a new logo and a refreshed corporate identity"
+        },
+        {
+          "period": "Today",
+          "body": "Committed to being a technology partner organizations trust for the long term"
+        }
+      ]
+    },
+    "standards": {
+      "heading": "Standards & partners",
+      "isoBody": "Internationally certified quality management system",
+      "isoLink": "View certificate",
+      "axwayTitle": "Axway Authorized Partner",
+      "axwayBody": "Officially authorized partner for API Management, Managed File Transfer, and B2B Integration"
+    },
+    "clients": {
+      "heading": "Trusted by leading organizations",
+      "subheading": "We are proud to help organizations move into the digital era.",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "services": {
@@ -86,37 +193,565 @@
       "paragraph": "Smart Alliance delivers end-to-end technology services that help government agencies and enterprises innovate, integrate, and transform with confidence."
     },
     "label": "Our Services",
-    "heading": "Solutions That Drive Efficiency, Integration, and Growth",
-    "subheading": "From custom software development to enterprise integration and support, we provide everything you need to succeed in the digital era.",
+    "heading": "End-to-end technology to take your organization fully digital",
+    "subheading": "We develop and deliver complete IT solutions that meet the needs of every organization, in both the public and private sectors.",
     "items": {
       "custom": {
         "title": "Custom Software Development",
-        "body": "Tailor-made software for web, mobile, and enterprise applications designed to meet your unique business requirements."
+        "body": "We design and build software around your organization's requirements, supporting your policies and specialized processes to raise efficiency and elevate how you work.",
+        "features": [
+          "Tailor-made systems",
+          "Web and mobile applications",
+          "Paperless-ready",
+          "Maintenance and further development"
+        ],
+        "overview": "We design and develop software that fits each organization's needs — web applications and mobile applications alike — with full support for paperless operations. We cover the whole lifecycle: analysis, design, development, testing, and go-live, followed by maintenance and further development, so your organization runs efficiently, securely, and in line with government policy and international standards.",
+        "capabilities": [
+          {
+            "title": "Tailor-made systems",
+            "items": [
+              "System analysis and design",
+              "Built around your real processes",
+              "Web and mobile support",
+              "Integrates with other systems"
+            ]
+          },
+          {
+            "title": "Paperless systems",
+            "items": [
+              "Online requests and approvals",
+              "e-Document and workflow",
+              "Electronic signatures",
+              "Electronic Transactions Act compliant"
+            ]
+          },
+          {
+            "title": "Specialized systems",
+            "items": [
+              "Regulation-driven processes",
+              "Complex multi-step workflows",
+              "Data exchange with external agencies",
+              "Reports and dashboards"
+            ]
+          },
+          {
+            "title": "Every channel covered",
+            "items": [
+              "Web applications",
+              "Mobile applications (iOS/Android)",
+              "Responsive design",
+              "Easy to use for every user group"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Requirements analysis",
+            "body": "We study your processes, users, and goals together with your team."
+          },
+          {
+            "title": "System design",
+            "body": "Architecture, database, and user interface design."
+          },
+          {
+            "title": "Development & testing",
+            "body": "Iterative development with quality testing before delivery."
+          },
+          {
+            "title": "Deployment & training",
+            "body": "Go-live in production with training for your users."
+          },
+          {
+            "title": "Ongoing development",
+            "body": "Maintenance and further development after handover."
+          }
+        ],
+        "highlights": [
+          "Built around your real processes",
+          "Web and mobile ready",
+          "Less paperwork",
+          "Room to grow"
+        ]
       },
       "api": {
         "title": "API & System Integration",
-        "body": "Seamlessly connect applications, data, APIs, and enterprise systems to ensure smooth data flow and operational efficiency."
+        "body": "We connect data between organizations through APIs and your enterprise systems, securely and to recognized standards, so data flows continuously and work runs efficiently.",
+        "features": [
+          "API design and development (REST/JSON)",
+          "Public and private sector integration",
+          "API gateway design and usage control",
+          "Security standards support"
+        ],
+        "overview": "We design and build APIs and connect your systems with government agencies, business partners, and the legacy platforms you already run, so data flows continuously, accurately, and securely. As an Axway partner, we set up API Management and Managed File Transfer (MFT) that is governed centrally, fully auditable, and ready to scale with your digital services.",
+        "capabilities": [
+          {
+            "title": "API development",
+            "items": [
+              "REST/JSON API design",
+              "API documentation (OpenAPI)",
+              "Testing and quality assurance",
+              "Built to scale"
+            ]
+          },
+          {
+            "title": "API gateway & management",
+            "items": [
+              "Centralized API management",
+              "Access control and quotas",
+              "Usage monitoring and analytics",
+              "Axway API Management"
+            ]
+          },
+          {
+            "title": "Public & private sector integration",
+            "items": [
+              "Inter-agency data exchange",
+              "Legacy system integration",
+              "Managed File Transfer (MFT)",
+              "B2B integration"
+            ]
+          },
+          {
+            "title": "Security standards",
+            "items": [
+              "OAuth 2.0 / JWT",
+              "Encryption in transit",
+              "Audit logging",
+              "PDPA compliant"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "System & data survey",
+            "body": "We review existing systems, data sources, and the agencies to connect."
+          },
+          {
+            "title": "API design",
+            "body": "Data structures, standards, and API documentation."
+          },
+          {
+            "title": "Build & connect",
+            "body": "API development and integration with target systems."
+          },
+          {
+            "title": "Security testing",
+            "body": "Data exchange, performance, and access control testing."
+          },
+          {
+            "title": "Launch & monitor",
+            "body": "API usage monitoring and continuous improvement."
+          }
+        ],
+        "highlights": [
+          "Automated data flow",
+          "REST/JSON standards",
+          "Centralized access control",
+          "Axway partner"
+        ]
       },
       "workflow": {
         "title": "Digital Workflow & e-\u2060Services",
-        "body": "Paperless solutions, workflow automation, e-Document, and digital platforms to optimize business processes and improve service delivery."
+        "body": "We deliver paperless solutions spanning workflow automation, electronic documents, and digital platforms to improve your processes and the services you provide to citizens.",
+        "features": [
+          "Electronic documents",
+          "Online requests and applications",
+          "Approval and status tracking",
+          "Compliant with Thailand's e-government laws"
+        ],
+        "overview": "We build digital workflow systems that take paper processes online end to end — submitting requests, reviewing and approving them, tracking their status, and storing the electronic documents. The result is shorter turnaround, lower costs, and more transparency, in line with the Electronic Transactions Act, so your organization can serve citizens and partners more conveniently.",
+        "capabilities": [
+          {
+            "title": "Online requests",
+            "items": [
+              "Electronic forms",
+              "Submit requests 24/7",
+              "Online document attachments",
+              "Status updates by email"
+            ]
+          },
+          {
+            "title": "Approval & tracking",
+            "items": [
+              "Configurable approval workflows",
+              "Real-time status tracking",
+              "Notifications to stakeholders",
+              "Turnaround-time reporting"
+            ]
+          },
+          {
+            "title": "Electronic documents",
+            "items": [
+              "Document storage and search",
+              "Electronic signatures",
+              "Access permissions",
+              "Electronic Transactions Act compliant"
+            ]
+          },
+          {
+            "title": "e-Services for your users",
+            "items": [
+              "Online service portal",
+              "Web and mobile support",
+              "Cross-agency data exchange",
+              "Less paper, shorter waits"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Current process review",
+            "body": "We review the forms, documents, and approval steps in use today."
+          },
+          {
+            "title": "Digital process design",
+            "body": "Online forms and a redesigned approval sequence."
+          },
+          {
+            "title": "Build & integrate",
+            "body": "e-Service development connected to related systems."
+          },
+          {
+            "title": "Pilot & training",
+            "body": "A pilot with real users and training for your staff."
+          },
+          {
+            "title": "Launch & follow-up",
+            "body": "Go-live and improvements based on real usage."
+          }
+        ],
+        "highlights": [
+          "Less paper",
+          "Real-time status tracking",
+          "Transparent and auditable",
+          "Legally compliant"
+        ]
       },
       "ai": {
         "title": "AI & Intelligent Solutions",
-        "body": "Leverage AI-powered applications, automation analytics, and intelligent solutions to drive innovation and smarter decisions."
+        "body": "We put AI to work analyzing your data automatically, driving innovation and more accurate decisions for how organizations work in the digital era.",
+        "features": [
+          "Data and image analysis (Vision AI)",
+          "AI CCTV face detection and behavior analysis",
+          "Blocklist / allowlist management",
+          "Reports and data export",
+          "Works with your existing CCTV cameras"
+        ],
+        "overview": "We apply artificial intelligence to your organization's real work — from analyzing camera footage and mining data for insight to automation that removes repetitive tasks. Every solution is designed to connect with your existing systems, helping you make faster, more accurate decisions while keeping security and personal data protection in mind.",
+        "capabilities": [
+          {
+            "title": "AI Vision / AI CCTV",
+            "items": [
+              "CCTV video analytics",
+              "Face and object detection",
+              "License plate recognition",
+              "Alerts on unusual events"
+            ]
+          },
+          {
+            "title": "Intelligent data analysis",
+            "items": [
+              "Trend analysis and forecasting",
+              "Data classification and clustering",
+              "Thai language processing",
+              "Executive-level insights"
+            ]
+          },
+          {
+            "title": "Blocklist / allowlist management",
+            "items": [
+              "Person and vehicle screening",
+              "Configurable watchlists",
+              "Instant match alerts",
+              "Audit history"
+            ]
+          },
+          {
+            "title": "Automation",
+            "items": [
+              "RPA for repetitive work",
+              "Chatbots for common questions",
+              "Document reading with OCR",
+              "Integrates with existing systems"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Define the problem",
+            "body": "The problem AI should solve and how success is measured."
+          },
+          {
+            "title": "Assess data & devices",
+            "body": "A review of your data, cameras, and existing systems."
+          },
+          {
+            "title": "Build & tune the model",
+            "body": "AI models fitted to your organization's data."
+          },
+          {
+            "title": "Accuracy testing",
+            "body": "Real-world trials and tuning of the results."
+          },
+          {
+            "title": "Deploy & improve",
+            "body": "Production deployment with ongoing accuracy improvements."
+          }
+        ],
+        "highlights": [
+          "Automation that frees your staff",
+          "Works with existing cameras",
+          "Instant alerts",
+          "Data-driven decisions"
+        ]
       },
       "security": {
         "title": "IT Infrastructure & Cybersecurity",
-        "body": "Secure, scalable, and reliable infrastructure with robust cybersecurity solutions to protect your systems and data."
+        "body": "We design and install IT infrastructure and networks, with multi-factor authentication (MFA/2FA) and cybersecurity solutions that protect your organization's data and systems.",
+        "features": [
+          "Multi-factor authentication (MFA / 2FA)",
+          "Cybersecurity systems",
+          "Backup and disaster recovery",
+          "Threat monitoring and detection"
+        ],
+        "overview": "We design, install, and look after your IT infrastructure — network, servers, and cloud — with multi-factor authentication (MFA/2FA) to stop unauthorized access, together with layered cybersecurity, backup, and disaster recovery planning. Your services keep running continuously and securely, and stay ready for new kinds of threats.",
+        "capabilities": [
+          {
+            "title": "Multi-factor authentication (MFA / 2FA)",
+            "items": [
+              "One-time passwords by SMS / email",
+              "Authenticator apps",
+              "Single sign-on (SSO) support",
+              "Risk-based access policies"
+            ]
+          },
+          {
+            "title": "Cybersecurity",
+            "items": [
+              "Firewall and WAF",
+              "Endpoint threat protection",
+              "Vulnerability assessment and penetration testing (VA/PT)",
+              "Access control"
+            ]
+          },
+          {
+            "title": "Backup & disaster recovery",
+            "items": [
+              "Automated backups",
+              "Disaster recovery planning (DRP)",
+              "DR site",
+              "Scheduled recovery testing"
+            ]
+          },
+          {
+            "title": "Monitoring",
+            "items": [
+              "Continuous system monitoring",
+              "Alerts on anomalies",
+              "Performance reporting",
+              "Capacity planning"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Risk assessment",
+            "body": "A review of your infrastructure and existing vulnerabilities."
+          },
+          {
+            "title": "Architecture & policy",
+            "body": "Network, authentication, and security policy design."
+          },
+          {
+            "title": "Install & configure",
+            "body": "Setting up equipment, MFA, and threat protection."
+          },
+          {
+            "title": "Pre-launch testing",
+            "body": "Security and recovery testing before go-live."
+          },
+          {
+            "title": "Continuous monitoring",
+            "body": "Ongoing monitoring, alerts, and regular hardening."
+          }
+        ],
+        "highlights": [
+          "Multi-factor authentication (MFA)",
+          "Layered threat protection",
+          "Reliable system recovery",
+          "Continuous monitoring"
+        ]
       },
       "data": {
         "title": "Data & Analytics",
-        "body": "Transform raw data into actionable insights with dashboards, reporting, and advanced analytics to support better business outcomes."
+        "body": "We turn large volumes of data into actionable insight with dashboards, reports, and advanced analytics that support better business decisions.",
+        "features": [
+          "Data warehouse / data lake design",
+          "Real-time dashboards and reports",
+          "In-depth data analytics",
+          "Connects data from many sources"
+        ],
+        "overview": "We help you bring data from many systems into a single warehouse, manage its quality, and present it through dashboards and reports that are easy to read. Executives and staff see the whole picture at a glance, analyze trends in depth, and decide on the basis of accurate, up-to-date data.",
+        "capabilities": [
+          {
+            "title": "Data warehouse / data lake",
+            "items": [
+              "Data warehouse design",
+              "Multi-source data integration (ETL)",
+              "Data quality management",
+              "Built for large volumes"
+            ]
+          },
+          {
+            "title": "Business intelligence",
+            "items": [
+              "Executive dashboards",
+              "Real-time KPIs",
+              "Drill-down analysis",
+              "Works on any device"
+            ]
+          },
+          {
+            "title": "Dashboards & reports",
+            "items": [
+              "Reports in your organization's format",
+              "Export to PDF / Excel",
+              "Scheduled report delivery",
+              "Data access permissions"
+            ]
+          },
+          {
+            "title": "Data analytics",
+            "items": [
+              "Trend analysis and forecasting",
+              "Data governance",
+              "Open data",
+              "Policy decision support"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Data source survey",
+            "body": "Your data sources and what decision-makers need from them."
+          },
+          {
+            "title": "Warehouse design",
+            "body": "Data structures and key performance indicators (KPIs)."
+          },
+          {
+            "title": "Collect & prepare data",
+            "body": "Connecting, extracting, and cleaning data (ETL)."
+          },
+          {
+            "title": "Dashboards & reports",
+            "body": "Clear views of the data for each user role."
+          },
+          {
+            "title": "Analyze & extend",
+            "body": "User training and further analytics over time."
+          }
+        ],
+        "highlights": [
+          "The big picture on one screen",
+          "Up-to-date data",
+          "Data from many systems combined",
+          "Exportable reports"
+        ]
       },
       "support": {
         "title": "Support & Managed Services",
-        "body": "Ongoing support, maintenance, monitoring, and system optimization to ensure your business runs smoothly 24/7."
+        "body": "We provide ongoing care, maintenance, monitoring, and performance optimization so your business runs smoothly around the clock.",
+        "features": [
+          "System maintenance and support",
+          "Helpdesk and technical support",
+          "Monitoring and issue alerts",
+          "Continuous system improvement"
+        ],
+        "overview": "We look after your systems long after handover — contracted maintenance, issue resolution, helpdesk, and improvements that keep pace with your changing needs — and we advise on technology from early planning through to the terms of reference. Your systems stay available and keep delivering a return on your investment over the long term.",
+        "capabilities": [
+          {
+            "title": "Maintenance & support",
+            "items": [
+              "Service level agreements (SLA)",
+              "Fast issue resolution",
+              "Preventive maintenance",
+              "Monthly service reports"
+            ]
+          },
+          {
+            "title": "Helpdesk",
+            "items": [
+              "Multi-channel issue reporting",
+              "Ticket tracking",
+              "Usage guidance",
+              "Knowledge base"
+            ]
+          },
+          {
+            "title": "System improvement",
+            "items": [
+              "Feature enhancements",
+              "Security updates",
+              "Performance tuning",
+              "Migration to new technology"
+            ]
+          },
+          {
+            "title": "Technology consulting",
+            "items": [
+              "Digital master planning",
+              "System architecture design",
+              "Terms of reference (TOR)",
+              "User training"
+            ]
+          }
+        ],
+        "process": [
+          {
+            "title": "Understand the system",
+            "body": "We study your systems, documentation, and environment."
+          },
+          {
+            "title": "Agree the scope",
+            "body": "Service levels (SLA) and issue reporting channels."
+          },
+          {
+            "title": "Handover & onboarding",
+            "body": "System takeover with a maintenance plan."
+          },
+          {
+            "title": "Monitor & resolve",
+            "body": "System monitoring and issue resolution within the SLA."
+          },
+          {
+            "title": "Report & improve",
+            "body": "Monthly reports and recommendations for improvement."
+          }
+        ],
+        "highlights": [
+          "SLA-backed care",
+          "Fast issue resolution",
+          "Preventive maintenance",
+          "Monthly reports"
+        ]
       }
+    },
+    "detail": {
+      "eyebrow": "Our service",
+      "viewDetails": "View details",
+      "metaTitle": "{service} — Smart Alliance",
+      "tabs": {
+        "overview": "Overview",
+        "capabilities": "Core capabilities",
+        "process": "How we work"
+      },
+      "consult": {
+        "title": "Talk to us about your organization's next system",
+        "body": "Our specialists are ready to advise you and propose the approach that fits your organization.",
+        "button": "Contact us"
+      },
+      "related": "Related services"
     }
   },
   "contact": {
@@ -146,7 +781,13 @@
         "emailRequired": "Please enter your email address.",
         "emailInvalid": "Please enter a valid email address.",
         "messageRequired": "Please enter your message.",
-        "tooMany": "Too many submissions. Please wait a few minutes and try again."
+        "tooMany": "Too many submissions. Please wait a few minutes and try again.",
+        "consentRequired": "Please tick the box to agree before sending your message.",
+        "captcha": "We could not confirm that this message was sent by a person. Please try again, or email us directly."
+      },
+      "consent": {
+        "label": "Consent to storing your personal data",
+        "agree": "Yes, I agree to the <privacy>privacy policy</privacy> and <terms>terms and conditions</terms>."
       }
     },
     "touchLabel": "Get in Touch",
@@ -179,12 +820,193 @@
       "heading": "We Look Forward to Hearing From You",
       "body": "Partner with Smart Alliance for innovative, secure, and scalable digital solutions."
     },
+    "about": {
+      "heading": "Let's build your digital solution together",
+      "body": "Let us design a solution that fits your organization.",
+      "button": "Discuss your project"
+    },
     "button": "Contact Smart Alliance"
   },
   "footer": {
     "copyright": "© Smart Alliance Co., Ltd. All Rights Reserved.",
     "facebook": "Facebook",
     "email": "Email",
-    "phone": "Phone"
+    "phone": "Phone",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions"
+  },
+  "cookieNotice": {
+    "title": "Cookies on this site",
+    "body": "We use only the cookies the site needs to work, such as the one that remembers your language. We use no analytics or advertising cookies. The map and the contact form use Google services, which may set cookies of their own. Read more in our <link>Privacy Policy</link>.",
+    "accept": "Accept cookies"
+  },
+  "legal": {
+    "label": "Legal",
+    "contactHeading": "Contact us",
+    "privacy": {
+      "title": "Privacy Policy",
+      "paragraph": "How Smart Alliance collects, uses and protects your personal data, and the rights you have under the Personal Data Protection Act B.E. 2562 (2019).",
+      "updated": "Effective date: 8 October 2026",
+      "sections": [
+        {
+          "heading": "Who we are",
+          "paragraphs": [
+            "Smart Alliance Co., Ltd. (“Smart Alliance”, “we”, “us”) is the data controller for personal data collected through www.smartalliance.co.th (the “Website”). This policy explains what we collect, why, how long we keep it and the rights you have under the Personal Data Protection Act B.E. 2562 (2019) (the “PDPA”)."
+          ]
+        },
+        {
+          "heading": "Personal data we collect",
+          "paragraphs": [
+            "We collect only what you give us, or what is needed to run the Website securely:"
+          ],
+          "items": [
+            "Contact form: your name and email address and, if you choose to provide them, your company or organization, phone number, subject and message.",
+            "Consent record: that you agreed to this policy and to the Terms and Conditions, and when.",
+            "Technical data: your IP address and basic request details such as browser type and the time of the request, used to protect the contact form against abuse and kept in server logs.",
+            "Language preference: a cookie that remembers whether you chose the English or the Thai version of the Website."
+          ]
+        },
+        {
+          "heading": "How we use it",
+          "paragraphs": [
+            "We use your personal data to:",
+            "We do not sell your personal data, and we do not use it for marketing without asking you first."
+          ],
+          "items": [
+            "reply to your enquiry and provide the information, quotation or service you asked about (steps taken at your request before entering into a contract, or performance of a contract);",
+            "keep a record of our correspondence with you (legitimate interest);",
+            "protect the Website and the contact form against spam, fraud and abuse (legitimate interest);",
+            "comply with legal obligations that apply to us."
+          ]
+        },
+        {
+          "heading": "Spam protection (Google reCAPTCHA)",
+          "paragraphs": [
+            "The contact form is protected by Google reCAPTCHA. To tell people from automated programs, reCAPTCHA collects hardware and software information, such as device and application data, and sends it to Google for analysis. That information is governed by Google's Privacy Policy and Terms of Service, published at policies.google.com."
+          ]
+        },
+        {
+          "heading": "Who we share it with",
+          "paragraphs": [
+            "Your personal data is handled by the members of our team who need it to respond to you. We also rely on service providers that process data on our behalf:",
+            "We may also disclose personal data where the law requires it, for example to a government authority or a court."
+          ],
+          "items": [
+            "Microsoft (Microsoft 365), which hosts the mailbox that receives contact form submissions;",
+            "Google, which provides reCAPTCHA;",
+            "our hosting provider, which runs the servers the Website is served from."
+          ]
+        },
+        {
+          "heading": "Transfers outside Thailand",
+          "paragraphs": [
+            "Some of these providers store or process data outside Thailand. Where they do, we rely on their contractual safeguards and data protection standards, as the PDPA permits."
+          ]
+        },
+        {
+          "heading": "How long we keep it",
+          "paragraphs": [
+            "We keep contact form submissions and our correspondence for as long as we need them to respond to you and to manage any business relationship that follows, and for no longer than 2 years after our last contact with you unless the law requires us to keep them longer. Server logs are kept for no longer than 90 days."
+          ]
+        },
+        {
+          "heading": "Your rights",
+          "paragraphs": [
+            "Under the PDPA you have the right to:",
+            "To exercise any of these rights, contact us using the details below. We will respond within 30 days."
+          ],
+          "items": [
+            "withdraw your consent at any time, without affecting processing that took place before you withdrew it;",
+            "request access to, and a copy of, your personal data;",
+            "ask us to correct personal data that is inaccurate, out of date or incomplete;",
+            "ask us to delete, destroy or anonymize your personal data;",
+            "ask us to restrict, or object to, the processing of your personal data;",
+            "receive your personal data in a commonly used electronic format, or have it sent to another data controller;",
+            "lodge a complaint with the Personal Data Protection Committee."
+          ]
+        },
+        {
+          "heading": "Security",
+          "paragraphs": [
+            "We use appropriate technical and organizational measures to protect personal data, including encrypted connections (HTTPS) and restricted access to the mailbox that receives enquiries."
+          ]
+        },
+        {
+          "heading": "Changes to this policy",
+          "paragraphs": [
+            "We may update this policy from time to time. The effective date at the top of this page shows when it last changed."
+          ]
+        }
+      ],
+      "contactBody": "For questions about this policy or to exercise your rights, contact:"
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "paragraph": "The terms that apply when you use the Smart Alliance website.",
+      "updated": "Effective date: 8 October 2026",
+      "sections": [
+        {
+          "heading": "Acceptance of these terms",
+          "paragraphs": [
+            "By using www.smartalliance.co.th (the “Website”), operated by Smart Alliance Co., Ltd. (“Smart Alliance”, “we”, “us”), you agree to these Terms and Conditions. If you do not agree, please do not use the Website."
+          ]
+        },
+        {
+          "heading": "Use of the Website",
+          "paragraphs": [
+            "You agree to use the Website lawfully, and not to:"
+          ],
+          "items": [
+            "attempt to gain unauthorized access to the Website, its servers or any related system;",
+            "interfere with the Website's operation, including by sending automated or bulk requests;",
+            "submit false, misleading, unlawful or harmful content through the contact form;",
+            "use the Website to send spam or unsolicited advertising."
+          ]
+        },
+        {
+          "heading": "Information on the Website",
+          "paragraphs": [
+            "The content of the Website is general information about Smart Alliance and our services. We make reasonable efforts to keep it accurate and up to date, but it is not an offer, a quotation or professional advice. Any engagement is governed by a separate written agreement."
+          ]
+        },
+        {
+          "heading": "Intellectual property",
+          "paragraphs": [
+            "The Website and its content, including text, graphics, logos and images, belong to Smart Alliance or to our licensors and are protected by law. Third-party trademarks, including Axway, belong to their respective owners. You may view and print pages for your own reference, but you may not copy, modify or distribute the content without our written permission."
+          ]
+        },
+        {
+          "heading": "Contact form submissions",
+          "paragraphs": [
+            "When you send us a message through the contact form, you confirm that the information you provide is accurate and that you are entitled to share it. Please do not send confidential information or passwords through the form. We handle the personal data in your message as described in our Privacy Policy."
+          ]
+        },
+        {
+          "heading": "Links to other websites",
+          "paragraphs": [
+            "The Website may link to websites run by others, such as our technology partners or Google Maps. We do not control those websites and are not responsible for their content or their privacy practices."
+          ]
+        },
+        {
+          "heading": "Limitation of liability",
+          "paragraphs": [
+            "The Website is provided “as is”. To the extent the law permits, Smart Alliance is not liable for any loss or damage arising from your use of, or inability to use, the Website, or from reliance on its content."
+          ]
+        },
+        {
+          "heading": "Changes to these terms",
+          "paragraphs": [
+            "We may update these Terms and Conditions from time to time. If you continue to use the Website after a change, you accept the updated terms."
+          ]
+        },
+        {
+          "heading": "Governing law",
+          "paragraphs": [
+            "These Terms and Conditions are governed by the laws of Thailand, and the courts of Thailand have jurisdiction over any dispute arising from them."
+          ]
+        }
+      ],
+      "contactBody": "For questions about these terms, contact:"
+    }
   }
 }

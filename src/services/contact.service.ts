@@ -1,9 +1,12 @@
 import { postContactApi } from "@/lib/api/api-main";
 import type { ContactRequest } from "@/types/api/main/contact";
-import type { ContactFormValues, ContactSubmitResult } from "@/types/app/contact";
+import type {
+  ContactSubmission,
+  ContactSubmitResult,
+} from "@/types/app/contact";
 
 /** Trim everything and drop the optional fields the user left blank. */
-const toRequest = (values: ContactFormValues): ContactRequest => {
+const toRequest = (values: ContactSubmission): ContactRequest => {
   const company = values.company.trim();
   const phone = values.phone.trim();
   const subject = values.subject.trim();
@@ -12,16 +15,18 @@ const toRequest = (values: ContactFormValues): ContactRequest => {
     name: values.name.trim(),
     email: values.email.trim(),
     message: values.message.trim(),
+    consent: values.consent,
     ...(company ? { company } : {}),
     ...(phone ? { phone } : {}),
     ...(subject ? { subject } : {}),
     // Forwarded as-is: the route decides what a non-empty honeypot means.
     ...(values.website ? { website: values.website } : {}),
+    ...(values.recaptchaToken ? { recaptchaToken: values.recaptchaToken } : {}),
   };
 };
 
 export const submitContact = async (
-  values: ContactFormValues,
+  values: ContactSubmission,
 ): Promise<ContactSubmitResult> => {
   const res = await postContactApi(toRequest(values));
   return { ok: res.data?.ok ?? true };

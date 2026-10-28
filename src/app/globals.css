@@ -95,3 +95,138 @@
     }
   }
 }
+
+/* ============================================================
+   Motion — scroll-in entrance and looping card icons
+   Everything here sits behind `prefers-reduced-motion: no-preference`;
+   with reduced motion the content is simply there, static.
+   ============================================================ */
+@keyframes reveal-bounce-in {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.02);
+  }
+  80% {
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes icon-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes icon-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(1, 57, 133, 0.22);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 14px rgba(1, 57, 133, 0);
+  }
+}
+
+@layer components {
+  /* Hidden only when a script will reveal it (see Reveal.tsx); without
+     scripting the content must not stay invisible. */
+  @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+    .reveal {
+      opacity: 0;
+    }
+
+    .reveal[data-shown] {
+      animation: reveal-bounce-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: var(--reveal-delay, 0ms);
+    }
+
+    /* Children follow once the container has mostly landed; `--i` (set
+       inline, 0-based) spaces them out. */
+    .reveal .reveal-item {
+      opacity: 0;
+    }
+
+    .reveal[data-shown] .reveal-item {
+      animation: reveal-rise 0.5s ease-out both;
+      animation-delay: calc(
+        var(--reveal-delay, 0ms) + 450ms + var(--i, 0) * 90ms
+      );
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .icon-pulse {
+      animation: icon-pulse 2.4s ease-out infinite;
+    }
+
+    .icon-float {
+      animation: icon-float 3s ease-in-out infinite;
+    }
+  }
+}
+
+/* ============================================================
+   Typewriter (see Typewriter.tsx)
+   ============================================================ */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@layer components {
+  /* Holds each line at its final size while the typed copy grows on top. */
+  .typewriter-ghost {
+    visibility: hidden;
+  }
+
+  .typewriter-caret {
+    display: inline-block;
+    width: 0.08em;
+    height: 0.9em;
+    margin-left: 0.06em;
+    vertical-align: -0.08em;
+    background: var(--color-yellow);
+    animation: caret-blink 1s step-end infinite;
+  }
+
+  /* No script means nothing will type: show the full text instead. */
+  @media (scripting: none) {
+    .typewriter-ghost {
+      visibility: visible;
+    }
+
+    .typewriter-typed {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typewriter-caret {
+      display: none;
+    }
+  }
+}

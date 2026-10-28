@@ -22,7 +22,7 @@ export function ContactFieldIcon({ field }: ContactFieldIconProps) {
 }
 
 interface ContactFieldErrorProps {
-  field: ContactFieldName;
+  field: ContactFieldName | "consent";
   message?: string;
 }
 

@@ -16,6 +16,13 @@
     The https default assumes the VM's nginx already serves a certificate for
     the domain; otherwise every canonical link points at a page that won't load.
 
+.PARAMETER RecaptchaSiteKey
+    reCAPTCHA v3 site key for the contact form - public, and baked in at build
+    time like SiteUrl. Defaults to $env:NEXT_PUBLIC_RECAPTCHA_SITE_KEY. Its
+    partner RECAPTCHA_SECRET_KEY goes in ~/production.env on the VM; set one
+    without the other and the form either has no protection or rejects
+    every enquiry (DEPLOYMENT.md).
+
 .PARAMETER SkipTests
     Skips `npm test`. There is no CI pipeline any more; use sparingly.
 
@@ -28,6 +35,7 @@
 [CmdletBinding()]
 param(
     [string] $SiteUrl = 'https://www.smartalliance.co.th',
+    [string] $RecaptchaSiteKey = $env:NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
     [switch] $SkipTests
 )
 
@@ -46,7 +54,13 @@ try {
     }
 
     Write-Host "`n== Build ($SiteUrl) ==" -ForegroundColor Cyan
-    docker build --build-arg "NEXT_PUBLIC_SITE_URL=$SiteUrl" -t $image .
+    $buildArgs = @('--build-arg', "NEXT_PUBLIC_SITE_URL=$SiteUrl")
+    if ($RecaptchaSiteKey) {
+        $buildArgs += @('--build-arg', "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$RecaptchaSiteKey")
+    } else {
+        Write-Warning 'No -RecaptchaSiteKey: the contact form will ship without reCAPTCHA.'
+    }
+    docker build @buildArgs -t $image .
     if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 
     # Tagged :latest before saving, deliberately. Save a :test tag instead and

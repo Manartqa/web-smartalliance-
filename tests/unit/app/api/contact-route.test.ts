@@ -25,6 +25,7 @@ const valid = {
   name: "Somchai Jaidee",
   email: "somchai@example.co.th",
   message: "We would like a quote for Axway MFT.",
+  consent: true,
 };
 
 const errorOf = async (response: Response): Promise<ApiErrorCode> =>
@@ -62,6 +63,7 @@ describe("POST /api/contact — happy path", () => {
         company: "  Acme  ",
         phone: "  +66 2  ",
         subject: "  Quote  ",
+        consent: true,
       }),
     );
 
@@ -69,6 +71,7 @@ describe("POST /api/contact — happy path", () => {
       name: "Somchai",
       email: "somchai@example.co.th",
       message: "hello",
+      consent: true,
       company: "Acme",
       phone: "+66 2",
       subject: "Quote",
@@ -386,5 +389,138 @@ describe("POST /api/contact — runtime", () => {
   it("declares the Node runtime, since nodemailer needs Node APIs", async () => {
     const mod = await import("@/app/api/contact/route");
     expect(mod.runtime).toBe("nodejs");
+  });
+});
+
+describe("POST /api/contact — consent", () => {
+  it("rejects a submission without consent", async () => {
+    const response = await (await load())(
+      post({ ...valid, consent: undefined }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await errorOf(response)).toBe("validation_failed");
+    expect(sendContactMail).not.toHaveBeenCalled();
+  });
+
+  it.each([false, "true", "yes", 1])(
+    "accepts only a literal true, not %j",
+    async (consent) => {
+      const response = await (await load())(post({ ...valid, consent }));
+
+      expect(response.status).toBe(400);
+      expect(sendContactMail).not.toHaveBeenCalled();
+    },
+  );
+
+  it("records the consent in what it hands the mailer", async () => {
+    await (await load())(post(valid));
+
+    expect(sendContactMail.mock.calls[0]![0]).toMatchObject({ consent: true });
+  });
+});
+
+describe("POST /api/contact — reCAPTCHA", () => {
+  const siteverify = vi.fn();
+
+  const answer = (body: Record<string, unknown>) =>
+    siteverify.mockResolvedValue(
+      new Response(JSON.stringify(body), { status: 200 }),
+    );
+
+  beforeEach(() => {
+    vi.stubGlobal("fetch", siteverify);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("skips the check entirely when no secret key is configured", async () => {
+    const response = await (await load())(post(valid));
+
+    expect(response.status).toBe(200);
+    expect(siteverify).not.toHaveBeenCalled();
+  });
+
+  describe("with RECAPTCHA_SECRET_KEY set", () => {
+    beforeEach(() => {
+      vi.stubEnv("RECAPTCHA_SECRET_KEY", "test-secret");
+    });
+
+    it("sends a submission whose token passes", async () => {
+      answer({ success: true, score: 0.9, action: "contact" });
+
+      const response = await (await load())(
+        post({ ...valid, recaptchaToken: "good-token" }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(sendContactMail).toHaveBeenCalledOnce();
+      const [url, init] = siteverify.mock.calls[0]!;
+      expect(url).toBe("https://www.google.com/recaptcha/api/siteverify");
+      const params = new URLSearchParams(init.body as URLSearchParams);
+      expect(params.get("secret")).toBe("test-secret");
+      expect(params.get("response")).toBe("good-token");
+    });
+
+    it("rejects a submission with no token, without asking Google", async () => {
+      const response = await (await load())(post(valid));
+
+      expect(response.status).toBe(400);
+      expect(await errorOf(response)).toBe("captcha_failed");
+      expect(siteverify).not.toHaveBeenCalled();
+      expect(sendContactMail).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ["Google rejects the token", { success: false, "error-codes": ["invalid-input-response"] }],
+      ["the score is below the threshold", { success: true, score: 0.1, action: "contact" }],
+      ["the token was minted for another action", { success: true, score: 0.9, action: "login" }],
+    ])("rejects when %s", async (_case, body) => {
+      answer(body);
+
+      const response = await (await load())(
+        post({ ...valid, recaptchaToken: "token" }),
+      );
+
+      expect(response.status).toBe(400);
+      expect(await errorOf(response)).toBe("captcha_failed");
+      expect(sendContactMail).not.toHaveBeenCalled();
+    });
+
+    it("fails closed when Google cannot be reached", async () => {
+      siteverify.mockRejectedValue(new TypeError("fetch failed"));
+
+      const response = await (await load())(
+        post({ ...valid, recaptchaToken: "token" }),
+      );
+
+      expect(response.status).toBe(400);
+      expect(sendContactMail).not.toHaveBeenCalled();
+    });
+
+    it("logs why a check failed, but keeps the reason out of the response", async () => {
+      answer({ success: true, score: 0.2, action: "contact" });
+
+      const response = await (await load())(
+        post({ ...valid, recaptchaToken: "token" }),
+      );
+
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringContaining("score 0.2 below threshold"),
+      );
+      expect(JSON.stringify(await response.json())).not.toContain("score");
+    });
+
+    it("never forwards the token to the mailer", async () => {
+      answer({ success: true, score: 0.9, action: "contact" });
+
+      await (await load())(post({ ...valid, recaptchaToken: "good-token" }));
+
+      expect(sendContactMail.mock.calls[0]![0]).not.toHaveProperty(
+        "recaptchaToken",
+      );
+    });
   });
 });

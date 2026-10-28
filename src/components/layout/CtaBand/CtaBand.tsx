@@ -62,7 +62,8 @@ export default function CtaBand({ variant, icon }: CtaBandProps) {
             variant="yellow"
             className="shrink-0 uppercase text-[#013a85]"
           >
-            {tCta("button")}
+            {/* A variant may word its own button; the rest share one. */}
+            {t.has("button") ? t("button") : tCta("button")}
             <ChevronRight />
           </BaseLinkButton>
         )}

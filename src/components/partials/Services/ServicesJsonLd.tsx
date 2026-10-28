@@ -17,9 +17,10 @@ import { SERVICE_ITEMS } from "./Services.config";
 export default async function ServicesJsonLd({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "services.items" });
 
-  const items = SERVICE_ITEMS.map(({ key }) => ({
+  const items = SERVICE_ITEMS.map(({ key, slug }) => ({
     name: t(`${key}.title`),
     description: t(`${key}.body`),
+    path: `/services/${slug}`,
   }));
 
   return <JsonLd data={servicesGraph(locale, items)} />;

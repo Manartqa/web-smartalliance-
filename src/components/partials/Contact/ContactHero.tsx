@@ -8,6 +8,7 @@ export default async function ContactHero() {
   return (
     <Hero
       image={HERO_IMAGES.contact}
+      banner
       label={t("label")}
       title={
         <>

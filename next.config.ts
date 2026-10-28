@@ -20,14 +20,17 @@ const isProduction = process.env.NODE_ENV === "production";
  */
 const CSP_REPORT_ONLY = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  // reCAPTCHA on /contact: the loader from www.google.com, the code it pulls
+  // from www.gstatic.com.
+  "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
   // The Maps embed on /contact. `frame-src` governs what this page may frame;
   // `frame-ancestors` below governs who may frame this page.
+  // Also reCAPTCHA's own frames, which are served from the same host.
   "frame-src https://www.google.com",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.google.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -114,6 +117,10 @@ const nextConfig: NextConfig = {
   images: {
     // Design assets are PNG; serve modern formats where the browser supports them.
     formats: ["image/avif", "image/webp"],
+    // 90 is for the service illustrations: at the default 75 AVIF smears
+    // their fine linework, and they are small enough that the extra bytes
+    // do not matter.
+    qualities: [75, 90],
   },
   // Testing on a real phone means loading the dev server over the LAN, and
   // `next dev` blocks cross-origin requests to `/_next/*` and the HMR socket by

@@ -51,9 +51,13 @@ const t = en.contact.form;
  */
 const setupUser = () => userEvent.setup({ delay: null });
 
+const consentBox = () => screen.getByRole("checkbox");
+
+/** Types the given fields and, unless told otherwise, ticks the consent box. */
 const fill = async (
   user: ReturnType<typeof userEvent.setup>,
   values: Partial<Record<string, string>> = {},
+  { consent = true }: { consent?: boolean } = {},
 ) => {
   const filled = {
     name: "Somchai Jaidee",
@@ -66,6 +70,7 @@ const fill = async (
     if (!value) continue;
     await user.type(screen.getByLabelText(t[field as keyof typeof t] as string), value);
   }
+  if (consent) await user.click(consentBox());
 };
 
 const submit = (user: ReturnType<typeof userEvent.setup>) =>
@@ -228,6 +233,65 @@ describe("ContactForm — client validation", () => {
   });
 });
 
+describe("ContactForm — consent", () => {
+  it("starts unticked — consent is never assumed", () => {
+    renderForm();
+
+    expect(consentBox()).not.toBeChecked();
+  });
+
+  it("blocks submission until the box is ticked, and says why", async () => {
+    const user = setupUser();
+    renderForm();
+
+    await fill(user, {}, { consent: false });
+    await submit(user);
+
+    expect(
+      await screen.findByText(t.errors.consentRequired),
+    ).toBeInTheDocument();
+    expect(consentBox()).toHaveAttribute("aria-invalid", "true");
+    expect(submitContact).not.toHaveBeenCalled();
+  });
+
+  it("clears the consent error once the box is ticked", async () => {
+    const user = setupUser();
+    renderForm();
+
+    await fill(user, {}, { consent: false });
+    await submit(user);
+    await screen.findByText(t.errors.consentRequired);
+    await user.click(consentBox());
+
+    expect(
+      screen.queryByText(t.errors.consentRequired),
+    ).not.toBeInTheDocument();
+  });
+
+  it("links the privacy policy and the terms, in a new tab", () => {
+    renderForm();
+
+    const privacy = screen.getByRole("link", { name: "privacy policy" });
+    const terms = screen.getByRole("link", {
+      name: "terms and conditions",
+    });
+    expect(privacy).toHaveAttribute("href", "/en/privacy-policy");
+    expect(terms).toHaveAttribute("href", "/en/terms");
+    expect(privacy).toHaveAttribute("target", "_blank");
+  });
+
+  it("unticks the box again after a successful send", async () => {
+    const user = setupUser();
+    renderForm();
+
+    await fill(user);
+    await submit(user);
+    await screen.findByText(t.success);
+
+    expect(consentBox()).not.toBeChecked();
+  });
+});
+
 describe("ContactForm — submission", () => {
   it("sends every field, with the honeypot empty", async () => {
     const user = setupUser();
@@ -245,6 +309,9 @@ describe("ContactForm — submission", () => {
         subject: "Quote",
         message: "We would like a quote.",
         website: "",
+        consent: true,
+        // No site key in tests, so no token is requested.
+        recaptchaToken: undefined,
       }),
     );
   });
@@ -335,6 +402,17 @@ describe("ContactForm — failure handling", () => {
 
     expect(await screen.findByText(t.errors.tooMany)).toBeInTheDocument();
     expect(screen.queryByText(t.error)).not.toBeInTheDocument();
+  });
+
+  it("names a failed reCAPTCHA check", async () => {
+    const user = setupUser();
+    submitContact.mockRejectedValue(new ApiError(400, "captcha_failed"));
+    renderForm();
+
+    await fill(user);
+    await submit(user);
+
+    expect(await screen.findByText(t.errors.captcha)).toBeInTheDocument();
   });
 
   it("falls back to the generic error for a transport failure with no code", async () => {

@@ -3,13 +3,13 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { submitContact } from "@/services/contact.service";
-import type { ContactFormValues, ContactSubmitResult } from "@/types/app/contact";
+import type { ContactSubmission, ContactSubmitResult } from "@/types/app/contact";
 
 export const CONTACT_SUBMIT_MUTATION_KEY = ["contactSubmit"] as const;
 
 export const useContactSubmit = () => {
   const { mutateAsync, isPending, isSuccess, isError, error, reset } =
-    useMutation<ContactSubmitResult, Error, ContactFormValues>({
+    useMutation<ContactSubmitResult, Error, ContactSubmission>({
       mutationKey: [...CONTACT_SUBMIT_MUTATION_KEY],
       mutationFn: submitContact,
     });

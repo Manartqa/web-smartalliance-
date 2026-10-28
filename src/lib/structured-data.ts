@@ -141,7 +141,7 @@ export function siteGraph(locale: Locale, description: string) {
  */
 export function servicesGraph(
   locale: Locale,
-  items: ReadonlyArray<{ name: string; description: string }>,
+  items: ReadonlyArray<{ name: string; description: string; path?: string }>,
 ) {
   return {
     "@context": "https://schema.org",
@@ -154,6 +154,8 @@ export function servicesGraph(
         "@type": "Service",
         name: item.name,
         description: item.description,
+        // The service's own detail page, so the catalogue links each entry.
+        ...(item.path && { url: `${siteConfig.url}/${locale}${item.path}` }),
         inLanguage: bcp47(locale),
         provider: { "@id": ORGANIZATION_ID },
         areaServed: { "@type": "Country", name: "Thailand" },
@@ -197,14 +199,40 @@ export function axwayPartnershipGraph(
 }
 
 /**
- * Breadcrumbs for a second-level page. Home is always the first crumb, so
- * callers pass only the page itself.
+ * One service, on its own detail page. Same shape as an entry in
+ * `servicesGraph`, plus the page's own `url`.
+ */
+export function serviceGraph(
+  locale: Locale,
+  service: { name: string; description: string; path: string },
+) {
+  const url = `${siteConfig.url}/${locale}${service.path}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: service.name,
+    description: service.description,
+    url,
+    inLanguage: bcp47(locale),
+    provider: { "@id": ORGANIZATION_ID },
+    areaServed: { "@type": "Country", name: "Thailand" },
+  };
+}
+
+/**
+ * Breadcrumbs below the home page. Home is always the first crumb, so callers
+ * pass only the pages after it — one for a second-level page, or the full
+ * trail for a deeper one.
  */
 export function breadcrumbGraph(
   locale: Locale,
-  page: { name: string; path: string },
+  page: Crumb | Crumb[],
   homeName: string,
 ) {
+  const trail = [page].flat();
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -215,12 +243,14 @@ export function breadcrumbGraph(
         name: homeName,
         item: `${siteConfig.url}/${locale}`,
       },
-      {
+      ...trail.map((crumb, index) => ({
         "@type": "ListItem",
-        position: 2,
-        name: page.name,
-        item: `${siteConfig.url}/${locale}${page.path}`,
-      },
+        position: index + 2,
+        name: crumb.name,
+        item: `${siteConfig.url}/${locale}${crumb.path}`,
+      })),
     ],
   };
 }
+
+type Crumb = { name: string; path: string };

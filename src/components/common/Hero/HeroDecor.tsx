@@ -69,25 +69,3 @@ export function HeroRibbon() {
     </svg>
   );
 }
-
-/**
- * The services hero uses a different pair of bands: a single yellow ribbon
- * under a single white one, both rising to the right. Here the yellow wedge is
- * thickest at the *right* edge (~21px) and tapers out toward the left, and the
- * white ribbon eats a much deeper diagonal slice out of the hero image.
- *
- * Source: the `.bands` SVG in services.html, cropped to y 555–740.
- */
-export function HeroRibbonServices() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 555 1440 185"
-      preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-16 w-full sm:h-24 lg:h-[185px]"
-    >
-      <polygon points="1659,534 -488,772 -470,933 1677,695" fill="#ffc300" />
-      <polygon points="1661,558 -489,761 -474,922 1677,719" fill="#ffffff" />
-    </svg>
-  );
-}

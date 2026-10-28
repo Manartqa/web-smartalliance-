@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { footerNavItems } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
-import { FOOTER_SOCIAL_ITEMS } from "./Footer.config";
+import { FOOTER_LEGAL_ITEMS, FOOTER_SOCIAL_ITEMS } from "./Footer.config";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -29,7 +29,9 @@ export default function Footer() {
             <Link
               key={item.key}
               href={item.href}
-              className="text-sm font-medium text-white/80 transition-colors hover:text-white"
+              // Underline grows in from the left on hover and leaves to the
+              // right: the origin flips with the hover state.
+              className="relative py-1 text-sm font-medium text-white/80 transition-colors duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-right after:scale-x-0 after:rounded-full after:bg-yellow after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-white hover:after:origin-left hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none"
             >
               {tNav(item.key)}
             </Link>
@@ -56,9 +58,20 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[#003a75]">
-        <p className="container-site py-4 text-center text-xs font-light text-white/40">
-          {t("copyright")}
-        </p>
+        <div className="container-site flex flex-col items-center gap-2 py-4 text-xs font-light text-white/40 sm:flex-row sm:justify-center sm:gap-6">
+          <p className="text-center">{t("copyright")}</p>
+          <div className="flex gap-4">
+            {FOOTER_LEGAL_ITEMS.map((item) => (
+              <Link
+                key={item.key}
+                href={item.href}
+                className="transition-colors hover:text-white"
+              >
+                {t(item.key)}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );

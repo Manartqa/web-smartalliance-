@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { SERVICE_ITEMS } from "@/components/partials/Services/Services.config";
 import { siteConfig } from "@/config/site";
 import { locales } from "@/i18n/routing";
 
@@ -27,6 +28,12 @@ const CONTENT_DATES = {
   axwaySeo: "2026-08-17",
   /** Launch content. */
   launch: "2026-08-14",
+  /** Privacy policy and terms, added with the contact-form consent box. */
+  legal: "2026-10-08",
+  /** One detail page per service, linked from the service cards. */
+  serviceDetail: "2026-10-28",
+  /** About page redesign: hero, timeline, standards and client list. */
+  aboutRedesign: "2026-10-28",
 } as const;
 
 /** `priority` is relative within this site only; it never compares to others. */
@@ -41,13 +48,13 @@ const PAGES = [
     path: "/about",
     priority: 0.8,
     changeFrequency: "yearly",
-    lastModified: CONTENT_DATES.axwaySeo,
+    lastModified: CONTENT_DATES.aboutRedesign,
   },
   {
     path: "/services",
     priority: 0.9,
     changeFrequency: "monthly",
-    lastModified: CONTENT_DATES.axwaySeo,
+    lastModified: CONTENT_DATES.serviceDetail,
   },
   {
     path: "/contact",
@@ -55,6 +62,24 @@ const PAGES = [
     changeFrequency: "yearly",
     lastModified: CONTENT_DATES.launch,
   },
+  {
+    path: "/privacy-policy",
+    priority: 0.3,
+    changeFrequency: "yearly",
+    lastModified: CONTENT_DATES.legal,
+  },
+  {
+    path: "/terms",
+    priority: 0.3,
+    changeFrequency: "yearly",
+    lastModified: CONTENT_DATES.legal,
+  },
+  ...SERVICE_ITEMS.map(({ slug }) => ({
+    path: `/services/${slug}`,
+    priority: 0.8,
+    changeFrequency: "monthly" as const,
+    lastModified: CONTENT_DATES.serviceDetail,
+  })),
 ] as const satisfies ReadonlyArray<{
   path: string;
   priority: number;
