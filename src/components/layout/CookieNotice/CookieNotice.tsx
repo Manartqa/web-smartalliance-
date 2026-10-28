@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { BaseButton } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
@@ -57,11 +57,33 @@ export default function CookieNotice() {
   const accepted = useSyncExternalStore(subscribe, isAccepted, () => true);
   // Kept in memory as well, so the button works when storage cannot be written.
   const [closed, setClosed] = useState(false);
+  const visible = !accepted && !closed;
+  const ref = useRef<HTMLElement>(null);
 
-  if (accepted || closed) return null;
+  // Publishes the notice's height as `--cookie-notice-height`, so other fixed
+  // elements at the bottom of the screen (the chat button) can sit above it.
+  useEffect(() => {
+    const notice = ref.current;
+    if (!visible || !notice) return;
+    const root = document.documentElement;
+    const observer = new ResizeObserver(() => {
+      root.style.setProperty(
+        "--cookie-notice-height",
+        `${notice.offsetHeight}px`,
+      );
+    });
+    observer.observe(notice);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--cookie-notice-height");
+    };
+  }, [visible]);
+
+  if (!visible) return null;
 
   return (
     <section
+      ref={ref}
       aria-label={t("title")}
       className="fixed inset-x-0 bottom-0 z-50 border-t-4 border-yellow bg-navy-deep/95 text-white shadow-[0_-8px_24px_rgb(0_0_0/0.25)] backdrop-blur"
     >

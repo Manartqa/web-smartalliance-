@@ -302,3 +302,38 @@ export function Star(props: SVGProps<SVGSVGElement>) {
     </StrokeIcon>
   );
 }
+
+export function Home(props: SVGProps<SVGSVGElement>) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M3.5 10.5 12 3.5l8.5 7" />
+      <path d="M5.5 9v11h4.5v-6h4v6h4.5V9" />
+    </StrokeIcon>
+  );
+}
+
+export function Phone(props: SVGProps<SVGSVGElement>) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M5 3.5h3.5l1.5 4.5-2.25 1.5a11 11 0 0 0 6.75 6.75L16 14l4.5 1.5V19a1.5 1.5 0 0 1-1.5 1.5A16 16 0 0 1 3.5 5 1.5 1.5 0 0 1 5 3.5z" />
+    </StrokeIcon>
+  );
+}
+
+export function HelpCircle(props: SVGProps<SVGSVGElement>) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.25a2.5 2.5 0 1 1 3.5 2.3c-.6.27-1 .87-1 1.53v.42M12 16.75h.01" />
+    </StrokeIcon>
+  );
+}
+
+export function Globe(props: SVGProps<SVGSVGElement>) {
+  return (
+    <StrokeIcon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+    </StrokeIcon>
+  );
+}

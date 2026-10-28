@@ -19,6 +19,14 @@ const renderNotice = () =>
 
 describe("CookieNotice", () => {
   beforeEach(() => {
+    // jsdom has no ResizeObserver; the notice only uses it to publish its height.
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    );
     window.sessionStorage.clear();
     window.localStorage.clear();
   });

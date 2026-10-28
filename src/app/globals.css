@@ -21,8 +21,9 @@
 
   /* Montserrat for Latin; Thai glyphs it does not have fall through to Noto
      Sans Thai behind it, per character. */
-  --font-sans: var(--font-montserrat), var(--font-noto-thai), ui-sans-serif,
-    system-ui, sans-serif;
+  --font-sans:
+    var(--font-montserrat), var(--font-noto-thai), ui-sans-serif, system-ui,
+    sans-serif;
 
   --shadow-card: 0 14px 34px rgba(13, 38, 76, 0.08);
   --shadow-card-lg: 0 14px 34px rgba(13, 38, 76, 0.1);
@@ -67,6 +68,14 @@
   :focus-visible {
     outline: 2px solid var(--color-yellow);
     outline-offset: 2px;
+  }
+
+  /* A modal dialog makes the page behind it inert but still scrollable; this
+     stops the wheel or a swipe scrolling the page under the chat. On <html>
+     only, and only while a dialog is open — `overflow` on <body> would break
+     the hero's `position: sticky`. */
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
 }
 

@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/common";
 import { CookieNotice } from "@/components/layout/CookieNotice";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { SmartChat } from "@/components/layout/SmartChat";
 import { UIProvider } from "@/components/providers";
 import { routing, type Locale } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
@@ -57,6 +58,7 @@ export default async function LocaleLayout({
             <main className="flex-1">{children}</main>
             <Footer />
             <CookieNotice />
+            <SmartChat />
             <JsonLd data={graph} />
           </UIProvider>
         </NextIntlClientProvider>

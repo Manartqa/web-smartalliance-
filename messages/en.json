@@ -840,6 +840,116 @@
     "body": "We use only the cookies the site needs to work, such as the one that remembers your language. We use no analytics or advertising cookies. The map and the contact form use Google services, which may set cookies of their own. Read more in our <link>Privacy Policy</link>.",
     "accept": "Accept cookies"
   },
+  "chat": {
+    "launcher": "Chat with SMART",
+    "launcherHint": "Questions? Ask SMART!",
+    "title": "SMART",
+    "subtitle": "Online assistant from SMART Alliance",
+    "minimize": "Minimize chat",
+    "close": "Close chat",
+    "sidebarLabel": "Chat topics",
+    "home": "Home",
+    "greeting": {
+      "title": "Hello 👋 Welcome to SMART Alliance",
+      "body": "I'm SMART, here to tell you about our technology and services. How can I help?"
+    },
+    "popular": "Popular questions",
+    "placeholder": "Type your message here...",
+    "send": "Send",
+    "note": "Your messages stay in this browser and are used only to answer you. See our <link>Privacy Policy</link>.",
+    "bubble": "Hello!<br></br>I'm <strong>SMART</strong>,<br></br>happy to help",
+    "mascotAlt": "SMART, the SMART Alliance mascot, waving hello",
+    "topics": {
+      "services": {
+        "title": "Our services",
+        "hint": "All {count} of our services"
+      },
+      "contact": {
+        "title": "Contact us",
+        "hint": "Ways to reach us and our office"
+      },
+      "industries": {
+        "title": "Solutions by industry",
+        "hint": "Find the right solution for your organization"
+      },
+      "faq": {
+        "title": "FAQ",
+        "hint": "Common questions about our services"
+      },
+      "quote": {
+        "title": "Request a quote",
+        "hint": "Get a quote or discuss a project"
+      },
+      "staff": {
+        "title": "Talk to our team",
+        "hint": "Have our team get back to you"
+      },
+      "about": {
+        "title": "About us",
+        "hint": "Who we are"
+      },
+      "clients": {
+        "title": "Our clients",
+        "hint": "Organizations we work with"
+      }
+    },
+    "replies": {
+      "services": "We offer {count} services. Choose one to see the details:",
+      "contact": "You can reach our team on <phoneLink>{phone}</phoneLink> or at <emailLink>{email}</emailLink>. Our office is at {address}.",
+      "industries": "We work with government agencies and with businesses. These services suit each best, and our team can recommend the right mix for your organization:",
+      "faq": "Here are the questions we hear most. Pick one:",
+      "quote": "To request a quote or discuss a project, send us a short outline through the contact form, and our team will get back to you as soon as we can.",
+      "staff": "SMART can't pass the chat to a person yet. Leave your details in the contact form and our team will get back to you, or call <phoneLink>{phone}</phoneLink> or email <emailLink>{email}</emailLink>.",
+      "about": "Smart Alliance has provided IT services since 2004: custom software development and system integration for government agencies and businesses. We are certified to ISO 9001:2015 and ISO/IEC 29110, and are an authorized Axway partner in Thailand.",
+      "clients": "Organizations that trust us include {names}, among many others.",
+      "fallback": "Sorry, SMART can't answer that yet. Try one of the topics below, or send your question to our team through the contact form."
+    },
+    "industries": {
+      "government": "Government agencies",
+      "enterprise": "Businesses and enterprises"
+    },
+    "faq": {
+      "cloud": {
+        "question": "What is a cloud service?",
+        "answer": "The cloud means running servers, storage, and systems over the internet rather than only on machines you own. As part of our IT infrastructure service, we design, install, and look after network, server, and cloud infrastructure for organizations."
+      },
+      "security": {
+        "question": "Do you offer cybersecurity?",
+        "answer": "Yes. Our IT Infrastructure & Cybersecurity service covers multi-factor authentication (MFA/2FA), layered security, backup and disaster recovery, and threat monitoring."
+      },
+      "timeline": {
+        "question": "How long does a project take?",
+        "answer": "It depends on the scope and the systems involved. Tell us about your project and our team will assess it and give you a timeline."
+      },
+      "government": {
+        "question": "Do you work with government agencies?",
+        "answer": "Yes. We have worked with many government agencies for over 20 years, including {names}."
+      }
+    },
+    "links": {
+      "services": "See all services",
+      "contact": "Go to the contact page",
+      "industries": "Ask for a recommendation",
+      "faq": "Ask our team",
+      "quote": "Request a quote",
+      "staff": "Go to the contact form",
+      "about": "Read about us",
+      "clients": "See our clients",
+      "cloud": "IT Infrastructure & Cybersecurity",
+      "security": "IT Infrastructure & Cybersecurity",
+      "timeline": "Tell us about your project",
+      "government": "See our clients",
+      "fallback": "Go to the contact form"
+    },
+    "notice": {
+      "title": "Privacy Notice",
+      "body": "The SMART chat gives basic information about Smart Alliance, answered from the content of this website. What you type is handled in your browser only: it is not sent to or stored on our servers, and it is gone when you reload the page. Please do not type personal or confidential information in the chat. If you would like our team to contact you, please use the contact form. See our Privacy Policy for details.",
+      "remember": "When you select \"OK\", this browser will remember that you have read this notice.",
+      "policy": "Privacy Policy",
+      "accept": "OK",
+      "close": "Close"
+    }
+  },
   "legal": {
     "label": "Legal",
     "contactHeading": "Contact us",

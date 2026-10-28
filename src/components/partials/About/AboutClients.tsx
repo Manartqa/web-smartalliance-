@@ -19,7 +19,11 @@ export default async function AboutClients() {
   }));
 
   return (
-    <section className="container-site py-14 lg:py-16">
+    // `id` is where the chat's "our clients" answer links to.
+    <section
+      id="clients"
+      className="container-site scroll-mt-24 py-14 lg:py-16"
+    >
       <AboutClientsCarousel
         heading={
           <AboutHeading subheading={t("subheading")}>
