@@ -14,6 +14,7 @@ export default async function AboutClients() {
     id: client.id,
     logo: client.logo,
     primary: locale === "th" ? client.th : client.en,
+    compact: locale === "th" && client.thCompact,
     secondary:
       client.th === client.en ? null : locale === "th" ? client.en : client.th,
   }));

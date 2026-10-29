@@ -76,7 +76,7 @@ export default function ContactMap() {
               href={siteConfig.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex items-center justify-center gap-2.5 rounded-[10px] border-[1.5px] border-navy bg-white px-4 py-3.5 text-center text-[11px] font-semibold uppercase leading-snug text-navy transition-colors hover:bg-navy hover:text-white"
+              className="mt-7 inline-flex items-center justify-center gap-2.5 rounded-[10px] border-[1.5px] border-navy bg-white px-4 py-3.5 text-center text-xs font-semibold uppercase leading-snug text-navy transition-colors hover:bg-navy hover:text-white"
             >
               <Image
                 src="/assets/btn-map.png"

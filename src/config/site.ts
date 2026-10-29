@@ -19,7 +19,7 @@ export const siteConfig = {
   website: "www.smartalliance.co.th",
   address: {
     building: "Smart Alliance Building,",
-    line1: "599/36 Ratchadapisek Road, Chatuchak Subdistrict, Chatuchak District,",
+    line1: "599/59 Ratchadapisek Road, Chatuchak Subdistrict, Chatuchak District,",
     line2: "Bangkok 10900, Thailand",
   },
   // Axway's own partner directory — where the partnership can be checked

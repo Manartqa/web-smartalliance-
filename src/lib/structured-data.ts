@@ -40,7 +40,7 @@ const bcp47 = (locale: Locale) => (locale === "th" ? "th-TH" : "en-US");
  */
 const postalAddress = {
   "@type": "PostalAddress",
-  streetAddress: "599/36 Ratchadapisek Road",
+  streetAddress: "599/59 Ratchadapisek Road",
   addressLocality: "Chatuchak",
   addressRegion: "Bangkok",
   postalCode: "10900",
@@ -101,6 +101,15 @@ export function siteGraph(locale: Locale, description: string) {
         // `sameAs` is how Google links this record to the profiles it already
         // knows about, which is what earns a Knowledge Panel.
         sameAs: [siteConfig.social.facebook, siteConfig.mapsUrl],
+        // The hours the contact page gives for the office and phone line.
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            opens: "09:00",
+            closes: "18:00",
+          },
+        ],
         contactPoint: [
           {
             "@type": "ContactPoint",
@@ -154,8 +163,13 @@ export function servicesGraph(
         "@type": "Service",
         name: item.name,
         description: item.description,
-        // The service's own detail page, so the catalogue links each entry.
-        ...(item.path && { url: `${siteConfig.url}/${locale}${item.path}` }),
+        // The service's own detail page, so the catalogue links each entry —
+        // and that page's `@id` (see `serviceGraph`), so the two are one
+        // entity rather than two services that happen to share a name.
+        ...(item.path && {
+          "@id": `${siteConfig.url}/${locale}${item.path}#service`,
+          url: `${siteConfig.url}/${locale}${item.path}`,
+        }),
         inLanguage: bcp47(locale),
         provider: { "@id": ORGANIZATION_ID },
         areaServed: { "@type": "Country", name: "Thailand" },
@@ -232,10 +246,13 @@ export function breadcrumbGraph(
   homeName: string,
 ) {
   const trail = [page].flat();
+  const pageUrl = `${siteConfig.url}/${locale}${trail.at(-1)!.path}`;
 
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    // So the page node (`webPageGraph`) can point at it.
+    "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -254,3 +271,37 @@ export function breadcrumbGraph(
 }
 
 type Crumb = { name: string; path: string };
+
+/**
+ * The page itself, which ties the loose nodes together: it belongs to the
+ * WebSite, carries the breadcrumb, and names what it is about (`mainEntity`).
+ * Without it the breadcrumb and the page's Service or Organization are
+ * separate facts a crawler has to connect on its own.
+ */
+export function webPageGraph(
+  locale: Locale,
+  page: {
+    type: "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage";
+    name: string;
+    path: string;
+    /** `@id` of what the page is about; defaults to nothing. */
+    mainEntity?: string;
+  },
+) {
+  const url = `${siteConfig.url}/${locale}${page.path}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": page.type,
+    "@id": url,
+    url,
+    name: page.name,
+    inLanguage: bcp47(locale),
+    isPartOf: { "@id": WEBSITE_ID },
+    breadcrumb: { "@id": `${url}#breadcrumb` },
+    ...(page.mainEntity && { mainEntity: { "@id": page.mainEntity } }),
+  };
+}
+
+/** The Organization's `@id`, for a page whose subject is the company. */
+export const organizationId = ORGANIZATION_ID;

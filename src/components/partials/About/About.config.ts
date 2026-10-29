@@ -75,6 +75,8 @@ export interface AboutClient {
   /** Stable key; also the logo's file name under `/assets/clients/`. */
   id: string;
   th: string;
+  /** The Thai name is set smaller on the card, so it fits on one line. */
+  thCompact?: boolean;
   en: string;
   /**
    * Path to the organization's logo, e.g. `/assets/clients/customs.png`.
@@ -104,6 +106,7 @@ export const ABOUT_CLIENTS: readonly AboutClient[] = [
   {
     id: "fda",
     th: "สำนักงานคณะกรรมการอาหารและยา",
+    thCompact: true,
     en: "Food and Drug Administration",
     logo: "/assets/clients/fda.png",
   },
@@ -122,6 +125,7 @@ export const ABOUT_CLIENTS: readonly AboutClient[] = [
   {
     id: "national-parks",
     th: "กรมอุทยานแห่งชาติ สัตว์ป่า และพันธุ์พืช",
+    thCompact: true,
     en: "Department of National Parks, Wildlife and Plant Conservation",
     logo: "/assets/clients/national-parks.png",
   },
@@ -158,6 +162,7 @@ export const ABOUT_CLIENTS: readonly AboutClient[] = [
   {
     id: "tint",
     th: "สถาบันเทคโนโลยีนิวเคลียร์แห่งชาติ",
+    thCompact: true,
     en: "Thailand Institute of Nuclear Technology",
     logo: "/assets/clients/tint.png",
   },

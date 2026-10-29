@@ -106,6 +106,16 @@ const nextConfig: NextConfig = {
    */
   async redirects() {
     return [
+      // One host for search engines: the bare domain moves to www, path kept.
+      // nginx serves both names, so this relies on it forwarding the visitor's
+      // Host header (`proxy_set_header Host $host`); without that it never
+      // matches, and a 301 in nginx itself does the same job.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "smartalliance.co.th" }],
+        destination: "https://www.smartalliance.co.th/:path*",
+        permanent: true,
+      },
       // The products page sold Axway; the home page carries the Axway logo.
       { source: "/products-smartalliance", destination: "/th", permanent: true },
       { source: "/about-us", destination: "/th/about", permanent: true },

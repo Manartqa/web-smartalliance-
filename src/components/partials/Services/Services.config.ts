@@ -53,7 +53,7 @@ export const SERVICE_ITEMS = [
   {
     key: "custom",
     slug: "custom-software-development",
-    art: "/assets/svc-art-custom.webp",
+    art: "/assets/svc-art-custom-v2.webp",
     accent: ACCENTS.blue,
     highlightIcons: [Target, Smartphone, FileText, Layers],
     capabilityIcons: [Monitor, FileText, Gear, Smartphone],
@@ -61,7 +61,7 @@ export const SERVICE_ITEMS = [
   {
     key: "api",
     slug: "api-system-integration",
-    art: "/assets/svc-art-api.webp",
+    art: "/assets/svc-art-api-v2.webp",
     accent: ACCENTS.violet,
     highlightIcons: [Cloud, Code, Lock, Users],
     capabilityIcons: [Cloud, Layers, Building, Shield],
@@ -69,7 +69,7 @@ export const SERVICE_ITEMS = [
   {
     key: "workflow",
     slug: "digital-workflow-e-services",
-    art: "/assets/svc-art-workflow.webp",
+    art: "/assets/svc-art-workflow-v2.webp",
     accent: ACCENTS.emerald,
     highlightIcons: [FileText, Search, ListChecks, Shield],
     capabilityIcons: [FileText, Layers, Lock, Monitor],
@@ -77,7 +77,7 @@ export const SERVICE_ITEMS = [
   {
     key: "ai",
     slug: "ai-intelligent-solutions",
-    art: "/assets/svc-art-ai.webp",
+    art: "/assets/svc-art-ai-v2.webp",
     accent: ACCENTS.orange,
     highlightIcons: [Gear, Camera, Bell, BarChart],
     capabilityIcons: [Cpu, BarChart, Shield, Gear],
@@ -85,7 +85,7 @@ export const SERVICE_ITEMS = [
   {
     key: "security",
     slug: "it-infrastructure-cybersecurity",
-    art: "/assets/svc-art-security.webp",
+    art: "/assets/svc-art-security-v2.webp",
     accent: ACCENTS.rose,
     highlightIcons: [Lock, Shield, Database, Monitor],
     capabilityIcons: [Lock, Shield, Cloud, Monitor],
@@ -93,7 +93,7 @@ export const SERVICE_ITEMS = [
   {
     key: "data",
     slug: "data-analytics",
-    art: "/assets/svc-art-data.webp",
+    art: "/assets/svc-art-data-v2.webp",
     accent: ACCENTS.blue,
     highlightIcons: [Monitor, Clock, Database, Download],
     capabilityIcons: [Database, BarChart, FileText, Target],
@@ -101,7 +101,7 @@ export const SERVICE_ITEMS = [
   {
     key: "support",
     slug: "support-managed-services",
-    art: "/assets/svc-art-support.webp",
+    art: "/assets/svc-art-support-v2.webp",
     accent: ACCENTS.green,
     highlightIcons: [ListChecks, Clock, Gear, Calendar],
     capabilityIcons: [Headset, Users, Gear, Target],

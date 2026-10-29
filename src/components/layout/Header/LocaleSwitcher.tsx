@@ -42,11 +42,13 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
             locale={locale}
             hrefLang={locale}
             aria-current={locale === active ? "true" : undefined}
-            className={
+            // Padded out to a 44px-tall tap target around the two letters.
+            className={cn(
+              "inline-flex min-h-11 items-center px-1.5",
               locale === active
                 ? "text-navy underline decoration-yellow decoration-2 underline-offset-4"
-                : "text-body hover:text-navy"
-            }
+                : "text-body hover:text-navy",
+            )}
           >
             {locale.toUpperCase()}
           </Link>

@@ -4,8 +4,10 @@ import { siteConfig } from "@/config/site";
 import {
   axwayPartnershipGraph,
   breadcrumbGraph,
+  serviceGraph,
   servicesGraph,
   siteGraph,
+  webPageGraph,
 } from "@/lib/structured-data";
 
 /**
@@ -92,6 +94,19 @@ describe("siteGraph", () => {
     expect(org.sameAs).toContain(siteConfig.mapsUrl);
   });
 
+  it("states the office hours the contact page gives", () => {
+    const [org] = siteGraph("en", "desc")["@graph"];
+
+    expect(org.openingHoursSpecification).toEqual([
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+    ]);
+  });
+
   it("points the WebSite node at the Organization by @id", () => {
     const [, site] = siteGraph("en", "desc")["@graph"];
 
@@ -166,6 +181,19 @@ describe("servicesGraph", () => {
   it("produces an empty list rather than throwing when given no items", () => {
     expect(servicesGraph("en", []).itemListElement).toEqual([]);
   });
+
+  it("shares each linked service's @id with its detail page", () => {
+    // Otherwise the catalogue entry and the detail page are two services that
+    // happen to share a name.
+    const service = {
+      name: "MFT",
+      description: "Managed file transfer.",
+      path: "/services/mft",
+    };
+    const [entry] = servicesGraph("en", [service]).itemListElement;
+
+    expect(entry.item["@id"]).toBe(serviceGraph("en", service)["@id"]);
+  });
 });
 
 describe("axwayPartnershipGraph", () => {
@@ -220,11 +248,56 @@ describe("breadcrumbGraph", () => {
     ]);
   });
 
+  it("gives the trail an @id under the page it belongs to", () => {
+    const graph = breadcrumbGraph(
+      "en",
+      [
+        { name: "Services", path: "/services" },
+        { name: "MFT", path: "/services/mft" },
+      ],
+      "Home",
+    );
+
+    expect(graph["@id"]).toBe(`${siteConfig.url}/en/services/mft#breadcrumb`);
+  });
+
   it("keeps the crumb inside the current locale", () => {
     const graph = breadcrumbGraph("th", { name: "เกี่ยวกับ", path: "/about" }, "หน้าแรก");
 
     for (const crumb of graph.itemListElement) {
       expect(crumb.item).toContain(`${siteConfig.url}/th`);
     }
+  });
+});
+
+describe("webPageGraph", () => {
+  it("joins the page to the site, its breadcrumb and its subject", () => {
+    const crumb = { name: "ติดต่อเรา", path: "/contact" };
+    const page = webPageGraph("th", {
+      type: "ContactPage",
+      ...crumb,
+      mainEntity: ORG_ID,
+    });
+
+    expect(page).toMatchObject({
+      "@type": "ContactPage",
+      "@id": `${siteConfig.url}/th/contact`,
+      inLanguage: "th-TH",
+      isPartOf: { "@id": `${siteConfig.url}/#website` },
+      mainEntity: { "@id": ORG_ID },
+    });
+    expect(page.breadcrumb).toEqual({
+      "@id": breadcrumbGraph("th", crumb, "หน้าแรก")["@id"],
+    });
+  });
+
+  it("leaves mainEntity out when the page has no single subject", () => {
+    const page = webPageGraph("en", {
+      type: "CollectionPage",
+      name: "Services",
+      path: "/services",
+    });
+
+    expect(page).not.toHaveProperty("mainEntity");
   });
 });

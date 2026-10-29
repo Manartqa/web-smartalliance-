@@ -1,7 +1,8 @@
 export type ButtonVariant = "yellow" | "outline" | "navyOutline" | "navy";
 
 export const BUTTON_BASE_CLASS =
-  "inline-flex items-center justify-center gap-2.5 rounded-[10px] px-6 py-3.5 " +
+  // min-h-11: a 44px tap target, which the padding alone falls just short of.
+  "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-[10px] px-6 py-3.5 " +
   "text-[13px] font-semibold leading-none tracking-[0.4px] transition-colors " +
   "text-center whitespace-normal";
 

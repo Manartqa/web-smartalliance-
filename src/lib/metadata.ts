@@ -38,8 +38,9 @@ export async function buildMetadata(
   page: PageKey | PageCopy,
   path: string,
 ): Promise<Metadata> {
-  const { title, description } =
-    typeof page === "string" ? await metaCopy(locale, page) : page;
+  const copy = typeof page === "string" ? await metaCopy(locale, page) : page;
+  const title = withoutWordJoiners(copy.title);
+  const description = withoutWordJoiners(copy.description);
 
   const href = (l: string) => `/${l}${path === "/" ? "" : path}`;
   const languages = Object.fromEntries(locales.map((l) => [l, href(l)]));
@@ -103,6 +104,14 @@ export async function buildMetadata(
     },
   };
 }
+
+/**
+ * The copy uses U+2060 (word joiner) to keep "e-Services" from breaking after
+ * the hyphen on screen. Outside a rendered heading it only gets in the way —
+ * an exact-match search for "e-Services" misses it — so text that leaves the
+ * page (titles, descriptions, llms.txt) drops it.
+ */
+export const withoutWordJoiners = (text: string) => text.replaceAll("⁠", "");
 
 async function metaCopy(locale: Locale, page: PageKey): Promise<PageCopy> {
   const t = await getTranslations({ locale, namespace: `meta.${page}` });

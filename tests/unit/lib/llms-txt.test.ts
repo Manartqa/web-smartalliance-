@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { ABOUT_CLIENTS } from "@/components/partials/About/About.config";
+import { CERTIFICATIONS } from "@/components/partials/Home/Home.config";
 import { SERVICE_ITEMS } from "@/components/partials/Services/Services.config";
 import { navItems, siteConfig } from "@/config/site";
 
@@ -93,6 +95,34 @@ describe("buildLlmsTxt — content derived from config", () => {
 
     for (const { key } of SERVICE_ITEMS) {
       expect(text, key).toContain(`**services.items.${key}.title**`);
+    }
+  });
+
+  it("links every service to its own detail page", async () => {
+    const text = await (await load())();
+
+    for (const { slug } of SERVICE_ITEMS) {
+      expect(text, slug).toContain(`${siteConfig.url}/en/services/${slug}`);
+    }
+  });
+
+  it("states each certificate with its number, scope and expiry", async () => {
+    // The scope matters: it is what the certificate actually covers.
+    const text = await (await load())();
+
+    for (const cert of CERTIFICATIONS) {
+      expect(text).toContain(cert.certificateNo);
+      expect(text).toContain(`home.certifications.items.${cert.key}.scope`);
+      expect(text).toContain(cert.validUntil);
+      expect(text).toContain(`${siteConfig.url}${cert.pdf}`);
+    }
+  });
+
+  it("names every client the about page lists", async () => {
+    const text = await (await load())();
+
+    for (const client of ABOUT_CLIENTS) {
+      expect(text).toContain(client.en);
     }
   });
 

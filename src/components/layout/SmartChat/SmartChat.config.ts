@@ -58,13 +58,13 @@ export const CHAT_TOPIC_ICONS: Partial<Record<ChatTopicKey, Icon>> = {
   staff: Headset,
 };
 
-/** The menu cards, in reading order (two columns on wide screens). */
+/** The menu cards, in reading order (three columns on wide screens). */
 export const CHAT_CARDS: readonly ChatTopicKey[] = [
   "services",
-  "contact",
   "industries",
-  "faq",
   "quote",
+  "contact",
+  "faq",
   "staff",
 ];
 

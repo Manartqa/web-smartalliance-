@@ -52,10 +52,29 @@ describe("getRecaptchaToken", () => {
       });
     });
 
-    it("rejects when the script never loaded", async () => {
+    it("rejects when the script never loads", async () => {
+      vi.useFakeTimers();
+      const { getRecaptchaToken, RECAPTCHA_SCRIPT_WAIT_MS } = await load();
+
+      const token = expect(getRecaptchaToken()).rejects.toThrow(/not loaded/);
+      await vi.advanceTimersByTimeAsync(RECAPTCHA_SCRIPT_WAIT_MS);
+      await token;
+      vi.useRealTimers();
+    });
+
+    it("waits for a script that is still loading", async () => {
+      vi.useFakeTimers();
       const { getRecaptchaToken } = await load();
 
-      await expect(getRecaptchaToken()).rejects.toThrow(/not loaded/);
+      const token = getRecaptchaToken();
+      await vi.advanceTimersByTimeAsync(500);
+      (window as { grecaptcha?: unknown }).grecaptcha = grecaptchaWith(
+        async () => "late-token",
+      );
+      await vi.advanceTimersByTimeAsync(200);
+
+      await expect(token).resolves.toBe("late-token");
+      vi.useRealTimers();
     });
 
     it("rejects, rather than hanging, when execute throws synchronously", async () => {

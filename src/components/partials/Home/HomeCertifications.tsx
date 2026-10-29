@@ -12,7 +12,6 @@ import {
   Building,
   Calendar,
   ChevronRight,
-  Download,
   FileText,
   Search,
   Target,
@@ -24,7 +23,7 @@ import { CERTIFICATIONS } from "./Home.config";
 /** Position in the card's rise-in sequence (see `.reveal-item` in globals.css). */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
 
-/** ISO certificates: view the PDF in a new tab, or download it. */
+/** ISO certificates: view the PDF in a new tab. */
 export default function HomeCertifications() {
   const t = useTranslations("home.certifications");
   const format = useFormatter();
@@ -171,18 +170,6 @@ export default function HomeCertifications() {
                       <Search className="h-4 w-4" />
                       {t("view")}
                       <ChevronRight className="transition-transform group-hover/btn:translate-x-0.5" />
-                    </a>
-                    <a
-                      href={cert.pdf}
-                      download={cert.downloadName}
-                      className={cn(
-                        BUTTON_BASE_CLASS,
-                        BUTTON_VARIANT_CLASS.navyOutline,
-                        "w-full text-sm sm:w-auto",
-                      )}
-                    >
-                      <Download className="h-4 w-4" />
-                      {t("download")}
                     </a>
                   </div>
                 </BaseCard>

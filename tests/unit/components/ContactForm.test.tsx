@@ -26,6 +26,22 @@ vi.mock("next/image", () => ({
   ),
 }));
 
+/**
+ * A site key for the script tag only: `getRecaptchaToken` keeps reading the
+ * real (empty) key, so submissions below still go out without a token.
+ * `next/script` becomes a marker element, which is all these tests look at.
+ */
+vi.mock("@/lib/recaptcha/client", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/recaptcha/client")>()),
+  recaptchaScriptSrc: () => "https://recaptcha.test/api.js",
+}));
+
+vi.mock("next/script", () => ({
+  default: ({ src }: { src: string }) => (
+    <span data-testid="recaptcha-script" data-src={src} />
+  ),
+}));
+
 const ContactForm = (await import("@/components/partials/Contact/ContactForm"))
   .default;
 
@@ -112,6 +128,21 @@ describe("ContactForm — rendering", () => {
     }
   });
 
+  it("exposes the required fields to assistive technology, not just in placeholders", () => {
+    renderForm();
+
+    for (const field of ["name", "email", "message"]) {
+      expect(
+        screen.getByLabelText(t[field as keyof typeof t] as string),
+      ).toHaveAttribute("aria-required", "true");
+    }
+    for (const field of ["company", "phone", "subject"]) {
+      expect(
+        screen.getByLabelText(t[field as keyof typeof t] as string),
+      ).not.toHaveAttribute("aria-required");
+    }
+  });
+
   it("keeps the honeypot out of the accessibility tree and out of tab order", () => {
     // A field a screen reader announces is a field a real visitor can fill by
     // accident — and a filled honeypot silently discards their message.
@@ -151,6 +182,20 @@ describe("ContactForm — rendering", () => {
     expect(screen.getByLabelText(t.company)).toHaveAttribute(
       "autocomplete",
       "organization",
+    );
+  });
+
+  it("loads reCAPTCHA only once the visitor starts on the form", async () => {
+    const user = setupUser();
+    renderForm();
+
+    expect(screen.queryByTestId("recaptcha-script")).not.toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(t.name));
+
+    expect(screen.getByTestId("recaptcha-script")).toHaveAttribute(
+      "data-src",
+      "https://recaptcha.test/api.js",
     );
   });
 });

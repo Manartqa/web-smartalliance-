@@ -11,7 +11,8 @@ import { NotFoundContent } from "@/components/partials/NotFound";
  * or CDN rewrites the status on the way out.
  */
 export const metadata: Metadata = {
-  title: "404",
+  // Static: a not-found boundary gets no params, so no locale to translate by.
+  title: "Page not found — Smart Alliance",
   robots: { index: false, follow: true },
 };
 

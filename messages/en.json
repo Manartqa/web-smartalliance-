@@ -12,15 +12,15 @@
   "meta": {
     "home": {
       "title": "Smart Alliance — Beyond Software. We Build Solutions.",
-      "description": "Empowering government agencies and enterprises with custom software development, system integration, and enterprise-grade digital solutions. Authorized Axway Partner in Thailand."
+      "description": "Custom software, system integration and enterprise digital solutions for government agencies and enterprises. Authorized Axway Partner in Thailand."
     },
     "about": {
       "title": "About Smart Alliance — Authorized Axway Partner in Thailand",
-      "description": "Authorized Axway Partner in Thailand. Smart Alliance has delivered custom software, system integration, API Management, and Managed File Transfer (MFT) since 2004."
+      "description": "Authorized Axway Partner in Thailand, delivering custom software, system integration, API Management and Managed File Transfer (MFT) since 2004."
     },
     "services": {
       "title": "Services — Axway API Management, MFT & System Integration",
-      "description": "Custom software development, Axway API Management and Managed File Transfer (MFT), system integration, digital workflow, AI, cybersecurity, data analytics, and managed services."
+      "description": "Custom software, Axway API Management and MFT, system integration, digital workflow, AI, cybersecurity, data analytics and managed services."
     },
     "contact": {
       "title": "Contact — Smart Alliance",
@@ -59,7 +59,6 @@
       "issuer": "Issued by",
       "validUntil": "Valid until",
       "view": "View certificate",
-      "download": "Download certificate",
       "thumbnailAlt": "{standard} certificate issued to Smart Alliance Co., Ltd. — opens the PDF",
       "items": {
         "iso9001": {
@@ -661,7 +660,7 @@
       },
       "support": {
         "title": "Support & Managed Services",
-        "body": "We provide ongoing care, maintenance, monitoring, and performance optimization so your business runs smoothly around the clock.",
+        "body": "We provide ongoing care, maintenance, monitoring, and performance optimization so your business runs smoothly, with our team on hand Mon – Fri, 9:00 AM – 6:00 PM (ICT).",
         "features": [
           "System maintenance and support",
           "Helpdesk and technical support",
@@ -845,10 +844,11 @@
     "launcherHint": "Questions? Ask SMART!",
     "title": "SMART",
     "subtitle": "Online assistant from SMART Alliance",
+    "tagline": "Connecting technology for a smarter tomorrow",
     "minimize": "Minimize chat",
     "close": "Close chat",
     "sidebarLabel": "Chat topics",
-    "home": "Home",
+    "home": "Chat with SMART",
     "greeting": {
       "title": "Hello 👋 Welcome to SMART Alliance",
       "body": "I'm SMART, here to tell you about our technology and services. How can I help?"
@@ -857,7 +857,16 @@
     "placeholder": "Type your message here...",
     "send": "Send",
     "note": "Your messages stay in this browser and are used only to answer you. See our <link>Privacy Policy</link>.",
-    "bubble": "Hello!<br></br>I'm <strong>SMART</strong>,<br></br>happy to help",
+    "highlights": {
+      "fast": "Quick answers",
+      "accurate": "Reliable information",
+      "advice": "Ready to advise",
+      "care": "Here for every need"
+    },
+    "promo": {
+      "body": "Here to help with every question, with quick and complete answers",
+      "welcome": "Happy<br></br>to help!"
+    },
     "mascotAlt": "SMART, the SMART Alliance mascot, waving hello",
     "topics": {
       "services": {

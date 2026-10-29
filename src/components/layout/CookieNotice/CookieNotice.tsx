@@ -87,10 +87,11 @@ export default function CookieNotice() {
       aria-label={t("title")}
       className="fixed inset-x-0 bottom-0 z-50 border-t-4 border-yellow bg-navy-deep/95 text-white shadow-[0_-8px_24px_rgb(0_0_0/0.25)] backdrop-blur"
     >
-      <div className="container-site flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:gap-8">
+      {/* Tighter on phones, where it sits over the first screen. */}
+      <div className="container-site flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:gap-8 sm:py-5">
         <div className="flex-1">
-          <p className="font-semibold">{t("title")}</p>
-          <p className="mt-1 text-sm font-light leading-relaxed text-white/85">
+          <p className="text-sm font-semibold sm:text-base">{t("title")}</p>
+          <p className="mt-1 text-[13px] font-light leading-snug text-white/85 sm:text-sm sm:leading-relaxed">
             {t.rich("body", {
               link: (chunks) => (
                 <Link

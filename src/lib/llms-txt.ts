@@ -1,8 +1,11 @@
 import { getTranslations } from "next-intl/server";
 
+import { ABOUT_CLIENTS } from "@/components/partials/About/About.config";
+import { CERTIFICATIONS } from "@/components/partials/Home/Home.config";
 import { SERVICE_ITEMS } from "@/components/partials/Services/Services.config";
 import { navItems, siteConfig } from "@/config/site";
 import { locales } from "@/i18n/routing";
+import { withoutWordJoiners } from "@/lib/metadata";
 
 /**
  * Builds `/llms.txt` — the plain-text site summary that AI assistants and
@@ -28,6 +31,10 @@ export async function buildLlmsTxt(): Promise<string> {
     namespace: "services.items",
   });
   const about = await getTranslations({ locale: "en", namespace: "about" });
+  const certifications = await getTranslations({
+    locale: "en",
+    namespace: "home.certifications",
+  });
 
   const url = (locale: string, path: string) =>
     `${siteConfig.url}/${locale}${path === "/" ? "" : path}`;
@@ -51,14 +58,27 @@ export async function buildLlmsTxt(): Promise<string> {
     "## Services",
     "",
     ...SERVICE_ITEMS.map(
-      ({ key }) =>
-        `- **${services(`${key}.title`)}**: ${services(`${key}.body`)}`,
+      ({ key, slug }) =>
+        `- **${services(`${key}.title`)}**: ${services(`${key}.body`)} Details: ${url("en", `/services/${slug}`)}`,
     ),
     "",
     "## Technology partnership",
     "",
     `- ${about("partnership.body")}`,
     `- Details: ${url("en", "/about")}#axway`,
+    "",
+    // The facts on the certificates themselves, scope included, so an answer
+    // quoting them says what is actually certified.
+    "## Certifications",
+    "",
+    ...CERTIFICATIONS.map(
+      (cert) =>
+        `- ${cert.standard} (${cert.name}): certificate ${cert.certificateNo}, issued by ${cert.issuer}, valid until ${cert.validUntil}. Scope: ${certifications(`items.${cert.key}.scope`)}. Certificate: ${siteConfig.url}${cert.pdf}`,
+    ),
+    "",
+    "## Clients",
+    "",
+    `Government agencies that have used Smart Alliance's services: ${ABOUT_CLIENTS.map((client) => client.en).join("; ")}.`,
     "",
     "## Company facts",
     "",
@@ -84,5 +104,5 @@ export async function buildLlmsTxt(): Promise<string> {
     lines.push(`> Note: this site now has ${locales.length} locales.`, "");
   }
 
-  return lines.join("\n");
+  return withoutWordJoiners(lines.join("\n"));
 }

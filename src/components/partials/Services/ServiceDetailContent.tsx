@@ -61,7 +61,7 @@ export default async function ServiceDetailContent({
   return (
     <>
       <section className="bg-gradient-to-b from-[#eaf1fd] via-[#f4f8fe] to-white">
-        <div className="container-site pt-10 pb-10 lg:pt-14 lg:pb-12">
+        <div className="container-site pt-6 pb-10 lg:pt-8 lg:pb-12">
           <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div>
               <div className="flex items-center gap-3">
@@ -90,7 +90,8 @@ export default async function ServiceDetailContent({
               </p>
             </div>
             {/* Multiply drops the illustration's off-white backdrop into the
-                hero's gradient. */}
+                hero's gradient. A fixed box, so every service's hero is the
+                same height whatever its illustration's proportions. */}
             <Image
               src={service.art}
               alt=""
@@ -98,7 +99,7 @@ export default async function ServiceDetailContent({
               width={480}
               height={300}
               priority
-              className="mx-auto w-full max-w-md mix-blend-multiply"
+              className="mx-auto h-56 w-full max-w-md object-contain mix-blend-multiply lg:h-64"
             />
           </div>
 

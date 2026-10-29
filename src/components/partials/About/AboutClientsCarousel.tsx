@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Building, ChevronRight } from "@/components/ui/Icon";
+import { cn } from "@/lib/utils";
 
 /** How long each card position holds before the row moves on by one card. */
 const AUTOPLAY_MS = 2000;
@@ -12,6 +13,8 @@ interface Client {
   id: string;
   logo?: string;
   primary: string;
+  /** Set the primary name smaller, so a long one keeps to one line. */
+  compact?: boolean;
   secondary: string | null;
 }
 
@@ -107,7 +110,7 @@ export default function AboutClientsCarousel({
         {clients.map((client) => (
           <li
             key={client.id}
-            className="w-60 shrink-0 snap-start rounded-xl border border-line bg-white px-5 py-4"
+            className="w-60 shrink-0 snap-start rounded-xl border border-line bg-white px-5 py-4 text-center"
           >
             {client.logo ? (
               <Image
@@ -116,19 +119,24 @@ export default function AboutClientsCarousel({
                 alt=""
                 width={160}
                 height={64}
-                className="mb-3 h-14 w-auto max-w-full object-contain"
+                className="mx-auto mb-3 h-14 w-auto max-w-full object-contain"
               />
             ) : (
               // Holds the logo's slot until one is supplied, so every card's
               // name starts at the same height.
               <span
                 aria-hidden
-                className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-surface-muted text-body/50"
+                className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-surface-muted text-body/50"
               >
                 <Building className="h-7 w-7" />
               </span>
             )}
-            <p className="text-sm font-semibold leading-snug text-navy">
+            <p
+              className={cn(
+                "font-semibold leading-snug text-navy",
+                client.compact ? "text-xs" : "text-sm",
+              )}
+            >
               {client.primary}
             </p>
             {client.secondary && (

@@ -36,6 +36,11 @@ export default function ContactForm() {
   // Set when no reCAPTCHA token could be had (script blocked or failed), which
   // happens before the mutation runs and so is not in its error state.
   const [captchaUnavailable, setCaptchaUnavailable] = useState(false);
+  // reCAPTCHA is a heavy third-party script; it loads once the visitor starts
+  // on the form, not with the page. A submit waits for it if it is still on
+  // its way (see `getRecaptchaToken`).
+  const [captchaWanted, setCaptchaWanted] = useState(false);
+  const wantCaptcha = () => setCaptchaWanted(true);
   const { submit, isPending, isSuccess, isError, error, reset } =
     useContactSubmit();
 
@@ -106,22 +111,32 @@ export default function ContactForm() {
         set(field, e.target.value),
       placeholder: `${t(field)}${required ? ` ${t("required")}` : ""}`,
       "aria-label": t(field),
+      // The "*" lives in the placeholder, which assistive technology and
+      // browsing agents cannot rely on. Not `required`: validation is ours.
+      "aria-required": required || undefined,
       "aria-invalid": errors[field] ? true : undefined,
       "aria-describedby": errors[field] ? `${field}-error` : undefined,
     };
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="grid gap-4">
+    <form
+      onSubmit={handleSubmit}
+      onFocus={wantCaptcha}
+      onPointerDown={wantCaptcha}
+      noValidate
+      className="grid gap-4"
+    >
       {/* Honeypot: off-screen rather than display:none, since some bots skip
-          hidden inputs. Never focusable, never announced.
+          hidden inputs. Never focusable, never announced; `inert` also keeps
+          browsing agents, which act on the DOM, from filling it.
 
           The id/name deliberately match no autofill category. Named `website`
           it was filled with the visitor's own email by Chrome and by password
           managers — and a tripped honeypot silently discards the message, so
           real enquiries vanished. The `data-*` opt-outs below cover
           1Password / LastPass / Dashlane, which ignore `autoComplete="off"`. */}
-      <div aria-hidden className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
+      <div aria-hidden inert className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
         <label htmlFor="contact-ref">Leave this field empty</label>
         <input
           id="contact-ref"
@@ -241,7 +256,7 @@ export default function ContactForm() {
         )}
       </p>
 
-      <p className="flex items-start gap-2 text-xs font-light text-placeholder">
+      <p className="flex items-start gap-2 text-xs font-light text-body">
         <Image
           src="/assets/ic-privacy.png"
           alt=""
@@ -254,7 +269,7 @@ export default function ContactForm() {
       </p>
 
       {/* reCAPTCHA v3 shows its own badge; nothing loads without a site key. */}
-      {recaptchaScriptSrc(locale) && (
+      {captchaWanted && recaptchaScriptSrc(locale) && (
         <Script src={recaptchaScriptSrc(locale)} strategy="afterInteractive" />
       )}
     </form>

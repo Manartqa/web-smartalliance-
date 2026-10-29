@@ -20,21 +20,36 @@ export const recaptchaScriptSrc = (locale: string) =>
     : undefined;
 
 /**
+ * How long a submission waits for the script. The form only adds the script
+ * once the visitor starts on it, so a quick submit can arrive first.
+ */
+export const RECAPTCHA_SCRIPT_WAIT_MS = 10_000;
+
+const loadedScript = () =>
+  new Promise<Grecaptcha>((resolve, reject) => {
+    const started = Date.now();
+    const check = () => {
+      if (window.grecaptcha) resolve(window.grecaptcha);
+      else if (Date.now() - started >= RECAPTCHA_SCRIPT_WAIT_MS)
+        reject(new Error("reCAPTCHA script has not loaded."));
+      else setTimeout(check, 100);
+    };
+    check();
+  });
+
+/**
  * A fresh token for one submission. Tokens expire after two minutes, so this is
  * called at submit time rather than when the page loads.
  *
  * Resolves `undefined` when no site key is configured. Rejects when the script
- * never loaded — typically a content blocker — which the form reports to the
+ * never loads — typically a content blocker — which the form reports to the
  * visitor instead of sending a submission the route would refuse anyway.
  */
-export function getRecaptchaToken(): Promise<string | undefined> {
-  if (!RECAPTCHA_SITE_KEY) return Promise.resolve(undefined);
+export async function getRecaptchaToken(): Promise<string | undefined> {
+  if (!RECAPTCHA_SITE_KEY) return undefined;
 
   const siteKey = RECAPTCHA_SITE_KEY;
-  const grecaptcha = window.grecaptcha;
-  if (!grecaptcha) {
-    return Promise.reject(new Error("reCAPTCHA script has not loaded."));
-  }
+  const grecaptcha = await loadedScript();
 
   return new Promise((resolve, reject) => {
     grecaptcha.ready(() => {

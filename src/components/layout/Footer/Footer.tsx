@@ -58,7 +58,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[#003a75]">
-        <div className="container-site flex flex-col items-center gap-2 py-4 text-xs font-light text-white/40 sm:flex-row sm:justify-center sm:gap-6">
+        <div className="container-site flex flex-col items-center gap-2 py-4 text-xs font-light text-white/70 sm:flex-row sm:justify-center sm:gap-6">
           <p className="text-center">{t("copyright")}</p>
           <div className="flex gap-4">
             {FOOTER_LEGAL_ITEMS.map((item) => (

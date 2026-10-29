@@ -19,7 +19,6 @@ export const CERTIFICATIONS = [
     issuer: "Ostia Management Pvt. Ltd.",
     validUntil: "2029-09-04",
     pdf: "/certificates/iso-9001-smart-alliance.pdf",
-    downloadName: "ISO-9001-Smart-Alliance.pdf",
     thumbnail: "/assets/cert-iso-9001.webp",
   },
   {
@@ -30,7 +29,6 @@ export const CERTIFICATIONS = [
     issuer: "Otabu Global Services Pvt. Ltd.",
     validUntil: "2027-11-27",
     pdf: "/certificates/iso-29110-smart-alliance.pdf",
-    downloadName: "ISO-IEC-29110-Smart-Alliance.pdf",
     thumbnail: "/assets/cert-iso-29110.webp",
   },
 ] as const;

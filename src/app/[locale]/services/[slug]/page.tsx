@@ -6,9 +6,14 @@ import {
   SERVICE_ITEMS,
   ServiceDetailContent,
 } from "@/components/partials/Services";
+import { siteConfig } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
-import { breadcrumbGraph, serviceGraph } from "@/lib/structured-data";
+import {
+  breadcrumbGraph,
+  serviceGraph,
+  webPageGraph,
+} from "@/lib/structured-data";
 
 type Params = Promise<{ locale: Locale; slug: string }>;
 
@@ -59,6 +64,14 @@ export default async function ServiceDetailPage({
   return (
     <>
       <ServiceDetailContent service={service} />
+      <JsonLd
+        data={webPageGraph(locale, {
+          type: "WebPage",
+          name,
+          path,
+          mainEntity: `${siteConfig.url}/${locale}${path}#service`,
+        })}
+      />
       <JsonLd
         data={breadcrumbGraph(
           locale,
