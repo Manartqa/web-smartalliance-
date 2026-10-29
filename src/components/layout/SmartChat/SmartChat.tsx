@@ -10,12 +10,12 @@ import SmartChatWindow from "./SmartChatWindow";
 
 const listeners = new Set<() => void>();
 
+// Session storage belongs to one tab, so no other tab can change it under us:
+// subscribers only hear about acknowledgements made on this page.
 const subscribe = (listener: () => void) => {
   listeners.add(listener);
-  window.addEventListener("storage", listener);
   return () => {
     listeners.delete(listener);
-    window.removeEventListener("storage", listener);
   };
 };
 
@@ -24,7 +24,7 @@ const subscribe = (listener: () => void) => {
 const isAcknowledged = () => {
   try {
     return (
-      window.localStorage.getItem(PRIVACY_ACK_KEY) === PRIVACY_NOTICE_VERSION
+      window.sessionStorage.getItem(PRIVACY_ACK_KEY) === PRIVACY_NOTICE_VERSION
     );
   } catch {
     return false;
@@ -33,7 +33,7 @@ const isAcknowledged = () => {
 
 const acknowledge = () => {
   try {
-    window.localStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
+    window.sessionStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
   } catch {
     // Remembered for this page view only.
   }
@@ -43,9 +43,10 @@ const acknowledge = () => {
 type View = "closed" | "notice" | "chat";
 
 /**
- * "น้อง Smart": a floating button that opens the chat. The first time, the
- * privacy notice comes first; once the visitor accepts it, the browser
- * remembers that (per notice version) and the button opens the chat directly.
+ * "น้อง Smart": a floating button that opens the chat. The privacy notice comes
+ * first on every visit; once the visitor accepts it, the button opens the chat
+ * directly for the rest of that visit (per notice version), as the cookie
+ * notice does.
  *
  * The button sits above the cookie notice while that is showing, using the
  * height the notice publishes as `--cookie-notice-height`.

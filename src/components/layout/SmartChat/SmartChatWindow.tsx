@@ -431,43 +431,26 @@ function Sidebar({
 
       {/* Fills the rest of the column. Left out on windows too short to fit
           it under the menu. */}
-      <div className="relative mt-3 hidden max-h-[26rem] min-h-[21rem] flex-1 flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-sky-100 via-white to-amber-50 px-5 pt-6 shadow-sm ring-1 ring-white [@media(min-height:860px)]:flex">
-        {locale === "th" ? (
-          // Supplied artwork with the Thai copy drawn in, so Thai only.
-          <Image
-            src="/assets/chat-promo-th.webp"
-            alt={`${t("title")} ${t("promo.body")}`}
-            width={720}
-            height={1072}
-            className="absolute inset-0 h-full w-full object-contain p-3"
-          />
-        ) : (
-          <>
-            <p className="text-3xl font-bold text-navy">{t("title")}</p>
-            <p className="mt-2 leading-relaxed text-navy">{t("promo.body")}</p>
-            {/* The mascot scales with the card and runs off its foot, so
-                the welcome line always lands below its hand. The still pose
-                here: the animated one waves beside the chat. */}
-            <Image
-              src="/assets/mascot-smart.webp"
-              alt=""
-              width={561}
-              height={560}
-              className="absolute -right-14 bottom-0 h-[80%] max-h-72 w-auto max-w-none translate-y-[20%] drop-shadow-lg"
-            />
-            <p className="absolute bottom-6 left-4 z-10 -rotate-[10deg] text-2xl font-bold italic leading-snug text-navy">
-              {t.rich("promo.welcome", { br: () => <br /> })}
-              <span
-                aria-hidden
-                className="ml-4 mt-1 block h-1.5 w-[115%] rounded-full bg-yellow"
-              />
-            </p>
-          </>
-        )}
+      <div className="relative mt-3 hidden max-h-[26rem] min-h-[21rem] flex-1 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-100 via-white to-amber-50 shadow-sm ring-1 ring-white [@media(min-height:860px)]:block">
+        {/* Supplied artwork with the copy drawn in, one per language; the alt
+            text carries the same words. */}
+        <Image
+          src={PROMO_ART[locale === "th" ? "th" : "en"].src}
+          alt={t("promo.alt")}
+          width={720}
+          height={PROMO_ART[locale === "th" ? "th" : "en"].height}
+          className="absolute inset-0 h-full w-full object-contain p-3"
+        />
       </div>
     </aside>
   );
 }
+
+/** The sidebar card's artwork, 720px wide, per language. */
+const PROMO_ART = {
+  th: { src: "/assets/chat-promo-th.webp", height: 1072 },
+  en: { src: "/assets/chat-promo-en.webp", height: 1046 },
+} as const;
 
 /**
  * Beside the chat on very wide screens only: any narrower and it squeezes the
@@ -477,7 +460,9 @@ function MascotPanel() {
   const t = useTranslations("chat");
   return (
     <div className="hidden w-[22rem] shrink-0 flex-col 2xl:flex">
-      <p className="text-5xl font-bold leading-tight text-navy">{t("title")}</p>
+      <p className="text-[2.75rem] font-bold leading-tight text-navy">
+        {t("title")}
+      </p>
       <p className="mt-1 text-lg font-semibold text-navy">{t("subtitle")}</p>
       <span
         aria-hidden

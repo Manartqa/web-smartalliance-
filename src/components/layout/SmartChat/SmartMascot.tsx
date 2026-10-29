@@ -9,7 +9,7 @@ import { useSyncExternalStore } from "react";
  * `sm` (240px tall) is for the launcher and the privacy notice; `lg` (560px)
  * is for the chat screen and is only fetched once the chat opens.
  *
- * The animations are heavy (0.7 MB and 2 MB), and the launcher is on every
+ * The animations are heavy (0.6 MB and 1.6 MB), and the launcher is on every
  * page, so the still pose shows first and the animation replaces it once the
  * page has loaded and the browser is idle. The still stays on screen until
  * the animation has arrived.

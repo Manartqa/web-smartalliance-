@@ -6,35 +6,36 @@ import { ArrowRight } from "@/components/ui/Icon";
 import { siteConfig } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
-import { ABOUT_EXPERTISE, ABOUT_OFFICE_IMAGE } from "./About.config";
+import { ABOUT_EXPERTISE, ABOUT_OFFICE_IMAGES } from "./About.config";
 import AboutHeading from "./AboutHeading";
+import AboutOfficeSlideshow from "./AboutOfficeSlideshow";
 
 /**
- * Office photo, the company introduction, and the four areas of expertise.
- * Three columns on wide screens; below `xl` the expertise cards drop to a row
- * of their own under the photo and text.
+ * Office photos (a slideshow), the company introduction, and the four areas of
+ * expertise, with the services button under the expertise cards. From `lg`
+ * the photos and the expertise share a row, and the introduction runs the full
+ * width under both; below `lg` everything stacks, introduction straight after
+ * the photos.
  */
 export default async function AboutIntro() {
   const t = await getTranslations("about");
   const locale = await getLocale();
 
   return (
-    <section className="container-site py-14 lg:py-16">
-      <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.25fr)] xl:gap-8">
-        {/* From `lg` the photo fills the height of its row, so it matches the
-            text beside it instead of leaving a gap underneath. The narrower
-            crop keeps the sign and the desks on the right in frame. */}
-        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl lg:aspect-auto lg:min-h-80">
-          <Image
-            src={ABOUT_OFFICE_IMAGE}
-            alt=""
-            fill
-            sizes="(min-width: 1280px) 340px, (min-width: 1024px) 50vw, 100vw"
-            className="object-cover object-[70%_center]"
+    <section className="container-site py-10">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-y-3 xl:gap-x-12">
+        {/* Landscape, the photos' own shape, so each shows whole rather than
+            as a tall crop. From `xl` it stretches to the expertise column
+            beside it, so both end level; narrower, that column's wrapped cards
+            would stretch it to portrait. */}
+        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl xl:aspect-auto">
+          <AboutOfficeSlideshow
+            images={ABOUT_OFFICE_IMAGES}
+            sizes="(min-width: 1024px) 560px, 100vw"
           />
         </div>
 
-        <div className="lg:self-center">
+        <div className="lg:order-last lg:col-span-2">
           <p className="border-l-[3px] border-yellow pl-3 text-sm font-medium uppercase tracking-[0.06em] text-navy">
             {t("intro.label")}
           </p>
@@ -44,17 +45,13 @@ export default async function AboutIntro() {
           <p className="mt-4 text-[15px] font-light leading-relaxed text-body">
             {t("intro.body")}
           </p>
-          <BaseLinkButton href="/services" className="mt-6">
-            {t("intro.cta")}
-            <ArrowRight />
-          </BaseLinkButton>
         </div>
 
-        <div className="lg:col-span-2 xl:col-span-1">
+        <div>
           <AboutHeading subheading={t("expertise.subheading")}>
             {t("expertise.heading")}
           </AboutHeading>
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {ABOUT_EXPERTISE.map(({ key, service }) => (
               <li key={key} className="flex">
                 <Link
@@ -81,6 +78,13 @@ export default async function AboutIntro() {
               </li>
             ))}
           </ul>
+          <BaseLinkButton
+            href="/services"
+            className="mx-auto mt-6 flex w-fit lg:mx-0"
+          >
+            {t("intro.cta")}
+            <ArrowRight />
+          </BaseLinkButton>
         </div>
       </div>
     </section>

@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/Icon";
 
 /**
- * Where the privacy notice's acknowledgement is remembered (browser storage,
- * kept across visits). The stored value is the notice version, so changing
- * the wording materially and bumping the version shows it to everyone again.
+ * Where the privacy notice's acknowledgement is remembered. Session storage,
+ * like the cookie notice: the notice comes back on every new visit (a new tab
+ * or browser session) but not on each page of the same visit. The stored value
+ * is the notice version, so changing the wording materially and bumping the
+ * version shows it again even mid-visit.
  */
 export const PRIVACY_ACK_KEY = "smart-chat-privacy-ack";
 export const PRIVACY_NOTICE_VERSION = "2026-10-28";

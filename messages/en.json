@@ -840,18 +840,18 @@
     "accept": "Accept cookies"
   },
   "chat": {
-    "launcher": "Chat with SMART",
-    "launcherHint": "Questions? Ask SMART!",
-    "title": "SMART",
+    "launcher": "Chat with SMART Buddy",
+    "launcherHint": "Questions? Ask SMART Buddy!",
+    "title": "SMART Buddy",
     "subtitle": "Online assistant from SMART Alliance",
     "tagline": "Connecting technology for a smarter tomorrow",
     "minimize": "Minimize chat",
     "close": "Close chat",
     "sidebarLabel": "Chat topics",
-    "home": "Chat with SMART",
+    "home": "Chat with SMART Buddy",
     "greeting": {
       "title": "Hello 👋 Welcome to SMART Alliance",
-      "body": "I'm SMART, here to tell you about our technology and services. How can I help?"
+      "body": "I'm SMART Buddy, here to tell you about our technology and services. How can I help?"
     },
     "popular": "Popular questions",
     "placeholder": "Type your message here...",
@@ -864,10 +864,9 @@
       "care": "Here for every need"
     },
     "promo": {
-      "body": "Here to help with every question, with quick and complete answers",
-      "welcome": "Happy<br></br>to help!"
+      "alt": "SMART Buddy: ready to help with every question, so you get fast and complete answers. Happy to help!"
     },
-    "mascotAlt": "SMART, the SMART Alliance mascot, waving hello",
+    "mascotAlt": "SMART Buddy, the SMART Alliance mascot, waving hello",
     "topics": {
       "services": {
         "title": "Our services",
@@ -908,10 +907,10 @@
       "industries": "We work with government agencies and with businesses. These services suit each best, and our team can recommend the right mix for your organization:",
       "faq": "Here are the questions we hear most. Pick one:",
       "quote": "To request a quote or discuss a project, send us a short outline through the contact form, and our team will get back to you as soon as we can.",
-      "staff": "SMART can't pass the chat to a person yet. Leave your details in the contact form and our team will get back to you, or call <phoneLink>{phone}</phoneLink> or email <emailLink>{email}</emailLink>.",
+      "staff": "SMART Buddy can't pass the chat to a person yet. Leave your details in the contact form and our team will get back to you, or call <phoneLink>{phone}</phoneLink> or email <emailLink>{email}</emailLink>.",
       "about": "Smart Alliance has provided IT services since 2004: custom software development and system integration for government agencies and businesses. We are certified to ISO 9001:2015 and ISO/IEC 29110, and are an authorized Axway partner in Thailand.",
       "clients": "Organizations that trust us include {names}, among many others.",
-      "fallback": "Sorry, SMART can't answer that yet. Try one of the topics below, or send your question to our team through the contact form."
+      "fallback": "Sorry, SMART Buddy can't answer that yet. Try one of the topics below, or send your question to our team through the contact form."
     },
     "industries": {
       "government": "Government agencies",
@@ -952,8 +951,8 @@
     },
     "notice": {
       "title": "Privacy Notice",
-      "body": "The SMART chat gives basic information about Smart Alliance, answered from the content of this website. What you type is handled in your browser only: it is not sent to or stored on our servers, and it is gone when you reload the page. Please do not type personal or confidential information in the chat. If you would like our team to contact you, please use the contact form. See our Privacy Policy for details.",
-      "remember": "When you select \"OK\", this browser will remember that you have read this notice.",
+      "body": "The SMART Buddy chat gives basic information about Smart Alliance, answered from the content of this website. What you type is handled in your browser only: it is not sent to or stored on our servers, and it is gone when you reload the page. Please do not type personal or confidential information in the chat. If you would like our team to contact you, please use the contact form. See our Privacy Policy for details.",
+      "remember": "When you select \"OK\", this notice won't appear again during this visit. It will appear again on your next visit.",
       "policy": "Privacy Policy",
       "accept": "OK",
       "close": "Close"

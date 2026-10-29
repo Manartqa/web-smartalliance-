@@ -38,7 +38,11 @@ export const ABOUT_STATS = [
    ------------------------------------------------------------------ */
 
 export const ABOUT_HERO_IMAGE = "/assets/hero-about.webp";
-export const ABOUT_OFFICE_IMAGE = "/assets/about-office.webp";
+/** The office slideshow beside the company introduction, in showing order. */
+export const ABOUT_OFFICE_IMAGES = Array.from(
+  { length: 8 },
+  (_, i) => `/assets/about-office-${i + 1}.webp`,
+);
 
 /** Icons for `about.hero.facts`, in order. */
 export const ABOUT_HERO_FACT_ICONS = [Calendar, Users, Building] as const;

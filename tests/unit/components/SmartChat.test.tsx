@@ -57,6 +57,7 @@ describe("SmartChat", () => {
   });
 
   beforeEach(() => {
+    window.sessionStorage.clear();
     window.localStorage.clear();
   });
 
@@ -78,14 +79,14 @@ describe("SmartChat", () => {
       screen.getByRole("button", { name: t.notice.accept }),
     );
 
-    expect(window.localStorage.getItem(PRIVACY_ACK_KEY)).toBe(
+    expect(window.sessionStorage.getItem(PRIVACY_ACK_KEY)).toBe(
       PRIVACY_NOTICE_VERSION,
     );
     expect(chatDialog()).toBeInTheDocument();
   });
 
   it("goes straight to the chat once acknowledged", async () => {
-    window.localStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
+    window.sessionStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
     renderChat();
     await openChat();
 
@@ -93,8 +94,20 @@ describe("SmartChat", () => {
     expect(chatDialog()).toBeInTheDocument();
   });
 
+  it("shows the notice on a new visit, like the cookie notice", async () => {
+    // What a visit before the switch to session storage left behind; a new
+    // visit starts with empty session storage.
+    window.localStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
+    renderChat();
+    await openChat();
+
+    expect(
+      screen.getByRole("dialog", { name: t.notice.title }),
+    ).toBeInTheDocument();
+  });
+
   it("shows the notice again when its version changes", async () => {
-    window.localStorage.setItem(PRIVACY_ACK_KEY, "an-older-version");
+    window.sessionStorage.setItem(PRIVACY_ACK_KEY, "an-older-version");
     renderChat();
     await openChat();
 
@@ -109,12 +122,12 @@ describe("SmartChat", () => {
     await userEvent.click(screen.getByRole("button", { name: t.notice.close }));
 
     expect(screen.queryByRole("dialog")).toBeNull();
-    expect(window.localStorage.getItem(PRIVACY_ACK_KEY)).toBeNull();
+    expect(window.sessionStorage.getItem(PRIVACY_ACK_KEY)).toBeNull();
   });
 
   describe("conversation", () => {
     beforeEach(async () => {
-      window.localStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
+      window.sessionStorage.setItem(PRIVACY_ACK_KEY, PRIVACY_NOTICE_VERSION);
       renderChat();
       await openChat();
     });
