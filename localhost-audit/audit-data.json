@@ -1,0 +1,267 @@
+{
+  "summary": {
+    "health_score": 73,
+    "business_type": "B2B IT services / agency",
+    "top_findings": [
+      "Address mismatch with ISO certificate (599/36 vs 599/59)",
+      "Thin templated service pages",
+      "No case studies / proof",
+      "Claims exceed certificates (ISO 29110 scope, 24h support)",
+      "No Axway landing page"
+    ],
+    "quick_wins": [
+      "Align address everywhere",
+      "alternateLinks:false",
+      "Relabel ISO 29110 and support hours",
+      "Translate English labels on Thai pages",
+      "Static launcher mascot first"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 82,
+      "what_works": [
+        "SSR on all 26 URLs",
+        "Self-canonicals + reciprocal hreflang",
+        "Legacy URLs 308",
+        "Real 404s"
+      ],
+      "findings": [
+        {
+          "title": "Link header x-default points to 307 root",
+          "severity": "Medium",
+          "description": "next-intl middleware emits x-default=/ (307) while HTML says /en",
+          "recommendation": "alternateLinks:false in src/i18n/routing.ts"
+        },
+        {
+          "title": "Apex domain not redirected to www",
+          "severity": "Medium",
+          "description": "nginx serves both hosts (DEPLOYMENT.md:32)",
+          "recommendation": "nginx 301 apex -> www"
+        },
+        {
+          "title": "OG image 500 in dev",
+          "severity": "Info",
+          "description": "sharp 'unsupported image format' on /en/opengraph-image; prod build has valid PNG",
+          "recommendation": "Verify on production build"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 52,
+      "what_works": [
+        "TH/EN parity 617/617 keys",
+        "Phone, email, map, hours, certificate PDFs"
+      ],
+      "findings": [
+        {
+          "title": "Address mismatch with ISO certificate",
+          "severity": "High",
+          "description": "Site/schema 599/36; ISO 9001 certificate 599/59",
+          "recommendation": "Confirm registered address; align site, schema, GBP"
+        },
+        {
+          "title": "Thin templated service pages",
+          "severity": "High",
+          "description": "191-272 words x7",
+          "recommendation": "800+ words with scope, deliverables, stack, case, FAQ section"
+        },
+        {
+          "title": "No case studies",
+          "severity": "High",
+          "description": "12 clients as logos only",
+          "recommendation": "3-7 case studies linked from services"
+        },
+        {
+          "title": "No named people",
+          "severity": "High",
+          "description": "No team/leadership",
+          "recommendation": "Leadership + team section"
+        },
+        {
+          "title": "ISO 29110 scope mislabelled",
+          "severity": "Medium",
+          "description": "Labelled software engineering; scope is network maintenance",
+          "recommendation": "Label by scope"
+        },
+        {
+          "title": "24-hour support claim vs Mon-Fri hours",
+          "severity": "Medium",
+          "description": "Support card vs contact hours",
+          "recommendation": "State real support model/SLA"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 85,
+      "what_works": [
+        "Unique titles/descriptions",
+        "One H1 per page"
+      ],
+      "findings": [
+        {
+          "title": "Long EN descriptions",
+          "severity": "Low",
+          "description": "7 over 160 chars",
+          "recommendation": "Trim to <=155"
+        },
+        {
+          "title": "English labels on Thai pages",
+          "severity": "Low",
+          "description": "certifications heading, eyebrow, about label",
+          "recommendation": "Translate"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 80,
+      "what_works": [
+        "Organization+LocalBusiness+WebSite sitewide",
+        "Service + BreadcrumbList"
+      ],
+      "findings": [
+        {
+          "title": "Service entities not linked",
+          "severity": "Medium",
+          "description": "ItemList items lack @id",
+          "recommendation": "Add #service @id"
+        },
+        {
+          "title": "No page-level nodes",
+          "severity": "Medium",
+          "description": "Breadcrumbs unattached",
+          "recommendation": "WebPage/AboutPage/ContactPage with breadcrumb"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 78,
+      "what_works": [
+        "Priority AVIF hero 13-71 KB",
+        "Self-hosted fonts with swap",
+        "No CLS sources"
+      ],
+      "findings": [
+        {
+          "title": "739 KB animated launcher on every page",
+          "severity": "High",
+          "description": "mascot-smart-wave-sm.webp plain img in root layout",
+          "recommendation": "Static 55 KB first, animate after idle"
+        },
+        {
+          "title": "2 MB chat mascot",
+          "severity": "Medium",
+          "description": "mascot-smart-wave.webp",
+          "recommendation": "Re-encode <=400 KB"
+        },
+        {
+          "title": "reCAPTCHA loads on hydrate",
+          "severity": "Medium",
+          "description": "ContactForm.tsx:257",
+          "recommendation": "Load on first focus"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 67,
+      "what_works": [
+        "Explicit AI crawler groups",
+        "Valid llms.txt"
+      ],
+      "findings": [
+        {
+          "title": "Services hub body lacks Axway/MFT",
+          "severity": "Medium",
+          "description": "Title leads with Axway, body 0 mentions",
+          "recommendation": "Direct-answer paragraph or Axway page"
+        },
+        {
+          "title": "llms.txt incomplete",
+          "severity": "Medium",
+          "description": "No service URLs/certs/clients",
+          "recommendation": "Extend src/lib/llms-txt.ts"
+        },
+        {
+          "title": "Required fields not exposed to agents",
+          "severity": "Medium",
+          "description": "noValidate, '*' in placeholder only",
+          "recommendation": "required + aria-required"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 75,
+      "what_works": [
+        "All images have alt",
+        "next/image AVIF heroes"
+      ],
+      "findings": [
+        {
+          "title": "Oversized animated mascots",
+          "severity": "High",
+          "description": "739 KB + 2 MB WebP",
+          "recommendation": "Re-encode / defer"
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Confirm and align address",
+          "Correct ISO 29110 label and support-hours claim",
+          "alternateLinks:false",
+          "Apex->www 301",
+          "Verify OG image on prod"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Light chat launcher",
+          "Lazy reCAPTCHA",
+          "Form semantics + mobile usability",
+          "Localisation/metadata cleanup",
+          "Link schema graph"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "3-7 case studies",
+          "Axway landing page",
+          "Expand service pages to 800+ words",
+          "Government procurement section",
+          "Named leadership + company registration",
+          "Extend llms.txt"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Drift baseline on production",
+          "PSI/Lighthouse on production",
+          "Keep lastmod current",
+          "Connect GSC/GA4"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

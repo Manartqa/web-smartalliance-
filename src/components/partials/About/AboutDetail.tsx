@@ -32,7 +32,8 @@ export default function AboutDetail() {
             {t("headingLine1")}
             <br className="hidden sm:block" />{" "}
             <span className="whitespace-nowrap">
-              {t("headingLine2")} <span className="text-yellow">{t("year")}</span>
+              {t("headingLine2")}{" "}
+              <span className="text-yellow">{t("year")}</span>
             </span>
           </h2>
 
