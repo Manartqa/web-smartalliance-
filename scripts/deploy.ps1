@@ -86,6 +86,7 @@ try {
     Write-Host "  sudo docker rename smartalliance-web smartalliance-web-old && sudo docker stop smartalliance-web-old"
     Write-Host "  sudo docker run -d --name smartalliance-web --restart unless-stopped -p 3000:3000 --env-file /home/azureuser/production.env $image"
     Write-Host "  sudo docker ps -a"
+    Write-Host "`nOn-premise server (172.22.22.201): same tarball, Compose instead of docker run - see DEPLOYMENT-ONPREM.md." -ForegroundColor Green
 }
 finally {
     Pop-Location

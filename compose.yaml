@@ -1,44 +1,38 @@
 services:
   web:
-    build:
-      context: .
-      # NEXT_PUBLIC_* are baked into the bundle during `docker compose build`.
-      # They are read from .env in this directory at build time — changing one
-      # needs a rebuild, not a restart. Everything else is runtime, below.
-      args:
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?set NEXT_PUBLIC_SITE_URL in .env}
-        NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:-}
-        NEXT_PUBLIC_BING_SITE_VERIFICATION: ${NEXT_PUBLIC_BING_SITE_VERIFICATION:-}
-
+    # Built and exported on a workstation by scripts/deploy.ps1, then loaded on
+    # the server with `docker load` — the same image the Azure VM runs. There is
+    # no `build:` block on purpose: the server holds no source code, and
+    # NEXT_PUBLIC_* are baked in at build time (DEPLOYMENT.md, "Build-time vs
+    # runtime"), so building here would need every one of them repeated.
     image: smartalliance-web:latest
     container_name: smartalliance-web
 
-    # Replaces the systemd unit: brings the site back after a crash and after a
-    # reboot, but stays down if it was stopped deliberately.
+    # Brings the site back after a crash and after a reboot, but stays down if
+    # it was stopped deliberately.
     restart: unless-stopped
 
-    # Mail credentials and TRUST_PROXY. Read at container start, so a change
-    # here needs only `docker compose up -d`, no rebuild.
+    # Mail credentials, reCAPTCHA secret and TRUST_PROXY. Read when the
+    # container is created, so a change needs `docker compose up -d
+    # --force-recreate`, not a restart.
     env_file:
       - .env.production
 
-    # Bound to loopback ON THE HOST, so the container is reachable only through
-    # nginx. Writing "3000:3000" instead would publish it on every interface,
-    # including the public one — and Docker inserts its own iptables rules ahead
-    # of ufw, so a host firewall would not stop it. (The Azure NSG still would,
-    # since it is enforced outside the VM, but that leaves the app one NSG edit
-    # away from being exposed with no TLS and no proxy in front of it.)
+    # Bound to the server's LAN address, which the central nginx host proxies
+    # to after terminating TLS (scripts/nginx/smartalliance.conf). Plain
+    # "3000:3000" would also publish it on every other interface, including
+    # docker0 and any address added later. Docker writes its own iptables rules
+    # ahead of ufw, so ufw does not narrow who on the LAN can reach this — see
+    # DEPLOYMENT-ONPREM.md, "Known caveats".
     ports:
-      - "127.0.0.1:3000:3000"
+      - "172.22.22.201:3000:3000"
 
-    # A VM disk filled by container logs takes the site down in a way that is
-    # slow to diagnose. Cap them.
+    # A disk filled by container logs takes the site down in a way that is slow
+    # to diagnose. Cap them.
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "5"
 
-    # The image's HEALTHCHECK covers a process that is up but wedged; these are
-    # the ordinary crash-and-restart guards.
     stop_grace_period: 20s
