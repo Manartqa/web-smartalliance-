@@ -738,6 +738,7 @@
     },
     "detail": {
       "eyebrow": "Our service",
+      "back": "All services",
       "viewDetails": "View details",
       "metaTitle": "{service} — Smart Alliance",
       "tabs": {
@@ -841,7 +842,7 @@
   },
   "chat": {
     "launcher": "Chat with SMART Buddy",
-    "launcherHint": "Questions? Ask SMART Buddy!",
+    "launcherHint": "Questions?\nAsk SMART Buddy!",
     "title": "SMART Buddy",
     "subtitle": "Online assistant from SMART Alliance",
     "tagline": "Connecting technology for a smarter tomorrow",
@@ -981,7 +982,8 @@
             "Contact form: your name and email address and, if you choose to provide them, your company or organization, phone number, subject and message.",
             "Consent record: that you agreed to this policy and to the Terms and Conditions, and when.",
             "Technical data: your IP address and basic request details such as browser type and the time of the request, used to protect the contact form against abuse and kept in server logs.",
-            "Language preference: a cookie that remembers whether you chose the English or the Thai version of the Website."
+            "Language preference: a cookie that remembers whether you chose the English or the Thai version of the Website.",
+            "Cookie notice: a cookie that remembers that you accepted the cookie notice, so it is not shown again on every page. It expires after one day."
           ]
         },
         {

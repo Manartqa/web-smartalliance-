@@ -7,12 +7,11 @@ import { BaseButton } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 
 /**
- * Where the acceptance is remembered. Session storage, so the notice comes
- * back on every new visit (a new tab or browser session) but not on each page
- * of the same visit. Browser storage, not a cookie: the notice should not set
- * the kind of thing it is telling visitors about.
+ * The cookie that remembers the acceptance. It lasts one day, so the notice
+ * comes back the day after a visitor accepts it.
  */
 export const COOKIE_NOTICE_KEY = "cookie-notice-accepted";
+const COOKIE_MAX_AGE = 60 * 60 * 24;
 
 const listeners = new Set<() => void>();
 
@@ -23,11 +22,11 @@ const subscribe = (listener: () => void) => {
   };
 };
 
-// Storage can throw (blocked site data, some private modes). Then the notice
-// shows on every page load, which is the safe way to fail.
+// Cookie access can throw (sandboxed frames). If cookies are blocked, the
+// notice shows on every page load, which is the safe way to fail.
 const isAccepted = () => {
   try {
-    return window.sessionStorage.getItem(COOKIE_NOTICE_KEY) === "1";
+    return document.cookie.split("; ").includes(`${COOKIE_NOTICE_KEY}=1`);
   } catch {
     return false;
   }
@@ -35,7 +34,8 @@ const isAccepted = () => {
 
 const accept = () => {
   try {
-    window.sessionStorage.setItem(COOKIE_NOTICE_KEY, "1");
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${COOKIE_NOTICE_KEY}=1; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
   } catch {
     // Hidden for this page view only.
   }
@@ -49,13 +49,13 @@ const accept = () => {
  * added, this needs to become a real consent banner that loads them only after
  * the visitor agrees.
  *
- * The server renders nothing (it cannot see browser storage); the notice
- * appears after hydration until the visitor accepts it for this visit.
+ * The server renders nothing; the notice appears after hydration until the
+ * visitor accepts it, and stays hidden for a day after that.
  */
 export default function CookieNotice() {
   const t = useTranslations("cookieNotice");
   const accepted = useSyncExternalStore(subscribe, isAccepted, () => true);
-  // Kept in memory as well, so the button works when storage cannot be written.
+  // Kept in memory as well, so the button works when the cookie cannot be set.
   const [closed, setClosed] = useState(false);
   const visible = !accepted && !closed;
   const ref = useRef<HTMLElement>(null);

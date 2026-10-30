@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useState, useSyncExternalStore } from "react";
 
@@ -66,18 +67,27 @@ export default function SmartChat() {
         type="button"
         onClick={() => setView(stored || accepted ? "chat" : "notice")}
         aria-label={t("launcher")}
-        className="group fixed bottom-[calc(var(--cookie-notice-height,0px)+1rem)] right-4 z-40 flex items-center gap-3 transition-[bottom] sm:bottom-[calc(var(--cookie-notice-height,0px)+1.5rem)] sm:right-6"
+        className="group fixed bottom-[calc(var(--cookie-notice-height,0px)+1rem)] right-4 z-40 flex flex-col items-end gap-1 transition-[bottom] sm:bottom-[calc(var(--cookie-notice-height,0px)+1.5rem)] sm:right-6"
       >
         <span
           aria-hidden
-          className="hidden rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-lg ring-1 ring-line lg:block"
+          className="hidden whitespace-pre-line rounded-2xl bg-white px-4 py-2 text-right text-sm font-semibold leading-snug text-navy shadow-lg ring-1 ring-line lg:block"
         >
           {t("launcherHint")}
         </span>
-        {/* The whole mascot, its open hand pointing at the hint beside it. */}
+        {/* Phones and tablets get a small still face; wider screens the whole
+            mascot, with the hint above its head. */}
+        <Image
+          src="/assets/mascot-smart-face.webp"
+          alt=""
+          width={256}
+          height={256}
+          sizes="56px"
+          className="h-14 w-14 rounded-full bg-white object-cover shadow-lg ring-2 ring-white transition-transform group-hover:-translate-y-1 lg:hidden"
+        />
         <SmartMascot
           size="sm"
-          className="h-28 w-auto drop-shadow-[0_6px_10px_rgb(0_26_61/0.35)] transition-transform group-hover:-translate-y-1 sm:h-32"
+          className="hidden h-32 w-auto drop-shadow-[0_6px_10px_rgb(0_26_61/0.35)] transition-transform group-hover:-translate-y-1 lg:block"
         />
       </button>
 

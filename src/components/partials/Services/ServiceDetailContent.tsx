@@ -64,6 +64,15 @@ export default async function ServiceDetailContent({
         <div className="container-site pt-6 pb-10 lg:pt-8 lg:pb-12">
           <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div>
+              <Link
+                href="/services"
+                className="group mb-5 inline-flex items-center gap-2.5 rounded-full bg-white py-1.5 pl-1.5 pr-4 text-sm font-semibold text-navy shadow-card ring-1 ring-line transition-colors hover:bg-navy hover:text-white"
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-cta text-white transition group-hover:-translate-x-0.5 group-hover:bg-yellow group-hover:text-navy">
+                  <ArrowRight className="h-2.5 w-auto rotate-180" />
+                </span>
+                {t("detail.back")}
+              </Link>
               <div className="flex items-center gap-3">
                 <span
                   className={cn(

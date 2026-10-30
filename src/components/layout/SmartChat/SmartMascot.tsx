@@ -14,6 +14,9 @@ import { useSyncExternalStore } from "react";
  * page has loaded and the browser is idle. The still stays on screen until
  * the animation has arrived.
  *
+ * Lazy, so a copy hidden with `display: none` (the launcher on phones)
+ * downloads nothing.
+ *
  * Visitors who ask for reduced motion get the still only.
  * `<picture>` is `display: contents`, so the classes on the image size it as
  * if the picture were not there.
@@ -72,6 +75,7 @@ export default function SmartMascot({
         alt={alt}
         width={width}
         height={height}
+        loading="lazy"
         decoding="async"
         className={className}
       />

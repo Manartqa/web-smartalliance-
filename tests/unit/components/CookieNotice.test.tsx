@@ -27,8 +27,7 @@ describe("CookieNotice", () => {
         disconnect() {}
       },
     );
-    window.sessionStorage.clear();
-    window.localStorage.clear();
+    document.cookie = `${COOKIE_NOTICE_KEY}=; Max-Age=0; Path=/`;
   });
 
   it("shows the notice with a link to the privacy policy", () => {
@@ -40,25 +39,28 @@ describe("CookieNotice", () => {
     ).toHaveAttribute("href", "/en/privacy-policy");
   });
 
-  it("hides on acceptance and remembers it for the visit", async () => {
+  it("hides on acceptance and remembers it in a one-day cookie", async () => {
+    const setCookie = vi.spyOn(Document.prototype, "cookie", "set");
     renderNotice();
 
     await userEvent.click(screen.getByRole("button", { name: t.accept }));
 
     expect(screen.queryByRole("region", { name: t.title })).toBeNull();
-    expect(window.sessionStorage.getItem(COOKIE_NOTICE_KEY)).toBe("1");
-    expect(window.localStorage.getItem(COOKIE_NOTICE_KEY)).toBeNull();
+    expect(setCookie).toHaveBeenCalledWith(
+      `${COOKIE_NOTICE_KEY}=1; Max-Age=86400; Path=/; SameSite=Lax`,
+    );
+    expect(document.cookie).toContain(`${COOKIE_NOTICE_KEY}=1`);
   });
 
-  it("stays hidden for the rest of the visit once accepted", () => {
-    window.sessionStorage.setItem(COOKIE_NOTICE_KEY, "1");
+  it("stays hidden while the acceptance cookie is set", () => {
+    document.cookie = `${COOKIE_NOTICE_KEY}=1; Path=/`;
     renderNotice();
 
     expect(screen.queryByRole("region", { name: t.title })).toBeNull();
   });
 
-  it("still hides when storage cannot be written", async () => {
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+  it("still hides when the cookie cannot be set", async () => {
+    vi.spyOn(Document.prototype, "cookie", "set").mockImplementation(() => {
       throw new Error("blocked");
     });
     renderNotice();
