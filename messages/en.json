@@ -61,10 +61,6 @@
       "view": "View certificate",
       "thumbnailAlt": "{standard} certificate issued to Smart Alliance Co., Ltd. — opens the PDF",
       "items": {
-        "iso9001": {
-          "title": "Quality Management",
-          "scope": "Sales, installation and maintenance services for system software"
-        },
         "iso29110": {
           "title": "Software Engineering",
           "scope": "Quality maintenance services for network systems, computer equipment and accessories"
@@ -121,7 +117,7 @@
     },
     "intro": {
       "label": "Get to know Smart Alliance",
-      "body": "Founded in 2004, we set out to become a leading provider of IT projects for the public and private sectors. Our ISO 9001:2015 certification means our work meets internationally recognized quality standards. Our team is carefully selected and trained by the product vendors themselves, so every engagement runs as smoothly as possible, and our track record has earned the trust of many leading organizations.",
+      "body": "Founded in 2004, we set out to become a leading provider of IT projects for the public and private sectors. Our ISO/IEC 29110-4-1:2018 certification in software engineering means our work meets internationally recognized standards. Our team is carefully selected and trained by the product vendors themselves, so every engagement runs as smoothly as possible, and our track record has earned the trust of many leading organizations.",
       "cta": "Explore our services"
     },
     "expertise": {
@@ -173,7 +169,7 @@
     },
     "standards": {
       "heading": "Standards & partners",
-      "isoBody": "Internationally certified quality management system",
+      "isoBody": "Internationally certified software engineering process",
       "isoLink": "View certificate",
       "axwayTitle": "Axway Authorized Partner",
       "axwayBody": "Officially authorized partner for API Management, Managed File Transfer, and B2B Integration"
@@ -909,7 +905,7 @@
       "faq": "Here are the questions we hear most. Pick one:",
       "quote": "To request a quote or discuss a project, send us a short outline through the contact form, and our team will get back to you as soon as we can.",
       "staff": "SMART Buddy can't pass the chat to a person yet. Leave your details in the contact form and our team will get back to you, or call <phoneLink>{phone}</phoneLink> or email <emailLink>{email}</emailLink>.",
-      "about": "Smart Alliance has provided IT services since 2004: custom software development and system integration for government agencies and businesses. We are certified to ISO 9001:2015 and ISO/IEC 29110, and are an authorized Axway partner in Thailand.",
+      "about": "Smart Alliance has provided IT services since 2004: custom software development and system integration for government agencies and businesses. We are certified to ISO/IEC 29110-4-1:2018 and are an authorized Axway partner in Thailand.",
       "clients": "Organizations that trust us include {names}, among many others.",
       "fallback": "Sorry, SMART Buddy can't answer that yet. Try one of the topics below, or send your question to our team through the contact form."
     },

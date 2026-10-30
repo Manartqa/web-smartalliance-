@@ -54,7 +54,7 @@ export default function HomeCertifications() {
         </div>
       </Reveal>
 
-      <ul className="mt-10 grid gap-6 lg:grid-cols-2">
+      <ul className="mx-auto mt-10 grid max-w-[38rem] gap-6">
         {CERTIFICATIONS.map((cert, index) => {
           const details = [
             {

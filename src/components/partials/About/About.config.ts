@@ -72,8 +72,8 @@ export const ABOUT_TIMELINE_ICONS = [
   Target,
 ] as const;
 
-/** The ISO 9001 certificate, shared with the home page's certification cards. */
-export const ABOUT_ISO = CERTIFICATIONS.find((cert) => cert.key === "iso9001")!;
+/** The ISO/IEC 29110 certificate, shared with the home page's certification card. */
+export const ABOUT_ISO = CERTIFICATIONS.find((cert) => cert.key === "iso29110")!;
 
 export interface AboutClient {
   /** Stable key; also the logo's file name under `/assets/clients/`. */
