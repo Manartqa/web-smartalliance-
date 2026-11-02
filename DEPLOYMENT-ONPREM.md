@@ -21,7 +21,7 @@ internet ──▶ FortiGate ──────────────▶ centr
 | Docker | Engine 29.9.2, Compose 5.6.1 |
 | Deploy path | `/opt/docker/smartalliance` (`compose.yaml` + `.env.production`) |
 | Container | `smartalliance-web`, published on `172.22.22.201:3000` |
-| Central nginx | `<nginx-ip>` — TLS, port 80 redirect, routing by host name. Site file: [scripts/nginx/smartalliance.conf](scripts/nginx/smartalliance.conf) |
+| Central nginx | `172.22.22.170` — TLS, port 80 redirect, routing by host name. Site file: [scripts/nginx/smartalliance.conf](scripts/nginx/smartalliance.conf) |
 | FortiGate | Public IP; forwards 80 and 443 to the central nginx |
 
 No nginx is installed on `websmart` itself.
@@ -107,7 +107,7 @@ unchanged, `X-Forwarded-For` overwritten.
 ### 3.1 FortiGate
 
 - VIP (static NAT / port forward) for **TCP 80 and 443** on the public IP to
-  `<nginx-ip>` 80 and 443. **No SSL offload, no HTTP rewriting** — TLS ends on
+  `172.22.22.170` 80 and 443. **No SSL offload, no HTTP rewriting** — TLS ends on
   nginx, so FortiGate passes the bytes through.
 - **No source NAT** on the inbound policy. nginx must see each visitor's real
   address as `$remote_addr`; with SNAT, every visitor arrives as FortiGate's
@@ -120,7 +120,7 @@ unchanged, `X-Forwarded-For` overwritten.
   `MAIL_TRANSPORT=smtp`), and DNS. A blocked call does not break page
   rendering — it fails the contact form only, and the container log names the
   call that failed.
-- From `<nginx-ip>` to `172.22.22.201:3000` must be allowed if the two are in
+- From `172.22.22.170` to `172.22.22.201:3000` must be allowed if the two are in
   different segments.
 
 ### 3.2 Central nginx
@@ -350,7 +350,7 @@ certificate file.
 From the workstation:
 
 ```powershell
-scp .\scripts\nginx\smartalliance.conf <user>@<nginx-ip>:/tmp/
+scp .\scripts\nginx\smartalliance.conf <user>@172.22.22.170:/tmp/
 ```
 
 On the nginx host (`sites-available` layout; for `conf.d`, move it to
@@ -567,7 +567,7 @@ container starts.
   `websmart`:
 
   ```bash
-  sudo iptables -I DOCKER-USER -p tcp -m conntrack --ctorigdstport 3000 ! -s <nginx-ip> -j DROP
+  sudo iptables -I DOCKER-USER -p tcp -m conntrack --ctorigdstport 3000 ! -s 172.22.22.170 -j DROP
   ```
 
   Not persistent across reboots on its own — save it with the host's usual
